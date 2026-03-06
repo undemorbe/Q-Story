@@ -1,0 +1,15 @@
+{
+  "appTitle": "QStory",
+  "generateQr": "Generate QR",
+  "scanQr": "Scan QR",
+  "cameraPermissionRequired": "Camera permission is required to scan QR codes.",
+  "openSettings": "Open Settings",
+  "permissionDenied": "Permission Denied",
+  "error": "Error",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "scanResult": "Scan Result",
+  "settings": "Settings",
+  "language": "Language",
+  "selectLanguage": "Select Language"
+}

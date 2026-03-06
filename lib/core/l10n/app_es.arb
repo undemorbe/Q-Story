@@ -1,0 +1,15 @@
+{
+  "appTitle": "QStory",
+  "generateQr": "Generar QR",
+  "scanQr": "Escanear QR",
+  "cameraPermissionRequired": "Se requiere permiso de cámara para escanear códigos QR.",
+  "openSettings": "Abrir Configuración",
+  "permissionDenied": "Permiso Denegado",
+  "error": "Error",
+  "ok": "Aceptar",
+  "cancel": "Cancelar",
+  "scanResult": "Resultado del Escaneo",
+  "settings": "Configuración",
+  "language": "Idioma",
+  "selectLanguage": "Seleccionar Idioma"
+}
