@@ -1,0 +1,36 @@
+package database
+
+import (
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"gorm.io/gorm"
+)
+
+func RunMigrations(db *gorm.DB) error {
+	DB, err := db.DB()
+	if err != nil {
+		return err
+	}
+
+	driver, err := postgres.WithInstance(DB, &postgres.Config{})
+	if err != nil {
+		return nil
+	}
+
+	migrations, err := migrate.NewWithDatabaseInstance(
+		"file://migrations",
+		"postgres",
+		driver,
+	)
+	if err != nil {
+		return err
+	}
+
+	err = migrations.Up()
+	if err != nil && err != migrate.ErrNoChange {
+		return err
+	}
+
+	return nil
+}
