@@ -128,14 +128,19 @@ func (s *QrService) PostInfo(req *requests.PostInfoRequest) error {
 		Resources: building.Resources,
 	}
 
-	err := s.markerRepo.CreateMarker(newMarker)
+	err := s.buildingRepo.CreateBuilding(newBuilding)
+	if err != nil {
+		return err
+	}
+
+	err = s.markerRepo.CreateMarker(newMarker)
 	if err != nil {
 		return err
 	}
 
 	newBuilding.Marker = newMarker
 
-	err = s.buildingRepo.CreateBuilding(newBuilding)
+	err = s.buildingRepo.UpdateBuilding(newBuilding)
 	if err != nil {
 		return err
 	}

@@ -8,7 +8,7 @@ import (
 )
 
 type GetInfoRequest struct {
-	QrCode uuid.UUID `json:"id" binding:"required"`
+	QrCode uuid.UUID `json:"qr-code" binding:"required"`
 }
 
 type PostInfoRequest struct {

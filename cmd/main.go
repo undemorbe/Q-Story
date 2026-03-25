@@ -49,6 +49,7 @@ func main() {
 	{
 		api.GET("/get-info", qrHandler.GetInfo)
 		api.GET("/get-markers", qrHandler.GetMarkers)
+		api.POST("/post-info", qrHandler.PostInfo)
 	}
 
 	logger.Log.Info("Сервер запущен на :5050")
