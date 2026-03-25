@@ -1,6 +1,7 @@
 package services
 
 import (
+	"q-story/internal/dto/requests"
 	"q-story/internal/dto/responses"
 	"q-story/internal/entities"
 	"q-story/internal/ports"
@@ -87,4 +88,57 @@ func (s *QrService) getMarker(marker *entities.Marker) responses.Marker {
 	}
 
 	return markerForResponse
+}
+
+func (s *QrService) PostInfo(req *requests.PostInfoRequest) error {
+
+	marker := req.Marker
+	building := req.Buidling
+
+	buildingID := uuid.New()
+
+	newMarker := &entities.Marker{
+		BuildingID: buildingID,
+
+		ClientID: req.Marker.ClientID,
+		Lat:      marker.Lat,
+		Lon:      marker.Lon,
+		Title:    marker.Title,
+		Type:     marker.Type,
+
+		CompressedDescription: marker.CompressedDescription,
+	}
+
+	newBuilding := &entities.Building{
+		ID: buildingID,
+
+		ClientID:              building.ClientID,
+		Title:                 building.Title,
+		CompressedDescription: building.CompressedDescription,
+
+		TopDescription:    building.Description.Top,
+		MainDescription:   building.Description.Main,
+		BottomDescription: building.Description.Bottom,
+
+		Image:     building.Image,
+		StartedAt: building.StartedAt,
+		EndedAt:   building.EndedAt,
+		Type:      building.Type,
+		Person:    *building.Person,
+		Resources: building.Resources,
+	}
+
+	err := s.markerRepo.CreateMarker(newMarker)
+	if err != nil {
+		return err
+	}
+
+	newBuilding.Marker = newMarker
+
+	err = s.buildingRepo.CreateBuilding(newBuilding)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
