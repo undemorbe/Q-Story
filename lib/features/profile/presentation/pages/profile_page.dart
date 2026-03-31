@@ -8,6 +8,8 @@ import '../../../qr_operations/presentation/stores/qr_store.dart';
 import '../../../favorites/presentation/stores/favorites_store.dart';
 import '../../../settings/presentation/pages/notification_settings_page.dart';
 
+import '../../../map/presentation/stores/map_store.dart';
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -16,6 +18,7 @@ class ProfilePage extends StatelessWidget {
     final authStore = getIt<AuthStore>();
     final qrStore = getIt<QrStore>();
     final favoritesStore = getIt<FavoritesStore>();
+    final mapStore = getIt<MapStore>();
 
     return Scaffold(
       appBar: AppBar(
@@ -65,17 +68,29 @@ class ProfilePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildStatCard(
-                      context,
-                      'Сканировано',
-                      qrStore.scanHistory.length.toString(),
-                      Icons.qr_code_scanner,
+                    Expanded(
+                      child: _buildStatCard(
+                        context,
+                        'Сканировано',
+                        qrStore.scanHistory.length.toString(),
+                        Icons.qr_code_scanner,
+                      ),
                     ),
-                    _buildStatCard(
-                      context,
-                      'Избранное',
-                      favoritesStore.favoriteIds.length.toString(),
-                      Icons.favorite,
+                    Expanded(
+                      child: _buildStatCard(
+                        context,
+                        'Избранное',
+                        favoritesStore.favoriteIds.length.toString(),
+                        Icons.favorite,
+                      ),
+                    ),
+                    Expanded(
+                      child: _buildStatCard(
+                        context,
+                        'Посещено',
+                        mapStore.markers.where((m) => m.isCompleted).length.toString(),
+                        Icons.location_on,
+                      ),
                     ),
                   ],
                 ),
@@ -125,7 +140,8 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-                // Logout Button
+                // Logout Button removed as authentication is removed
+                /*
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
@@ -143,6 +159,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                */
               ],
             ),
           );
@@ -160,7 +177,7 @@ class ProfilePage extends StatelessWidget {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
         child: Column(
           children: [
             Icon(icon, size: 28, color: Theme.of(context).colorScheme.primary),
@@ -174,6 +191,9 @@ class ProfilePage extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.labelMedium,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

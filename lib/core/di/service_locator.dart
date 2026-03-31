@@ -20,6 +20,9 @@ import '../../features/history/data/datasources/history_local_data_source.dart';
 import '../../features/history/data/repositories/history_repository_impl.dart';
 import '../../features/history/domain/repositories/history_repository.dart';
 import '../../features/history/presentation/stores/history_store.dart';
+import '../../features/map/data/repositories/map_repository_impl.dart';
+import '../../features/map/domain/repositories/map_repository.dart';
+import '../../features/map/presentation/stores/map_store.dart';
 
 final getIt = GetIt.instance;
 
@@ -55,6 +58,7 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(localDataSource: getIt()),
   );
+  getIt.registerLazySingleton<MapRepository>(() => MapRepositoryImpl());
 
   // UseCases
   getIt.registerLazySingleton<ProcessQrUseCase>(
@@ -67,4 +71,5 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<AuthStore>(() => AuthStore(getIt()));
   getIt.registerLazySingleton<FavoritesStore>(() => FavoritesStore(getIt()));
   getIt.registerLazySingleton<HistoryStore>(() => HistoryStore(getIt()));
+  getIt.registerLazySingleton<MapStore>(() => MapStore(getIt()));
 }

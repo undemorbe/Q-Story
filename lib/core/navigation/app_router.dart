@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
-import '../../features/history/presentation/pages/main_page.dart';
+import '../../features/map/presentation/pages/map_page.dart';
 import '../../features/history/presentation/pages/history_detail_page.dart';
 import '../../features/history/domain/entities/history_entity.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
@@ -15,11 +15,14 @@ import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../di/service_locator.dart';
 import 'scaffold_with_navbar.dart';
 
+import '../../features/qr_operations/presentation/pages/qr_result_page.dart';
+import '../../features/qr_operations/data/models/qr_content_model.dart';
+
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/map',
   redirect: (context, state) async {
     final prefs = getIt<SharedPreferences>();
     final hasSeenOnboarding = prefs.getBool('has_seen_onboarding') ?? false;
@@ -29,13 +32,9 @@ final appRouter = GoRouter(
       return '/onboarding';
     }
 
-    // If onboarding seen and trying to access root, go to login or main
-    // For now, let's assume we want to go to login first if just launched
-    // But if we have a token (mocked in AuthStore), we could go to main
-    // Let's stick to explicit flow: Onboarding -> Login -> Main
-    
+    // If onboarding seen and trying to access root, go to map
     if (state.matchedLocation == '/') {
-       return hasSeenOnboarding ? '/login' : '/onboarding';
+       return hasSeenOnboarding ? '/map' : '/onboarding';
     }
     
     return null;
@@ -45,14 +44,9 @@ final appRouter = GoRouter(
       path: '/onboarding',
       builder: (context, state) => const OnboardingPage(),
     ),
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginPage(),
-    ),
-    GoRoute(
-      path: '/register',
-      builder: (context, state) => const RegisterPage(),
-    ),
+    // Login and Register routes removed as per request to remove auth
+    // We can keep them commented out or remove entirely. 
+    // Removing them to follow instructions strictly.
     GoRoute(
       path: '/history/:id',
       builder: (context, state) {
@@ -68,6 +62,13 @@ final appRouter = GoRouter(
       path: '/notification-settings',
       builder: (context, state) => const NotificationSettingsPage(),
     ),
+    GoRoute(
+      path: '/qr-result',
+      builder: (context, state) {
+        final content = state.extra as QrContentModel;
+        return QrResultPage(content: content);
+      },
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return ScaffoldWithNavBar(navigationShell: navigationShell);
@@ -76,8 +77,8 @@ final appRouter = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/main',
-              builder: (context, state) => const MainPage(),
+              path: '/map',
+              builder: (context, state) => const MapPage(),
             ),
           ],
         ),

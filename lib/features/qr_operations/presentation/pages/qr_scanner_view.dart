@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -81,14 +82,22 @@ class _QrScannerViewState extends State<QrScannerView> with WidgetsBindingObserv
         children: [
           MobileScanner(
             controller: _controller,
-            onDetect: (capture) {
+            onDetect: (capture) async {
               final List<Barcode> barcodes = capture.barcodes;
               for (final barcode in barcodes) {
                 if (barcode.rawValue != null) {
-                  _store.onScan(barcode.rawValue!);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Scanned: ${barcode.rawValue}')),
-                  );
+                  // Avoid multiple scans of the same code quickly
+                  if (_store.isLoading) return;
+                  
+                  await _store.onScan(barcode.rawValue!);
+                  
+                  if (context.mounted && _store.lastScannedContent != null) {
+                     context.push('/qr-result', extra: _store.lastScannedContent);
+                  } else if (context.mounted) {
+                     ScaffoldMessenger.of(context).showSnackBar(
+                       SnackBar(content: Text('Scanned: ${barcode.rawValue}')),
+                     );
+                  }
                 }
               }
             },

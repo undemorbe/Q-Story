@@ -37,12 +37,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
   @override
   Future<bool> canCheckBiometrics() async {
-    final bool canAuthenticateWithBiometrics = await localAuth.canCheckBiometrics;
-    final bool canAuthenticate = canAuthenticateWithBiometrics || await localAuth.isDeviceSupported();
-    if (!canAuthenticate) return false;
-    
-    final List<BiometricType> availableBiometrics = await localAuth.getAvailableBiometrics();
-    return availableBiometrics.isNotEmpty;
+    return await localAuth.canCheckBiometrics;
   }
 
   @override
@@ -50,8 +45,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     try {
       return await localAuth.authenticate(
         localizedReason: 'Please authenticate to login',
-        // biometricOnly: true, // If available
-        // stickyAuth: true,    // If available
+        // options: const AuthenticationOptions(stickyAuth: true, biometricOnly: true),
       );
     } catch (e) {
       return false;

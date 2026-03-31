@@ -23,20 +23,20 @@ class ScaffoldWithNavBar extends StatelessWidget {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.history),
-            label: 'History',
+            icon: Icon(Icons.map),
+            label: 'Карта',
           ),
           NavigationDestination(
             icon: Icon(Icons.qr_code_scanner),
-            label: 'Scanner',
+            label: 'Сканер',
           ),
           NavigationDestination(
             icon: Icon(Icons.favorite),
-            label: 'Favorites',
+            label: 'Избранное',
           ),
           NavigationDestination(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Профиль',
           ),
         ],
       ),
