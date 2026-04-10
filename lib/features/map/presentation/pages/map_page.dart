@@ -51,7 +51,7 @@ class _MapPageState extends State<MapPage> {
                   return MarkerLayer(
                     markers: _store.markers.map((marker) {
                       return Marker(
-                        point: LatLng(marker.latitude, marker.longitude),
+                        point: LatLng(marker.lat, marker.lon),
                         width: 40,
                         height: 40,
                         child: GestureDetector(
@@ -79,11 +79,44 @@ class _MapPageState extends State<MapPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _mapController.move(_initialCenter, 13.0);
-        },
-        child: const Icon(Icons.my_location),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          // Zoom in button
+          FloatingActionButton.small(
+            heroTag: 'zoomIn',
+            onPressed: () {
+              final currentZoom = _mapController.camera.zoom;
+              _mapController.move(
+                _mapController.camera.center,
+                currentZoom + 1,
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          // Zoom out button
+          FloatingActionButton.small(
+            heroTag: 'zoomOut',
+            onPressed: () {
+              final currentZoom = _mapController.camera.zoom;
+              _mapController.move(
+                _mapController.camera.center,
+                currentZoom - 1,
+              );
+            },
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 16),
+          // My location button
+          FloatingActionButton(
+            heroTag: 'myLocation',
+            onPressed: () {
+              _mapController.move(_initialCenter, 13.0);
+            },
+            child: const Icon(Icons.my_location),
+          ),
+        ],
       ),
     );
   }
@@ -107,7 +140,7 @@ class _MapPageState extends State<MapPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                marker.description,
+                marker.compressedDescription,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),

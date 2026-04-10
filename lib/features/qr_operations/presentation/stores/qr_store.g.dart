@@ -41,6 +41,54 @@ mixin _$QrStore on _QrStore, Store {
     });
   }
 
+  late final _$lastScannedContentAtom =
+      Atom(name: '_QrStore.lastScannedContent', context: context);
+
+  @override
+  QrContentModel? get lastScannedContent {
+    _$lastScannedContentAtom.reportRead();
+    return super.lastScannedContent;
+  }
+
+  @override
+  set lastScannedContent(QrContentModel? value) {
+    _$lastScannedContentAtom.reportWrite(value, super.lastScannedContent, () {
+      super.lastScannedContent = value;
+    });
+  }
+
+  late final _$scannedPlaceDataAtom =
+      Atom(name: '_QrStore.scannedPlaceData', context: context);
+
+  @override
+  QrDataModel? get scannedPlaceData {
+    _$scannedPlaceDataAtom.reportRead();
+    return super.scannedPlaceData;
+  }
+
+  @override
+  set scannedPlaceData(QrDataModel? value) {
+    _$scannedPlaceDataAtom.reportWrite(value, super.scannedPlaceData, () {
+      super.scannedPlaceData = value;
+    });
+  }
+
+  late final _$pendingQrCodeIdAtom =
+      Atom(name: '_QrStore.pendingQrCodeId', context: context);
+
+  @override
+  String? get pendingQrCodeId {
+    _$pendingQrCodeIdAtom.reportRead();
+    return super.pendingQrCodeId;
+  }
+
+  @override
+  set pendingQrCodeId(String? value) {
+    _$pendingQrCodeIdAtom.reportWrite(value, super.pendingQrCodeId, () {
+      super.pendingQrCodeId = value;
+    });
+  }
+
   late final _$isLoadingAtom =
       Atom(name: '_QrStore.isLoading', context: context);
 
@@ -97,6 +145,57 @@ mixin _$QrStore on _QrStore, Store {
     return _$onScanAsyncAction.run(() => super.onScan(data));
   }
 
+  late final _$fetchPlaceInfoAsyncAction =
+      AsyncAction('_QrStore.fetchPlaceInfo', context: context);
+
+  @override
+  Future<void> fetchPlaceInfo(String qrCode) {
+    return _$fetchPlaceInfoAsyncAction.run(() => super.fetchPlaceInfo(qrCode));
+  }
+
+  late final _$saveScanStatisticsAsyncAction =
+      AsyncAction('_QrStore.saveScanStatistics', context: context);
+
+  @override
+  Future<void> saveScanStatistics(String qrCodeId, String placeTitle) {
+    return _$saveScanStatisticsAsyncAction
+        .run(() => super.saveScanStatistics(qrCodeId, placeTitle));
+  }
+
+  late final _$getTotalScansAsyncAction =
+      AsyncAction('_QrStore.getTotalScans', context: context);
+
+  @override
+  Future<int> getTotalScans() {
+    return _$getTotalScansAsyncAction.run(() => super.getTotalScans());
+  }
+
+  late final _$hasScannedAsyncAction =
+      AsyncAction('_QrStore.hasScanned', context: context);
+
+  @override
+  Future<bool> hasScanned(String qrCodeId) {
+    return _$hasScannedAsyncAction.run(() => super.hasScanned(qrCodeId));
+  }
+
+  late final _$markMarkerAsCompletedAsyncAction =
+      AsyncAction('_QrStore.markMarkerAsCompleted', context: context);
+
+  @override
+  Future<void> markMarkerAsCompleted(String markerId) {
+    return _$markMarkerAsCompletedAsyncAction
+        .run(() => super.markMarkerAsCompleted(markerId));
+  }
+
+  late final _$isMarkerCompletedAsyncAction =
+      AsyncAction('_QrStore.isMarkerCompleted', context: context);
+
+  @override
+  Future<bool> isMarkerCompleted(String markerId) {
+    return _$isMarkerCompletedAsyncAction
+        .run(() => super.isMarkerCompleted(markerId));
+  }
+
   late final _$_QrStoreActionController =
       ActionController(name: '_QrStore', context: context);
 
@@ -106,6 +205,39 @@ mixin _$QrStore on _QrStore, Store {
         name: '_QrStore.setGeneratedData');
     try {
       return super.setGeneratedData(data);
+    } finally {
+      _$_QrStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearPendingQrCode() {
+    final _$actionInfo = _$_QrStoreActionController.startAction(
+        name: '_QrStore.clearPendingQrCode');
+    try {
+      return super.clearPendingQrCode();
+    } finally {
+      _$_QrStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearScannedPlaceData() {
+    final _$actionInfo = _$_QrStoreActionController.startAction(
+        name: '_QrStore.clearScannedPlaceData');
+    try {
+      return super.clearScannedPlaceData();
+    } finally {
+      _$_QrStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearLastScannedData() {
+    final _$actionInfo = _$_QrStoreActionController.startAction(
+        name: '_QrStore.clearLastScannedData');
+    try {
+      return super.clearLastScannedData();
     } finally {
       _$_QrStoreActionController.endAction(_$actionInfo);
     }
@@ -127,6 +259,9 @@ mixin _$QrStore on _QrStore, Store {
     return '''
 generatedData: ${generatedData},
 lastScannedData: ${lastScannedData},
+lastScannedContent: ${lastScannedContent},
+scannedPlaceData: ${scannedPlaceData},
+pendingQrCodeId: ${pendingQrCodeId},
 isLoading: ${isLoading},
 errorMessage: ${errorMessage},
 scanHistory: ${scanHistory}

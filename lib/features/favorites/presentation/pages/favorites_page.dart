@@ -6,42 +6,6 @@ import '../../../history/domain/entities/history_entity.dart';
 import '../stores/favorites_store.dart';
 import '../../../history/presentation/widgets/history_card.dart';
 
-// Dummy Data (Shared with MainPage for now - ideally should be in a Repository)
-final List<HistoryEntity> _allEvents = [
-  const HistoryEntity(
-    id: '1',
-    title: 'Industrial Revolution',
-    subtitle: 'Transition to new manufacturing processes',
-    description: 'The Industrial Revolution was the transition to new manufacturing processes in Great Britain, continental Europe, and the United States.',
-    imageUrl: 'https://picsum.photos/id/1/400/300',
-    yearRange: '1760 - 1840',
-  ),
-  const HistoryEntity(
-    id: '2',
-    title: 'French Revolution',
-    subtitle: 'Period of radical political and societal change',
-    description: 'The French Revolution was a period of radical political and societal change in France that began with the Estates General of 1789 and ended with the formation of the French Consulate in November 1799.',
-    imageUrl: 'https://picsum.photos/id/10/400/300',
-    yearRange: '1789 - 1799',
-  ),
-  const HistoryEntity(
-    id: '3',
-    title: 'American Civil War',
-    subtitle: 'Civil war in the United States',
-    description: 'The American Civil War was a civil war in the United States between the Union and the Confederacy.',
-    imageUrl: 'https://picsum.photos/id/20/400/300',
-    yearRange: '1861 - 1865',
-  ),
-  const HistoryEntity(
-    id: '4',
-    title: 'Moon Landing',
-    subtitle: 'First manned mission to land on the Moon',
-    description: 'Apollo 11 was the American spaceflight that first landed humans on the Moon. Commander Neil Armstrong and lunar module pilot Buzz Aldrin.',
-    imageUrl: 'https://picsum.photos/id/30/400/300',
-    yearRange: '1969',
-  ),
-];
-
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});
 
@@ -66,9 +30,16 @@ class FavoritesPage extends StatelessWidget {
             );
           }
 
-          final favoriteEvents = _allEvents
-              .where((event) => store.isFavorite(event.id))
-              .toList();
+          final favoriteEvents = store.favoriteItems.map((item) {
+            return HistoryEntity(
+              id: item['id'] as String,
+              title: item['title'] as String,
+              subtitle: item['subtitle'] as String? ?? '',
+              description: item['description'] as String? ?? '',
+              imageUrl: item['imageUrl'] as String? ?? '',
+              yearRange: item['yearRange'] as String? ?? '',
+            );
+          }).toList();
 
           return GridView.builder(
             padding: const EdgeInsets.all(16),

@@ -3,20 +3,22 @@ import '../../domain/entities/map_marker_entity.dart';
 class MapMarkerModel extends MapMarkerEntity {
   const MapMarkerModel({
     required super.id,
-    required super.latitude,
-    required super.longitude,
+    required super.lat,
+    required super.lon,
     required super.title,
-    required super.description,
+    required super.compressedDescription,
+    required super.type,
     super.isCompleted,
   });
 
   factory MapMarkerModel.fromJson(Map<String, dynamic> json) {
     return MapMarkerModel(
       id: json['id'] as String,
-      latitude: (json['lat'] as num).toDouble(),
-      longitude: (json['long'] as num).toDouble(),
+      lat: double.tryParse(json['lat'].toString()) ?? 0.0,
+      lon: double.tryParse(json['lon'].toString()) ?? 0.0,
       title: json['title'] as String,
-      description: json['description'] as String,
+      compressedDescription: json['compressed-description'] as String? ?? '',
+      type: json['type'] as String,
       isCompleted: json['isCompleted'] as bool? ?? false,
     );
   }
@@ -24,28 +26,31 @@ class MapMarkerModel extends MapMarkerEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'lat': latitude,
-      'long': longitude,
+      'lat': lat,
+      'lon': lon,
       'title': title,
-      'description': description,
+      'compressed-description': compressedDescription,
+      'type': type,
       'isCompleted': isCompleted,
     };
   }
 
   MapMarkerModel copyWith({
     String? id,
-    double? latitude,
-    double? longitude,
+    double? lat,
+    double? lon,
     String? title,
-    String? description,
+    String? compressedDescription,
+    String? type,
     bool? isCompleted,
   }) {
     return MapMarkerModel(
       id: id ?? this.id,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
+      lat: lat ?? this.lat,
+      lon: lon ?? this.lon,
       title: title ?? this.title,
-      description: description ?? this.description,
+      compressedDescription: compressedDescription ?? this.compressedDescription,
+      type: type ?? this.type,
       isCompleted: isCompleted ?? this.isCompleted,
     );
   }

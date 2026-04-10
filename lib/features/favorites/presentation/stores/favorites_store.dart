@@ -1,45 +1,44 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:mobx/mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../history/data/datasources/favorites_local_data_source.dart';
 
 part 'favorites_store.g.dart';
 
 class FavoritesStore = _FavoritesStore with _$FavoritesStore;
 
 abstract class _FavoritesStore with Store {
-  final SharedPreferences _prefs;
-  static const String _favoritesKey = 'favorites_list';
+  final FavoritesLocalDataSource _localDataSource;
 
-  _FavoritesStore(this._prefs) {
+  _FavoritesStore(this._localDataSource) {
     _loadFavorites();
   }
 
   @observable
-  ObservableList<String> favoriteIds = ObservableList<String>();
+  ObservableList<Map<String, dynamic>> favoriteItems = ObservableList<Map<String, dynamic>>();
 
   @computed
-  bool get hasFavorites => favoriteIds.isNotEmpty;
+  bool get hasFavorites => favoriteItems.isNotEmpty;
 
   @action
   Future<void> _loadFavorites() async {
-    final List<String>? storedFavorites = _prefs.getStringList(_favoritesKey);
-    if (storedFavorites != null) {
-      favoriteIds = ObservableList.of(storedFavorites);
-    }
+    final items = await _localDataSource.getFavorites();
+    favoriteItems = ObservableList.of(items);
   }
 
   @action
-  Future<void> toggleFavorite(String id) async {
-    if (favoriteIds.contains(id)) {
-      favoriteIds.remove(id);
-    } else {
-      favoriteIds.add(id);
-    }
-    await _prefs.setStringList(_favoritesKey, favoriteIds.toList());
+  Future<void> toggleFavorite(Map<String, dynamic> historyItem) async {
+    await _localDataSource.toggleFavorite(historyItem);
+    await _loadFavorites();
+  }
+
+  @action
+  Future<void> removeFavorite(String id) async {
+    await _localDataSource.removeFromFavorites(id);
+    await _loadFavorites();
   }
 
   bool isFavorite(String id) {
-    return favoriteIds.contains(id);
+    return favoriteItems.any((item) => item['id'] == id);
   }
 }

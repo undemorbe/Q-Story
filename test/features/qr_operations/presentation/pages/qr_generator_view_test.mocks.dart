@@ -3,10 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i6;
 
 import 'package:mobx/mobx.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:qstory/features/qr_operations/data/models/qr_content_model.dart'
+    as _i4;
+import 'package:qstory/features/qr_operations/data/models/qr_data_model.dart'
+    as _i5;
 import 'package:qstory/features/qr_operations/presentation/stores/qr_store.dart'
     as _i3;
 
@@ -90,6 +94,33 @@ class MockQrStore extends _i1.Mock implements _i3.QrStore {
       );
 
   @override
+  set lastScannedContent(_i4.QrContentModel? value) => super.noSuchMethod(
+        Invocation.setter(
+          #lastScannedContent,
+          value,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  set scannedPlaceData(_i5.QrDataModel? value) => super.noSuchMethod(
+        Invocation.setter(
+          #scannedPlaceData,
+          value,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  set pendingQrCodeId(String? value) => super.noSuchMethod(
+        Invocation.setter(
+          #pendingQrCodeId,
+          value,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   set isLoading(bool? value) => super.noSuchMethod(
         Invocation.setter(
           #isLoading,
@@ -139,14 +170,51 @@ class MockQrStore extends _i1.Mock implements _i3.QrStore {
       );
 
   @override
-  _i4.Future<void> onScan(String? data) => (super.noSuchMethod(
+  _i6.Future<void> onScan(String? data) => (super.noSuchMethod(
         Invocation.method(
           #onScan,
           [data],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> fetchPlaceInfo(String? qrCode) => (super.noSuchMethod(
+        Invocation.method(
+          #fetchPlaceInfo,
+          [qrCode],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  void clearPendingQrCode() => super.noSuchMethod(
+        Invocation.method(
+          #clearPendingQrCode,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void clearScannedPlaceData() => super.noSuchMethod(
+        Invocation.method(
+          #clearScannedPlaceData,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void clearLastScannedData() => super.noSuchMethod(
+        Invocation.method(
+          #clearLastScannedData,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
   void onManualInput(String? input) => super.noSuchMethod(
@@ -156,4 +224,62 @@ class MockQrStore extends _i1.Mock implements _i3.QrStore {
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  _i6.Future<void> saveScanStatistics(
+    String? qrCodeId,
+    String? placeTitle,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveScanStatistics,
+          [
+            qrCodeId,
+            placeTitle,
+          ],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<int> getTotalScans() => (super.noSuchMethod(
+        Invocation.method(
+          #getTotalScans,
+          [],
+        ),
+        returnValue: _i6.Future<int>.value(0),
+        returnValueForMissingStub: _i6.Future<int>.value(0),
+      ) as _i6.Future<int>);
+
+  @override
+  _i6.Future<bool> hasScanned(String? qrCodeId) => (super.noSuchMethod(
+        Invocation.method(
+          #hasScanned,
+          [qrCodeId],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+        returnValueForMissingStub: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+
+  @override
+  _i6.Future<void> markMarkerAsCompleted(String? markerId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #markMarkerAsCompleted,
+          [markerId],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<bool> isMarkerCompleted(String? markerId) => (super.noSuchMethod(
+        Invocation.method(
+          #isMarkerCompleted,
+          [markerId],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+        returnValueForMissingStub: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
 }

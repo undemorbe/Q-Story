@@ -6,6 +6,10 @@
 import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:qstory/features/map/data/datasources/completed_markers_local_data_source.dart'
+    as _i6;
+import 'package:qstory/features/qr_operations/data/datasources/scan_statistics_local_data_source.dart'
+    as _i5;
 import 'package:qstory/features/qr_operations/domain/entities/qr_entity.dart'
     as _i2;
 import 'package:qstory/features/qr_operations/domain/usecases/process_qr_usecase.dart'
@@ -62,4 +66,119 @@ class MockProcessQrUseCase extends _i1.Mock implements _i3.ProcessQrUseCase {
           ),
         )),
       ) as _i4.Future<_i2.QrEntity>);
+}
+
+/// A class which mocks [ScanStatisticsLocalDataSource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockScanStatisticsLocalDataSource extends _i1.Mock
+    implements _i5.ScanStatisticsLocalDataSource {
+  @override
+  _i4.Future<void> saveScan({
+    required String? qrCodeId,
+    required String? placeTitle,
+    required DateTime? scannedAt,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveScan,
+          [],
+          {
+            #qrCodeId: qrCodeId,
+            #placeTitle: placeTitle,
+            #scannedAt: scannedAt,
+          },
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<List<Map<String, dynamic>>> getScanHistory() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getScanHistory,
+          [],
+        ),
+        returnValue: _i4.Future<List<Map<String, dynamic>>>.value(
+            <Map<String, dynamic>>[]),
+        returnValueForMissingStub: _i4.Future<List<Map<String, dynamic>>>.value(
+            <Map<String, dynamic>>[]),
+      ) as _i4.Future<List<Map<String, dynamic>>>);
+
+  @override
+  _i4.Future<int> getTotalScans() => (super.noSuchMethod(
+        Invocation.method(
+          #getTotalScans,
+          [],
+        ),
+        returnValue: _i4.Future<int>.value(0),
+        returnValueForMissingStub: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
+
+  @override
+  _i4.Future<bool> hasScanned(String? qrCodeId) => (super.noSuchMethod(
+        Invocation.method(
+          #hasScanned,
+          [qrCodeId],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+
+  @override
+  _i4.Future<void> clearScanHistory() => (super.noSuchMethod(
+        Invocation.method(
+          #clearScanHistory,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+}
+
+/// A class which mocks [CompletedMarkersLocalDataSource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCompletedMarkersLocalDataSource extends _i1.Mock
+    implements _i6.CompletedMarkersLocalDataSource {
+  @override
+  _i4.Future<Set<String>> getCompletedMarkerIds() => (super.noSuchMethod(
+        Invocation.method(
+          #getCompletedMarkerIds,
+          [],
+        ),
+        returnValue: _i4.Future<Set<String>>.value(<String>{}),
+        returnValueForMissingStub: _i4.Future<Set<String>>.value(<String>{}),
+      ) as _i4.Future<Set<String>>);
+
+  @override
+  _i4.Future<void> markAsCompleted(String? markerId) => (super.noSuchMethod(
+        Invocation.method(
+          #markAsCompleted,
+          [markerId],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<bool> isCompleted(String? markerId) => (super.noSuchMethod(
+        Invocation.method(
+          #isCompleted,
+          [markerId],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+
+  @override
+  _i4.Future<void> clearAll() => (super.noSuchMethod(
+        Invocation.method(
+          #clearAll,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }

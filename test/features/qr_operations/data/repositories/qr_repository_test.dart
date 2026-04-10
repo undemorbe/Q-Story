@@ -1,11 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:qstory/core/network/api_client.dart';
 import 'package:qstory/features/qr_operations/data/repositories/qr_repository_impl.dart';
 
 void main() {
   late QrRepositoryImpl repository;
+  late ApiClient apiClient;
 
   setUp(() {
-    repository = QrRepositoryImpl();
+    apiClient = ApiClient();
+    repository = QrRepositoryImpl(apiClient);
   });
 
   group('QrRepositoryImpl', () {

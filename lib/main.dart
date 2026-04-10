@@ -34,7 +34,7 @@ class MainApp extends StatelessWidget {
     return Observer(
       builder: (_) {
         return MaterialApp.router(
-          title: 'QStory',
+          title: 'Q-Story',
           routerConfig: appRouter,
           localizationsDelegates: const [
             AppLocalizations.delegate,

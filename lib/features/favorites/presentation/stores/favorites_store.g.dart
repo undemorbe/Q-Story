@@ -17,19 +17,19 @@ mixin _$FavoritesStore on _FavoritesStore, Store {
               name: '_FavoritesStore.hasFavorites'))
           .value;
 
-  late final _$favoriteIdsAtom =
-      Atom(name: '_FavoritesStore.favoriteIds', context: context);
+  late final _$favoriteItemsAtom =
+      Atom(name: '_FavoritesStore.favoriteItems', context: context);
 
   @override
-  ObservableList<String> get favoriteIds {
-    _$favoriteIdsAtom.reportRead();
-    return super.favoriteIds;
+  ObservableList<Map<String, dynamic>> get favoriteItems {
+    _$favoriteItemsAtom.reportRead();
+    return super.favoriteItems;
   }
 
   @override
-  set favoriteIds(ObservableList<String> value) {
-    _$favoriteIdsAtom.reportWrite(value, super.favoriteIds, () {
-      super.favoriteIds = value;
+  set favoriteItems(ObservableList<Map<String, dynamic>> value) {
+    _$favoriteItemsAtom.reportWrite(value, super.favoriteItems, () {
+      super.favoriteItems = value;
     });
   }
 
@@ -45,14 +45,23 @@ mixin _$FavoritesStore on _FavoritesStore, Store {
       AsyncAction('_FavoritesStore.toggleFavorite', context: context);
 
   @override
-  Future<void> toggleFavorite(String id) {
-    return _$toggleFavoriteAsyncAction.run(() => super.toggleFavorite(id));
+  Future<void> toggleFavorite(Map<String, dynamic> historyItem) {
+    return _$toggleFavoriteAsyncAction
+        .run(() => super.toggleFavorite(historyItem));
+  }
+
+  late final _$removeFavoriteAsyncAction =
+      AsyncAction('_FavoritesStore.removeFavorite', context: context);
+
+  @override
+  Future<void> removeFavorite(String id) {
+    return _$removeFavoriteAsyncAction.run(() => super.removeFavorite(id));
   }
 
   @override
   String toString() {
     return '''
-favoriteIds: ${favoriteIds},
+favoriteItems: ${favoriteItems},
 hasFavorites: ${hasFavorites}
     ''';
   }

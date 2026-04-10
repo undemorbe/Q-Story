@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../history/presentation/pages/daily_history_page.dart';
-import '../../../auth/presentation/stores/auth_store.dart';
 import '../../../qr_operations/presentation/stores/qr_store.dart';
 import '../../../favorites/presentation/stores/favorites_store.dart';
 import '../../../settings/presentation/pages/notification_settings_page.dart';
@@ -15,7 +13,6 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authStore = getIt<AuthStore>();
     final qrStore = getIt<QrStore>();
     final favoritesStore = getIt<FavoritesStore>();
     final mapStore = getIt<MapStore>();
@@ -80,7 +77,7 @@ class ProfilePage extends StatelessWidget {
                       child: _buildStatCard(
                         context,
                         'Избранное',
-                        favoritesStore.favoriteIds.length.toString(),
+                        favoritesStore.favoriteItems.length.toString(),
                         Icons.favorite,
                       ),
                     ),

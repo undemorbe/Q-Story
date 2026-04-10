@@ -3,8 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../network/api_client.dart';
 import '../../features/qr_operations/data/repositories/qr_repository_impl.dart';
 import '../../features/qr_operations/domain/repositories/qr_repository.dart';
-import '../../features/qr_operations/presentation/stores/qr_store.dart';
 import '../../features/qr_operations/domain/usecases/process_qr_usecase.dart';
+import '../../features/qr_operations/presentation/stores/qr_store.dart';
+import '../../features/qr_operations/data/datasources/scan_statistics_local_data_source.dart';
 import '../../features/settings/data/datasources/settings_local_data_source.dart';
 import '../../features/settings/data/repositories/settings_repository_impl.dart';
 import '../../features/settings/domain/repositories/settings_repository.dart';
@@ -20,6 +21,8 @@ import '../../features/history/data/datasources/history_local_data_source.dart';
 import '../../features/history/data/repositories/history_repository_impl.dart';
 import '../../features/history/domain/repositories/history_repository.dart';
 import '../../features/history/presentation/stores/history_store.dart';
+import '../../features/map/data/datasources/completed_markers_local_data_source.dart';
+import '../../features/history/data/datasources/favorites_local_data_source.dart';
 import '../../features/map/data/repositories/map_repository_impl.dart';
 import '../../features/map/domain/repositories/map_repository.dart';
 import '../../features/map/presentation/stores/map_store.dart';
@@ -37,18 +40,27 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<ApiClient>(() => ApiClient());
 
   // Data Sources
+  getIt.registerLazySingleton<CompletedMarkersLocalDataSource>(
+    () => CompletedMarkersLocalDataSource(),
+  );
+  getIt.registerLazySingleton<FavoritesLocalDataSource>(
+    () => FavoritesLocalDataSource(),
+  );
   getIt.registerLazySingleton<SettingsLocalDataSource>(
     () => SettingsLocalDataSourceImpl(getIt()),
-  );
-  getIt.registerLazySingleton<HistoryLocalDataSource>(
-    () => HistoryLocalDataSourceImpl(sharedPreferences: getIt()),
   );
   getIt.registerLazySingleton<AuthLocalDataSource>(
     () => AuthLocalDataSourceImpl(secureStorage: getIt(), localAuth: getIt()),
   );
+  getIt.registerLazySingleton<ScanStatisticsLocalDataSource>(
+    () => ScanStatisticsLocalDataSource(getIt()),
+  );
+  getIt.registerLazySingleton<HistoryLocalDataSource>(
+    () => HistoryLocalDataSourceImpl(sharedPreferences: getIt()),
+  );
 
   // Repositories
-  getIt.registerLazySingleton<QrRepository>(() => QrRepositoryImpl());
+  getIt.registerLazySingleton<QrRepository>(() => QrRepositoryImpl(getIt<ApiClient>()));
   getIt.registerLazySingleton<SettingsRepository>(
     () => SettingsRepositoryImpl(getIt()),
   );
@@ -58,7 +70,7 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(localDataSource: getIt()),
   );
-  getIt.registerLazySingleton<MapRepository>(() => MapRepositoryImpl());
+  getIt.registerLazySingleton<MapRepository>(() => MapRepositoryImpl(getIt<ApiClient>(), getIt<CompletedMarkersLocalDataSource>()));
 
   // UseCases
   getIt.registerLazySingleton<ProcessQrUseCase>(
@@ -66,7 +78,7 @@ Future<void> setupServiceLocator() async {
   );
 
   // Stores
-  getIt.registerLazySingleton<QrStore>(() => QrStore(getIt()));
+  getIt.registerLazySingleton<QrStore>(() => QrStore(getIt(), getIt(), getIt(), getIt()));
   getIt.registerLazySingleton<SettingsStore>(() => SettingsStore(getIt()));
   getIt.registerLazySingleton<AuthStore>(() => AuthStore(getIt()));
   getIt.registerLazySingleton<FavoritesStore>(() => FavoritesStore(getIt()));

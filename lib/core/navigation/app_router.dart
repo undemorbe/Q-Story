@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../features/auth/presentation/pages/login_page.dart';
-import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/map/presentation/pages/map_page.dart';
 import '../../features/history/presentation/pages/history_detail_page.dart';
 import '../../features/history/domain/entities/history_entity.dart';
@@ -51,6 +49,18 @@ final appRouter = GoRouter(
       path: '/history/:id',
       builder: (context, state) {
         final entity = state.extra as HistoryEntity;
+        return HistoryDetailPage(entity: entity);
+      },
+    ),
+    GoRoute(
+      path: '/history-detail',
+      builder: (context, state) {
+        final entity = state.extra as HistoryEntity?;
+        if (entity == null) {
+          return const Scaffold(
+            body: Center(child: Text('No data provided')),
+          );
+        }
         return HistoryDetailPage(entity: entity);
       },
     ),
