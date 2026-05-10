@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/gothic_widgets.dart';
 import '../../../history/presentation/pages/daily_history_page.dart';
 import '../../../qr_operations/presentation/stores/qr_store.dart';
 import '../../../favorites/presentation/stores/favorites_store.dart';
 import '../../../settings/presentation/pages/notification_settings_page.dart';
-
 import '../../../map/presentation/stores/map_store.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -19,10 +21,10 @@ class ProfilePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Профиль'),
+        title: const Text('Profile'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.settings_outlined),
             onPressed: () {
               Navigator.push(
                 context,
@@ -37,33 +39,59 @@ class ProfilePage extends StatelessWidget {
       body: Observer(
         builder: (_) {
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 20),
-                // User Avatar
-                const CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+                const SizedBox(height: 12),
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.primaryGold, width: 2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryGold.withValues(alpha: 0.25),
+                        blurRadius: 20,
+                        spreadRadius: 3,
+                      ),
+                    ],
+                  ),
+                  child: const CircleAvatar(
+                    radius: 52,
+                    backgroundImage:
+                        NetworkImage('https://i.pravatar.cc/300'),
+                  ),
                 ),
                 const SizedBox(height: 16),
-                // Username
                 Text(
-                  'Историк', // Placeholder
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  '✦',
+                  style: TextStyle(
+                    color: AppColors.primaryGold.withValues(alpha: 0.5),
+                    fontSize: 12,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
+                Text(
+                  'Историк',
+                  style: GoogleFonts.cinzelDecorative(
+                    color: AppColors.onBackground,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 6),
                 Text(
                   'user@qstory.com',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey,
-                      ),
+                  style: GoogleFonts.crimsonText(
+                    color: AppColors.onSurface,
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
-                const SizedBox(height: 32),
-                // Stats Row
+                const SizedBox(height: 28),
+                const GothicDivider(),
+                const SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
                       child: _buildStatCard(
@@ -73,6 +101,7 @@ class ProfilePage extends StatelessWidget {
                         Icons.qr_code_scanner,
                       ),
                     ),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: _buildStatCard(
                         context,
@@ -81,27 +110,33 @@ class ProfilePage extends StatelessWidget {
                         Icons.favorite,
                       ),
                     ),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: _buildStatCard(
                         context,
                         'Посещено',
-                        mapStore.markers.where((m) => m.isCompleted).length.toString(),
+                        mapStore.markers
+                            .where((m) => m.isCompleted)
+                            .length
+                            .toString(),
                         Icons.location_on,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 32),
-                // Quick Actions
-                Card(
-                  elevation: 2,
+                const SizedBox(height: 24),
+                const GothicDivider(),
+                const SizedBox(height: 8),
+                GothicCard(
+                  padding: EdgeInsets.zero,
                   child: Column(
                     children: [
                       ListTile(
                         leading: const Icon(Icons.history),
                         title: const Text('История дня'),
                         subtitle: const Text('Откройте для себя сегодняшнюю историю'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: AppColors.outline),
                         onTap: () {
                           Navigator.push(
                             context,
@@ -111,52 +146,35 @@ class ProfilePage extends StatelessWidget {
                           );
                         },
                       ),
-                      const Divider(height: 1),
+                      Container(height: 1, color: AppColors.outlineVariant),
                       ListTile(
-                        leading: const Icon(Icons.notifications),
+                        leading: const Icon(Icons.notifications_outlined),
                         title: const Text('Уведомления'),
                         subtitle: const Text('Настройте ежедневные уведомления'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: AppColors.outline),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const NotificationSettingsPage(),
+                              builder: (context) =>
+                                  const NotificationSettingsPage(),
                             ),
                           );
                         },
                       ),
-                      const Divider(height: 1),
+                      Container(height: 1, color: AppColors.outlineVariant),
                       ListTile(
                         leading: const Icon(Icons.help_outline),
                         title: const Text('Помощь и поддержка'),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: AppColors.outline),
                         onTap: () {},
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 32),
-                // Logout Button removed as authentication is removed
-                /*
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () async {
-                      await authStore.logout();
-                      if (context.mounted) {
-                        context.go('/login');
-                      }
-                    },
-                    icon: const Icon(Icons.logout),
-                    label: const Text('Выйти'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      foregroundColor: Colors.red,
-                    ),
-                  ),
-                ),
-                */
               ],
             ),
           );
@@ -171,29 +189,30 @@ class ProfilePage extends StatelessWidget {
     String value,
     IconData icon,
   ) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-        child: Column(
-          children: [
-            Icon(icon, size: 28, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+    return GothicCard(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      child: Column(
+        children: [
+          Icon(icon, size: 26, color: AppColors.primaryGold),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: GoogleFonts.cinzelDecorative(
+              color: AppColors.onBackground,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.labelMedium,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: GoogleFonts.cinzel(
+                color: AppColors.onSurface, fontSize: 9, letterSpacing: 0.3),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

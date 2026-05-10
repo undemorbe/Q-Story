@@ -82,6 +82,18 @@ class _MapPageState extends State<MapPage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          // Refresh button
+          FloatingActionButton(
+            heroTag: 'refresh',
+            onPressed: () {
+              _store.loadMarkers();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Обновление карты...')),
+              );
+            },
+            child: const Icon(Icons.refresh),
+          ),
+          const SizedBox(height: 16),
           // Zoom in button
           FloatingActionButton.small(
             heroTag: 'zoomIn',
