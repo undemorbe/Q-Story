@@ -37,6 +37,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get close => 'Close';
+
+  @override
+  String get save => 'Save';
+
+  @override
   String get scanResult => 'Scan Result';
 
   @override
@@ -287,115 +293,160 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get close => 'Close';
-  @override
-  String get save => 'Save';
-  @override
-  String get done => 'Done';
-  @override
-  String get confirmAction => 'Confirm';
+  String get createMarkerTitle => 'Create Marker';
 
   @override
-  String get createMarkerTitle => 'Create Marker';
-  @override
   String get markerSection => 'Map Marker';
+
   @override
   String get buildingSection => 'Object (QR)';
+
   @override
   String get titleField => 'Title';
+
   @override
   String get typeField => 'Type';
+
   @override
   String get markerCompressedField => 'Compressed description (marker)';
+
   @override
   String get buildingNameField => 'Object name';
+
   @override
   String get buildingCompressedField => 'Compressed description';
+
   @override
   String get descTopField => 'Upper description';
+
   @override
   String get descMainField => 'Main description';
+
   @override
   String get descBottomField => 'Lower description';
+
   @override
   String get personField => 'Related person';
+
   @override
   String get dateStartField => 'Start date';
+
   @override
   String get dateEndField => 'End date';
+
   @override
   String get imageUrlField => 'Image URL';
+
   @override
   String get coordinatesLabel => 'Coordinates';
+
   @override
   String get resourcesLabel => 'SOURCES';
+
   @override
-  String resourceItem(int n) => 'Source $n';
+  String resourceItem(int n) {
+    return 'Source $n';
+  }
+
   @override
   String get addResource => 'Add source';
+
   @override
   String get atLeastOneResource => 'Add at least one source';
+
   @override
   String get fieldRequired => 'Required field';
+
   @override
   String get selectDate => 'Select date';
+
   @override
   String get submittingLabel => 'Submitting…';
+
   @override
   String get publishButton => 'Publish';
+
   @override
   String get markerPublished => 'Marker published';
 
   @override
   String get pickPointTitle => 'Pick a point';
+
   @override
   String get tapMapHint => 'Tap on the map to choose coordinates';
 
   @override
+  String get done => 'Done';
+
+  @override
+  String get confirmAction => 'Confirm';
+
+  @override
   String get onThisDayTitle => 'On this day';
+
   @override
   String get onThisDaySubtitle => 'events of the day in Russian history';
+
   @override
   String get anotherFact => 'Another fact';
+
   @override
   String get refreshAction => 'Refresh';
+
   @override
   String get loadingLabel => 'Loading…';
+
   @override
   String get openInWikipedia => 'Open in Wikipedia';
+
   @override
   String get noFactsForToday =>
       'No facts from Russian or Soviet history for this day.';
+
   @override
   String get wikipediaSource => 'Source: Wikipedia';
+
   @override
-  String wikipediaSourceWithCount(int count) =>
-      'Source: Wikipedia · $count facts';
+  String wikipediaSourceWithCount(int count) {
+    return 'Source: Wikipedia · $count facts';
+  }
 
   @override
   String get refreshingMap => 'Refreshing the map…';
+
   @override
   String get locationDisabled => 'Location is disabled in device settings';
+
   @override
   String get locationDenied => 'Location access not granted';
+
   @override
   String get locationDeniedForever =>
       'Location is permanently denied. Enable it in app settings';
+
   @override
-  String locationError(String error) =>
-      'Could not determine coordinates: $error';
+  String locationError(String error) {
+    return 'Could not determine coordinates: $error';
+  }
+
   @override
   String get filtersTitle => 'Filters';
+
   @override
   String get statusFilter => 'Status';
+
   @override
   String get filterAll => 'All';
+
   @override
   String get filterCompleted => 'Completed';
+
   @override
   String get filterNotCompleted => 'Not completed';
+
   @override
   String get markAsCompleted => 'Mark as completed';
+
   @override
   String get markedAsCompleted => 'Marked as completed!';
 }

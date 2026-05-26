@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
 import '../../domain/entities/daily_fact_entity.dart';
@@ -36,9 +37,10 @@ class _DailyHistoryPageState extends State<DailyHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     return Scaffold(
-      appBar: AppBar(title: const Text('История дня')),
+      appBar: AppBar(title: Text(l10n.onThisDayTitle)),
       body: Observer(
         builder: (_) {
           return RefreshIndicator(
@@ -88,6 +90,7 @@ class _DailyHistoryPageState extends State<DailyHistoryPage> {
   }
 
   Widget _buildActions(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final canRefresh = !_store.isLoading;
     return Column(
       children: [
@@ -96,7 +99,7 @@ class _DailyHistoryPageState extends State<DailyHistoryPage> {
           child: ElevatedButton.icon(
             onPressed: canRefresh ? () => _store.nextFact() : null,
             icon: const Icon(Icons.auto_awesome, size: 18),
-            label: const Text('Другой факт'),
+            label: Text(l10n.anotherFact),
           ),
         ),
         const SizedBox(height: 10),
@@ -113,7 +116,8 @@ class _DailyHistoryPageState extends State<DailyHistoryPage> {
                         strokeWidth: 2, color: context.gold),
                   )
                 : const Icon(Icons.refresh, size: 18),
-            label: Text(_store.isLoading ? 'Загрузка…' : 'Обновить'),
+            label: Text(
+                _store.isLoading ? l10n.loadingLabel : l10n.refreshAction),
           ),
         ),
       ],
@@ -157,7 +161,7 @@ class _DateHeader extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'события дня в истории России',
+          AppLocalizations.of(context)!.onThisDaySubtitle,
           style: GoogleFonts.crimsonText(
             color: context.onBg,
             fontSize: 14,
@@ -279,7 +283,8 @@ class _FactCard extends StatelessWidget {
                     child: TextButton.icon(
                       onPressed: () => onOpenLink(fact.wikipediaUrl!),
                       icon: const Icon(Icons.open_in_new, size: 14),
-                      label: const Text('Открыть в Wikipedia'),
+                      label:
+                          Text(AppLocalizations.of(context)!.openInWikipedia),
                     ),
                   ),
                 ],
@@ -307,7 +312,7 @@ class _EmptyCard extends StatelessWidget {
               style: TextStyle(color: context.outlineClr, fontSize: 28)),
           const SizedBox(height: 12),
           Text(
-            'На этот день нет фактов из истории России или СССР.',
+            AppLocalizations.of(context)!.noFactsForToday,
             style: GoogleFonts.crimsonText(
               color: context.onBg,
               fontSize: 16,
@@ -354,11 +359,12 @@ class _SourceFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Text(
         factsCount > 0
-            ? 'Источник: Wikipedia · доступно фактов: $factsCount'
-            : 'Источник: Wikipedia',
+            ? l10n.wikipediaSourceWithCount(factsCount)
+            : l10n.wikipediaSource,
         style: GoogleFonts.cinzel(
           color: context.onBg.withValues(alpha: 0.5),
           fontSize: 10,

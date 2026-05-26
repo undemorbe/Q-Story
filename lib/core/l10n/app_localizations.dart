@@ -152,6 +152,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
   /// No description provided for @scanResult.
   ///
   /// In en, this message translates to:
@@ -638,63 +650,304 @@ abstract class AppLocalizations {
   /// **'Daily notifications activated at {time}'**
   String dailyNotificationsActivated(String time);
 
-  // ─── Newly added (create marker / picker / daily fact / map filters) ──────
-
-  String get close;
-  String get save;
-  String get done;
-  String get confirmAction;
-
+  /// No description provided for @createMarkerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Marker'**
   String get createMarkerTitle;
+
+  /// No description provided for @markerSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Map Marker'**
   String get markerSection;
+
+  /// No description provided for @buildingSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Object (QR)'**
   String get buildingSection;
+
+  /// No description provided for @titleField.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
   String get titleField;
+
+  /// No description provided for @typeField.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
   String get typeField;
+
+  /// No description provided for @markerCompressedField.
+  ///
+  /// In en, this message translates to:
+  /// **'Compressed description (marker)'**
   String get markerCompressedField;
+
+  /// No description provided for @buildingNameField.
+  ///
+  /// In en, this message translates to:
+  /// **'Object name'**
   String get buildingNameField;
+
+  /// No description provided for @buildingCompressedField.
+  ///
+  /// In en, this message translates to:
+  /// **'Compressed description'**
   String get buildingCompressedField;
+
+  /// No description provided for @descTopField.
+  ///
+  /// In en, this message translates to:
+  /// **'Upper description'**
   String get descTopField;
+
+  /// No description provided for @descMainField.
+  ///
+  /// In en, this message translates to:
+  /// **'Main description'**
   String get descMainField;
+
+  /// No description provided for @descBottomField.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower description'**
   String get descBottomField;
+
+  /// No description provided for @personField.
+  ///
+  /// In en, this message translates to:
+  /// **'Related person'**
   String get personField;
+
+  /// No description provided for @dateStartField.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
   String get dateStartField;
+
+  /// No description provided for @dateEndField.
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
   String get dateEndField;
+
+  /// No description provided for @imageUrlField.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL'**
   String get imageUrlField;
+
+  /// No description provided for @coordinatesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
   String get coordinatesLabel;
+
+  /// No description provided for @resourcesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SOURCES'**
   String get resourcesLabel;
+
+  /// No description provided for @resourceItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Source {n}'**
   String resourceItem(int n);
+
+  /// No description provided for @addResource.
+  ///
+  /// In en, this message translates to:
+  /// **'Add source'**
   String get addResource;
+
+  /// No description provided for @atLeastOneResource.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one source'**
   String get atLeastOneResource;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required field'**
   String get fieldRequired;
+
+  /// No description provided for @selectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select date'**
   String get selectDate;
+
+  /// No description provided for @submittingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting…'**
   String get submittingLabel;
+
+  /// No description provided for @publishButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish'**
   String get publishButton;
+
+  /// No description provided for @markerPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Marker published'**
   String get markerPublished;
 
+  /// No description provided for @pickPointTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a point'**
   String get pickPointTitle;
+
+  /// No description provided for @tapMapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap on the map to choose coordinates'**
   String get tapMapHint;
 
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @confirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirmAction;
+
+  /// No description provided for @onThisDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'On this day'**
   String get onThisDayTitle;
+
+  /// No description provided for @onThisDaySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'events of the day in Russian history'**
   String get onThisDaySubtitle;
+
+  /// No description provided for @anotherFact.
+  ///
+  /// In en, this message translates to:
+  /// **'Another fact'**
   String get anotherFact;
+
+  /// No description provided for @refreshAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
   String get refreshAction;
+
+  /// No description provided for @loadingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
   String get loadingLabel;
+
+  /// No description provided for @openInWikipedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Wikipedia'**
   String get openInWikipedia;
+
+  /// No description provided for @noFactsForToday.
+  ///
+  /// In en, this message translates to:
+  /// **'No facts from Russian or Soviet history for this day.'**
   String get noFactsForToday;
+
+  /// No description provided for @wikipediaSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: Wikipedia'**
   String get wikipediaSource;
+
+  /// No description provided for @wikipediaSourceWithCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: Wikipedia · {count} facts'**
   String wikipediaSourceWithCount(int count);
 
+  /// No description provided for @refreshingMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing the map…'**
   String get refreshingMap;
+
+  /// No description provided for @locationDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is disabled in device settings'**
   String get locationDisabled;
+
+  /// No description provided for @locationDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location access not granted'**
   String get locationDenied;
+
+  /// No description provided for @locationDeniedForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is permanently denied. Enable it in app settings'**
   String get locationDeniedForever;
+
+  /// No description provided for @locationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not determine coordinates: {error}'**
   String locationError(String error);
+
+  /// No description provided for @filtersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
   String get filtersTitle;
+
+  /// No description provided for @statusFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
   String get statusFilter;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
   String get filterAll;
+
+  /// No description provided for @filterCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
   String get filterCompleted;
+
+  /// No description provided for @filterNotCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not completed'**
   String get filterNotCompleted;
+
+  /// No description provided for @markAsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as completed'**
   String get markAsCompleted;
+
+  /// No description provided for @markedAsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked as completed!'**
   String get markedAsCompleted;
 }
 

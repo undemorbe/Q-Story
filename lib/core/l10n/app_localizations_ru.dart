@@ -19,7 +19,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get cameraPermissionRequired =>
-      'Для сканирования QR-кодов необходим доступ к камере.';
+      'Для сканирования QR-кодов нужен доступ к камере.';
 
   @override
   String get openSettings => 'Открыть настройки';
@@ -31,10 +31,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get error => 'Ошибка';
 
   @override
-  String get ok => 'ОК';
+  String get ok => 'OK';
 
   @override
   String get cancel => 'Отмена';
+
+  @override
+  String get close => 'Закрыть';
+
+  @override
+  String get save => 'Сохранить';
 
   @override
   String get scanResult => 'Результат сканирования';
@@ -82,13 +88,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get loginButton => 'Войти';
 
   @override
-  String get loginWithBiometrics => 'Войти с биометрией';
+  String get loginWithBiometrics => 'Войти по биометрии';
 
   @override
   String get noAccount => 'Нет аккаунта?';
 
   @override
-  String get registerLink => 'Зарегистрироваться';
+  String get registerLink => 'Регистрация';
 
   @override
   String get registerTitle => 'Создать аккаунт';
@@ -113,20 +119,20 @@ class AppLocalizationsRu extends AppLocalizations {
       'Исследуйте исторические события и личности со всего мира.';
 
   @override
-  String get onboarding2Title => 'Сканируйте QR-коды';
+  String get onboarding2Title => 'Сканируйте QR';
 
   @override
   String get onboarding2Desc =>
-      'Сканируйте QR-коды в музеях и на исторических объектах.';
+      'Сканируйте QR-коды в музеях и исторических местах.';
 
   @override
-  String get onboarding3Title => 'Сохраняйте любимое';
+  String get onboarding3Title => 'Сохраняйте избранное';
 
   @override
-  String get onboarding3Desc => 'Храните свои любимые исторические моменты.';
+  String get onboarding3Desc => 'Сохраняйте любимые исторические моменты.';
 
   @override
-  String get continueButton => 'Далее';
+  String get continueButton => 'Дальше';
 
   @override
   String get beginButton => 'Начать';
@@ -162,13 +168,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dailyHistory => 'История дня';
 
   @override
-  String get dailyHistorySubtitle => 'Откройте для себя сегодняшнюю историю';
+  String get dailyHistorySubtitle => 'Откройте историю сегодняшнего дня';
 
   @override
   String get notifications => 'Уведомления';
 
   @override
-  String get notificationsSubtitle => 'Настройте ежедневные уведомления';
+  String get notificationsSubtitle => 'Настройка ежедневных уведомлений';
 
   @override
   String get helpAndSupport => 'Помощь и поддержка';
@@ -193,23 +199,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pushNotificationsSubtitle =>
-      'Получайте ежедневные исторические факты';
+      'Получать ежедневные исторические факты';
 
   @override
-  String get checkNotification => 'Проверить уведомление';
+  String get checkNotification => 'Проверка уведомлений';
 
   @override
-  String get checkNotificationSubtitle =>
-      'Отправить тестовое уведомление сейчас';
+  String get checkNotificationSubtitle => 'Отправить тестовое уведомление';
 
   @override
-  String get preferences => 'Предпочтения';
+  String get preferences => 'Настройки';
 
   @override
   String get dataSaver => 'Экономия трафика';
 
   @override
-  String get dataSaverSubtitle => 'Снижайте качество изображений';
+  String get dataSaverSubtitle => 'Снизить качество изображений';
 
   @override
   String get data => 'Данные';
@@ -221,10 +226,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get importData => 'Импорт данных';
 
   @override
-  String get dataExported => 'Данные экспортированы успешно';
+  String get dataExported => 'Данные успешно экспортированы';
 
   @override
-  String get dataImported => 'Данные импортированы успешно';
+  String get dataImported => 'Данные успешно импортированы';
 
   @override
   String get about => 'О приложении';
@@ -239,7 +244,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get russian => 'Русский';
 
   @override
-  String get english => 'English';
+  String get english => 'Английский';
 
   @override
   String get enterData => 'Введите данные';
@@ -251,24 +256,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dailyNotificationsTitle => 'Ежедневные уведомления';
 
   @override
-  String get dailyNotificationsDesc =>
-      'Получайте интересные исторические факты';
+  String get dailyNotificationsDesc => 'Получать интересные исторические факты';
 
   @override
-  String get notificationTime => 'Время уведомлений';
+  String get notificationTime => 'Время уведомления';
 
   @override
   String get testNotification => 'Тестовое уведомление';
 
   @override
-  String get testNotificationDesc => 'Проверьте, как работают уведомления';
+  String get testNotificationDesc => 'Проверить, как работают уведомления';
 
   @override
   String get aboutNotificationsTitle => 'Об уведомлениях';
 
   @override
   String get aboutNotificationsText =>
-      'Каждый день в выбранное время вы будете получать уведомления с интересными историческими фактами и событиями.';
+      'Каждый день в выбранное время вы будете получать уведомления с интересными историческими фактами.';
 
   @override
   String get notificationsWorkInDnd =>
@@ -278,127 +282,171 @@ class AppLocalizationsRu extends AppLocalizations {
   String get notificationsEnabledMsg => 'Уведомления включены';
 
   @override
-  String get notificationsDisabledMsg => 'Уведомления отключены';
+  String get notificationsDisabledMsg => 'Уведомления выключены';
 
   @override
   String get testNotificationSent => 'Тестовое уведомление отправлено';
 
   @override
   String dailyNotificationsActivated(String time) {
-    return 'Ежедневные уведомления активированы на $time';
+    return 'Ежедневные уведомления активированы в $time';
   }
 
   @override
-  String get close => 'Закрыть';
-  @override
-  String get save => 'Сохранить';
-  @override
-  String get done => 'Готово';
-  @override
-  String get confirmAction => 'Подтвердить';
+  String get createMarkerTitle => 'Создать метку';
 
   @override
-  String get createMarkerTitle => 'Создать метку';
-  @override
   String get markerSection => 'Метка на карте';
+
   @override
   String get buildingSection => 'Объект (QR)';
+
   @override
   String get titleField => 'Название';
+
   @override
   String get typeField => 'Тип';
+
   @override
   String get markerCompressedField => 'Сжатое описание (для маркера)';
+
   @override
   String get buildingNameField => 'Название объекта';
+
   @override
   String get buildingCompressedField => 'Сжатое описание';
+
   @override
   String get descTopField => 'Верхнее описание';
+
   @override
   String get descMainField => 'Главное описание';
+
   @override
   String get descBottomField => 'Нижнее описание';
+
   @override
   String get personField => 'Связанная личность';
+
   @override
   String get dateStartField => 'Дата начала';
+
   @override
   String get dateEndField => 'Дата конца';
+
   @override
   String get imageUrlField => 'URL изображения';
+
   @override
   String get coordinatesLabel => 'Координаты';
+
   @override
   String get resourcesLabel => 'ИСТОЧНИКИ';
+
   @override
-  String resourceItem(int n) => 'Источник $n';
+  String resourceItem(int n) {
+    return 'Источник $n';
+  }
+
   @override
   String get addResource => 'Добавить источник';
+
   @override
   String get atLeastOneResource => 'Добавьте хотя бы один источник';
+
   @override
   String get fieldRequired => 'Обязательное поле';
+
   @override
   String get selectDate => 'Выберите дату';
+
   @override
   String get submittingLabel => 'Отправка…';
+
   @override
   String get publishButton => 'Опубликовать';
+
   @override
   String get markerPublished => 'Метка опубликована';
 
   @override
   String get pickPointTitle => 'Выберите точку';
+
   @override
   String get tapMapHint => 'Нажмите на карту, чтобы выбрать координаты';
 
   @override
+  String get done => 'Готово';
+
+  @override
+  String get confirmAction => 'Подтвердить';
+
+  @override
   String get onThisDayTitle => 'История дня';
+
   @override
   String get onThisDaySubtitle => 'события дня в истории России';
+
   @override
   String get anotherFact => 'Другой факт';
+
   @override
   String get refreshAction => 'Обновить';
+
   @override
   String get loadingLabel => 'Загрузка…';
+
   @override
   String get openInWikipedia => 'Открыть в Wikipedia';
+
   @override
   String get noFactsForToday =>
       'На этот день нет фактов из истории России или СССР.';
+
   @override
   String get wikipediaSource => 'Источник: Wikipedia';
+
   @override
-  String wikipediaSourceWithCount(int count) =>
-      'Источник: Wikipedia · доступно фактов: $count';
+  String wikipediaSourceWithCount(int count) {
+    return 'Источник: Wikipedia · доступно фактов: $count';
+  }
 
   @override
   String get refreshingMap => 'Обновление карты…';
+
   @override
-  String get locationDisabled =>
-      'Геолокация выключена в настройках устройства';
+  String get locationDisabled => 'Геолокация выключена в настройках устройства';
+
   @override
   String get locationDenied => 'Доступ к геолокации не предоставлен';
+
   @override
   String get locationDeniedForever =>
       'Геолокация запрещена. Включите в настройках приложения';
+
   @override
-  String locationError(String error) =>
-      'Не удалось определить координаты: $error';
+  String locationError(String error) {
+    return 'Не удалось определить координаты: $error';
+  }
+
   @override
   String get filtersTitle => 'Фильтры';
+
   @override
   String get statusFilter => 'Статус';
+
   @override
   String get filterAll => 'Все';
+
   @override
   String get filterCompleted => 'Пройдено';
+
   @override
   String get filterNotCompleted => 'Не пройдено';
+
   @override
   String get markAsCompleted => 'Отметить как пройдено';
+
   @override
   String get markedAsCompleted => 'Отмечено как пройдено!';
 }

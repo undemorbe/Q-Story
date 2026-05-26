@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/services/location_service.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
@@ -130,7 +131,10 @@ class _MapPageState extends State<MapPage> {
             onPressed: () {
               _store.loadMarkers();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Обновление карты...')),
+                SnackBar(
+                  content:
+                      Text(AppLocalizations.of(context)!.refreshingMap),
+                ),
               );
             },
           ),
@@ -199,18 +203,19 @@ class _MapPageState extends State<MapPage> {
     if (!mounted) return;
     setState(() => _locating = false);
 
+    final l10n = AppLocalizations.of(context)!;
     switch (result) {
       case LocationSuccess(point: final p):
         setState(() => _userLocation = p);
         _mapController.move(p, 15.0);
       case LocationServiceDisabled():
-        _snack('Геолокация выключена в настройках устройства');
+        _snack(l10n.locationDisabled);
       case LocationDenied():
-        _snack('Доступ к геолокации не предоставлен');
+        _snack(l10n.locationDenied);
       case LocationDeniedForever():
-        _snack('Геолокация запрещена. Включите в настройках приложения');
+        _snack(l10n.locationDeniedForever);
       case LocationError(message: final m):
-        _snack('Не удалось определить координаты: $m');
+        _snack(l10n.locationError(m));
     }
   }
 
@@ -281,19 +286,22 @@ class _MapPageState extends State<MapPage> {
                     ? OutlinedButton.icon(
                         onPressed: null,
                         icon: const Icon(Icons.check, size: 16),
-                        label: const Text('Пройдено'),
+                        label: Text(
+                            AppLocalizations.of(context)!.filterCompleted),
                       )
                     : ElevatedButton.icon(
                         onPressed: () {
                           _store.markAsCompleted(marker.id);
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Отмечено как пройдено!')),
+                            SnackBar(
+                                content: Text(AppLocalizations.of(context)!
+                                    .markedAsCompleted)),
                           );
                         },
                         icon: const Icon(Icons.flag, size: 16),
-                        label: const Text('Отметить как пройдено'),
+                        label: Text(
+                            AppLocalizations.of(context)!.markAsCompleted),
                       ),
               ),
             ],
@@ -423,6 +431,7 @@ class _FiltersSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
@@ -433,31 +442,32 @@ class _FiltersSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Фильтры',
+                  l10n.filtersTitle,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8),
                 const GothicDivider(),
                 const SizedBox(height: 12),
-                _section(context, 'Статус'),
+                _section(context, l10n.statusFilter),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    _statusChip(context, 'Все', MarkerStatusFilter.all),
                     _statusChip(
-                        context, 'Пройдено', MarkerStatusFilter.completed),
-                    _statusChip(context, 'Не пройдено',
+                        context, l10n.filterAll, MarkerStatusFilter.all),
+                    _statusChip(context, l10n.filterCompleted,
+                        MarkerStatusFilter.completed),
+                    _statusChip(context, l10n.filterNotCompleted,
                         MarkerStatusFilter.notCompleted),
                   ],
                 ),
                 const SizedBox(height: 18),
-                _section(context, 'Тип'),
+                _section(context, l10n.typeField),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    _typeChip(context, 'Все', null),
+                    _typeChip(context, l10n.filterAll, null),
                     for (final t in store.availableTypes)
                       _typeChip(context, t, t),
                   ],
@@ -467,7 +477,7 @@ class _FiltersSheet extends StatelessWidget {
                   width: double.infinity,
                   child: OutlinedButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Закрыть'),
+                    child: Text(l10n.close),
                   ),
                 ),
               ],
@@ -687,13 +697,13 @@ class _MapLegend extends StatelessWidget {
           _LegendItem(
             symbol: '✦',
             color: context.gold,
-            label: 'Пройдено',
+            label: AppLocalizations.of(context)!.filterCompleted,
           ),
           const SizedBox(height: 6),
           _LegendItem(
             symbol: '◆',
             color: context.blood,
-            label: 'Не пройдено',
+            label: AppLocalizations.of(context)!.filterNotCompleted,
           ),
         ],
       ),
