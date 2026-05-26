@@ -287,4 +287,118 @@ class AppLocalizationsRu extends AppLocalizations {
   String dailyNotificationsActivated(String time) {
     return 'Ежедневные уведомления активированы на $time';
   }
+
+  @override
+  String get close => 'Закрыть';
+  @override
+  String get save => 'Сохранить';
+  @override
+  String get done => 'Готово';
+  @override
+  String get confirmAction => 'Подтвердить';
+
+  @override
+  String get createMarkerTitle => 'Создать метку';
+  @override
+  String get markerSection => 'Метка на карте';
+  @override
+  String get buildingSection => 'Объект (QR)';
+  @override
+  String get titleField => 'Название';
+  @override
+  String get typeField => 'Тип';
+  @override
+  String get markerCompressedField => 'Сжатое описание (для маркера)';
+  @override
+  String get buildingNameField => 'Название объекта';
+  @override
+  String get buildingCompressedField => 'Сжатое описание';
+  @override
+  String get descTopField => 'Верхнее описание';
+  @override
+  String get descMainField => 'Главное описание';
+  @override
+  String get descBottomField => 'Нижнее описание';
+  @override
+  String get personField => 'Связанная личность';
+  @override
+  String get dateStartField => 'Дата начала';
+  @override
+  String get dateEndField => 'Дата конца';
+  @override
+  String get imageUrlField => 'URL изображения';
+  @override
+  String get coordinatesLabel => 'Координаты';
+  @override
+  String get resourcesLabel => 'ИСТОЧНИКИ';
+  @override
+  String resourceItem(int n) => 'Источник $n';
+  @override
+  String get addResource => 'Добавить источник';
+  @override
+  String get atLeastOneResource => 'Добавьте хотя бы один источник';
+  @override
+  String get fieldRequired => 'Обязательное поле';
+  @override
+  String get selectDate => 'Выберите дату';
+  @override
+  String get submittingLabel => 'Отправка…';
+  @override
+  String get publishButton => 'Опубликовать';
+  @override
+  String get markerPublished => 'Метка опубликована';
+
+  @override
+  String get pickPointTitle => 'Выберите точку';
+  @override
+  String get tapMapHint => 'Нажмите на карту, чтобы выбрать координаты';
+
+  @override
+  String get onThisDayTitle => 'История дня';
+  @override
+  String get onThisDaySubtitle => 'события дня в истории России';
+  @override
+  String get anotherFact => 'Другой факт';
+  @override
+  String get refreshAction => 'Обновить';
+  @override
+  String get loadingLabel => 'Загрузка…';
+  @override
+  String get openInWikipedia => 'Открыть в Wikipedia';
+  @override
+  String get noFactsForToday =>
+      'На этот день нет фактов из истории России или СССР.';
+  @override
+  String get wikipediaSource => 'Источник: Wikipedia';
+  @override
+  String wikipediaSourceWithCount(int count) =>
+      'Источник: Wikipedia · доступно фактов: $count';
+
+  @override
+  String get refreshingMap => 'Обновление карты…';
+  @override
+  String get locationDisabled =>
+      'Геолокация выключена в настройках устройства';
+  @override
+  String get locationDenied => 'Доступ к геолокации не предоставлен';
+  @override
+  String get locationDeniedForever =>
+      'Геолокация запрещена. Включите в настройках приложения';
+  @override
+  String locationError(String error) =>
+      'Не удалось определить координаты: $error';
+  @override
+  String get filtersTitle => 'Фильтры';
+  @override
+  String get statusFilter => 'Статус';
+  @override
+  String get filterAll => 'Все';
+  @override
+  String get filterCompleted => 'Пройдено';
+  @override
+  String get filterNotCompleted => 'Не пройдено';
+  @override
+  String get markAsCompleted => 'Отметить как пройдено';
+  @override
+  String get markedAsCompleted => 'Отмечено как пройдено!';
 }

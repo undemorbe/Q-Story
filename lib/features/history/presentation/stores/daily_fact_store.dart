@@ -3,6 +3,9 @@
 import 'dart:math';
 
 import 'package:mobx/mobx.dart';
+
+import '../../../../core/errors/failures.dart';
+import '../../../../core/util/result.dart';
 import '../../domain/entities/daily_fact_entity.dart';
 import '../../domain/repositories/daily_fact_repository.dart';
 
@@ -43,15 +46,15 @@ abstract class _DailyFactStore with Store {
 
     isLoading = true;
     errorMessage = null;
-    try {
-      final list = await _repository.getFactsForDate(now.month, now.day);
-      facts = list;
-      _loadedFor = DateTime(now.year, now.month, now.day);
-      currentFact = list.isEmpty ? null : _pickRandom(list, exclude: null);
-    } catch (e) {
-      errorMessage = _humanize(e);
-    } finally {
-      isLoading = false;
+    final result = await _repository.getFactsForDate(now.month, now.day);
+    isLoading = false;
+    switch (result) {
+      case Ok<List<DailyFactEntity>>(value: final list):
+        facts = list;
+        _loadedFor = DateTime(now.year, now.month, now.day);
+        currentFact = list.isEmpty ? null : _pickRandom(list, exclude: null);
+      case Err<List<DailyFactEntity>>(failure: final f):
+        errorMessage = _humanize(f);
     }
   }
 
@@ -81,14 +84,12 @@ abstract class _DailyFactStore with Store {
     return candidates[_random.nextInt(candidates.length)];
   }
 
-  String _humanize(Object e) {
-    final msg = e.toString();
-    if (msg.contains('SocketException') ||
-        msg.contains('Failed host lookup') ||
-        msg.contains('Connection') ||
-        msg.contains('timeout')) {
-      return 'Нет соединения с сервером Wikipedia';
-    }
-    return 'Не удалось загрузить факт дня';
-  }
+  String _humanize(Failure f) => switch (f) {
+        NetworkFailure() => 'Нет соединения с сервером Wikipedia',
+        NotFoundFailure() => 'На этот день фактов нет',
+        ServerFailure(message: final m) => m,
+        ValidationFailure(message: final m) => m,
+        CacheFailure(message: final m) => m,
+        UnknownFailure() => 'Не удалось загрузить факт дня',
+      };
 }

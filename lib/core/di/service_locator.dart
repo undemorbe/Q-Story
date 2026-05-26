@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../network/api_client.dart';
+import '../services/location_service.dart';
 import '../../features/qr_operations/data/repositories/qr_repository_impl.dart';
 import '../../features/qr_operations/domain/repositories/qr_repository.dart';
 import '../../features/qr_operations/domain/usecases/process_qr_usecase.dart';
@@ -42,6 +43,7 @@ Future<void> setupServiceLocator() async {
 
   // Core
   getIt.registerLazySingleton<ApiClient>(() => ApiClient());
+  getIt.registerLazySingleton<LocationService>(() => LocationService());
 
   // Data Sources
   getIt.registerLazySingleton<CompletedMarkersLocalDataSource>(

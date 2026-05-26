@@ -51,7 +51,7 @@ class HistoryDetailPage extends StatelessWidget {
                   return Container(
                     margin: const EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -96,7 +96,7 @@ class HistoryDetailPage extends StatelessWidget {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.black.withOpacity(0.6),
+                            Colors.black.withValues(alpha: 0.6),
                             Colors.transparent,
                           ],
                         ),
@@ -116,7 +116,7 @@ class HistoryDetailPage extends StatelessWidget {
                           end: Alignment.bottomCenter,
                           colors: [
                             Colors.transparent,
-                            Colors.black.withOpacity(0.8),
+                            Colors.black.withValues(alpha: 0.8),
                           ],
                         ),
                       ),
@@ -164,7 +164,7 @@ class HistoryDetailPage extends StatelessWidget {
                         width: 40,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: colorScheme.onSurfaceVariant.withOpacity(0.3),
+                          color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -181,13 +181,13 @@ class HistoryDetailPage extends StatelessWidget {
                           end: Alignment.bottomRight,
                           colors: [
                             colorScheme.primaryContainer,
-                            colorScheme.secondaryContainer.withOpacity(0.8),
+                            colorScheme.secondaryContainer.withValues(alpha: 0.8),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: colorScheme.primary.withOpacity(0.15),
+                            color: colorScheme.primary.withValues(alpha: 0.15),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
                           ),
@@ -198,7 +198,7 @@ class HistoryDetailPage extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: colorScheme.onPrimaryContainer.withOpacity(0.1),
+                              color: colorScheme.onPrimaryContainer.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Icon(
@@ -254,10 +254,10 @@ class HistoryDetailPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: colorScheme.outlineVariant.withOpacity(0.3),
+          color: colorScheme.outlineVariant.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -266,7 +266,7 @@ class HistoryDetailPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: colorScheme.primary.withOpacity(0.1),
+              color: colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
@@ -348,7 +348,7 @@ class HistoryDetailPage extends StatelessWidget {
               ),
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -390,10 +390,10 @@ class HistoryDetailPage extends StatelessWidget {
           return Container(
             margin: const EdgeInsets.only(bottom: 12),
             decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+              color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: colorScheme.outlineVariant.withOpacity(0.2),
+                color: colorScheme.outlineVariant.withValues(alpha: 0.2),
               ),
             ),
             child: ListTile(
@@ -406,8 +406,8 @@ class HistoryDetailPage extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      colorScheme.primary.withOpacity(0.2),
-                      colorScheme.secondary.withOpacity(0.2),
+                      colorScheme.primary.withValues(alpha: 0.2),
+                      colorScheme.secondary.withValues(alpha: 0.2),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -456,7 +456,7 @@ class HistoryDetailPage extends StatelessWidget {
               onTap: isUrl ? () => _launchUrl(resource) : null,
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

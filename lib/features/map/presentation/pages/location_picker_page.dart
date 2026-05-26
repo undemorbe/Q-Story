@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
 
@@ -35,12 +36,13 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Выберите точку'),
+        title: Text(l10n.pickPointTitle),
         actions: [
           IconButton(
-            tooltip: 'Подтвердить',
+            tooltip: l10n.confirmAction,
             icon: const Icon(Icons.check),
             onPressed: () => Navigator.of(context).pop(_selected),
           ),
@@ -91,7 +93,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
               padding: const EdgeInsets.symmetric(
                   horizontal: 12, vertical: 10),
               child: Text(
-                'Нажмите на карту, чтобы выбрать координаты',
+                l10n.tapMapHint,
                 style: GoogleFonts.crimsonText(
                   color: context.onBg,
                   fontSize: 14,
@@ -107,7 +109,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
         foregroundColor: context.bgClr,
         onPressed: () => Navigator.of(context).pop(_selected),
         icon: const Icon(Icons.check),
-        label: const Text('Готово'),
+        label: Text(l10n.done),
       ),
     );
   }

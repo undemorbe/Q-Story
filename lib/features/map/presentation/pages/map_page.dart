@@ -2,10 +2,13 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
+
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/services/location_service.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
 import '../../domain/entities/map_marker_entity.dart';
@@ -21,9 +24,14 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   final MapStore _store = getIt<MapStore>();
+  final LocationService _location = getIt<LocationService>();
   final MapController _mapController = MapController();
 
-  static const LatLng _initialCenter = LatLng(59.9343, 30.3351);
+  /// Falls back to Saint Petersburg if user has not granted location yet.
+  static const LatLng _fallbackCenter = LatLng(59.9343, 30.3351);
+
+  LatLng? _userLocation;
+  bool _locating = false;
 
   @override
   void initState() {
@@ -34,7 +42,6 @@ class _MapPageState extends State<MapPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Refresh markers every time the page is visited
     _store.loadMarkers();
   }
 
@@ -46,7 +53,7 @@ class _MapPageState extends State<MapPage> {
           FlutterMap(
             mapController: _mapController,
             options: const MapOptions(
-              initialCenter: _initialCenter,
+              initialCenter: _fallbackCenter,
               initialZoom: 13.0,
               interactionOptions: InteractionOptions(
                 flags: InteractiveFlag.all,
@@ -60,23 +67,32 @@ class _MapPageState extends State<MapPage> {
               ),
               Observer(
                 builder: (_) {
-                  return MarkerLayer(
-                    markers: _store.markers.map((marker) {
-                      return Marker(
-                        point: LatLng(marker.lat, marker.lon),
-                        width: 52,
-                        height: 62,
-                        alignment: Alignment.bottomCenter,
-                        child: GestureDetector(
-                          onTap: () => _showMarkerInfo(context, marker),
-                          child: _GothicMarker(
-                              isCompleted: marker.isCompleted),
-                        ),
-                      );
-                    }).toList(),
+                  final list = _store.filteredMarkers;
+                  final markers = list.map((m) => _buildMarker(m)).toList();
+                  return MarkerClusterLayerWidget(
+                    options: MarkerClusterLayerOptions(
+                      maxClusterRadius: 60,
+                      size: const Size(48, 48),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(50),
+                      markers: markers,
+                      builder: (ctx, clusterMarkers) =>
+                          _ClusterBubble(count: clusterMarkers.length),
+                    ),
                   );
                 },
               ),
+              if (_userLocation != null)
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: _userLocation!,
+                      width: 26,
+                      height: 26,
+                      child: const _UserDot(),
+                    ),
+                  ],
+                ),
             ],
           ),
           Observer(
@@ -87,11 +103,21 @@ class _MapPageState extends State<MapPage> {
               return const SizedBox.shrink();
             },
           ),
-          // Legend
           const Positioned(
             top: 56,
             right: 16,
             child: _MapLegend(),
+          ),
+          Positioned(
+            top: 56,
+            left: 16,
+            child: Observer(
+              builder: (_) => _FilterBadge(
+                count: _store.filteredMarkers.length,
+                total: _store.markers.length,
+                onTap: _openFilters,
+              ),
+            ),
           ),
         ],
       ),
@@ -107,6 +133,12 @@ class _MapPageState extends State<MapPage> {
                 const SnackBar(content: Text('Обновление карты...')),
               );
             },
+          ),
+          const SizedBox(height: 12),
+          _GothicFab(
+            heroTag: 'filters',
+            icon: Icons.filter_alt_outlined,
+            onPressed: _openFilters,
           ),
           const SizedBox(height: 12),
           _GothicFab.small(
@@ -133,10 +165,8 @@ class _MapPageState extends State<MapPage> {
           const SizedBox(height: 12),
           _GothicFab(
             heroTag: 'myLocation',
-            icon: Icons.my_location,
-            onPressed: () {
-              _mapController.move(_initialCenter, 13.0);
-            },
+            icon: _locating ? Icons.hourglass_empty : Icons.my_location,
+            onPressed: _goToMyLocation,
           ),
           const SizedBox(height: 12),
           _GothicFab(
@@ -149,8 +179,47 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+  Marker _buildMarker(MapMarkerEntity marker) {
+    return Marker(
+      point: LatLng(marker.lat, marker.lon),
+      width: 52,
+      height: 62,
+      alignment: Alignment.bottomCenter,
+      child: GestureDetector(
+        onTap: () => _showMarkerInfo(context, marker),
+        child: _GothicMarker(isCompleted: marker.isCompleted),
+      ),
+    );
+  }
+
+  Future<void> _goToMyLocation() async {
+    if (_locating) return;
+    setState(() => _locating = true);
+    final result = await _location.getCurrentPosition();
+    if (!mounted) return;
+    setState(() => _locating = false);
+
+    switch (result) {
+      case LocationSuccess(point: final p):
+        setState(() => _userLocation = p);
+        _mapController.move(p, 15.0);
+      case LocationServiceDisabled():
+        _snack('Геолокация выключена в настройках устройства');
+      case LocationDenied():
+        _snack('Доступ к геолокации не предоставлен');
+      case LocationDeniedForever():
+        _snack('Геолокация запрещена. Включите в настройках приложения');
+      case LocationError(message: final m):
+        _snack('Не удалось определить координаты: $m');
+    }
+  }
+
+  void _snack(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
   Future<void> _openCreateMarker() async {
-    final center = _mapController.camera.center;
+    final center = _userLocation ?? _mapController.camera.center;
     final created = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
         builder: (_) => CreateMarkerPage(
@@ -162,6 +231,14 @@ class _MapPageState extends State<MapPage> {
     if (created == true && mounted) {
       _store.loadMarkers();
     }
+  }
+
+  void _openFilters() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _FiltersSheet(store: _store),
+    );
   }
 
   void _showMarkerInfo(BuildContext context, MapMarkerEntity marker) {
@@ -227,6 +304,229 @@ class _MapPageState extends State<MapPage> {
   }
 }
 
+// ─── Cluster bubble ──────────────────────────────────────────────────────────
+
+class _ClusterBubble extends StatelessWidget {
+  final int count;
+  const _ClusterBubble({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    final gold = context.gold;
+    return Container(
+      decoration: BoxDecoration(
+        color: context.goldContainer,
+        shape: BoxShape.circle,
+        border: Border.all(color: gold, width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: gold.withValues(alpha: 0.45),
+            blurRadius: 14,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          '$count',
+          style: GoogleFonts.cinzel(
+            color: gold,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── User dot ────────────────────────────────────────────────────────────────
+
+class _UserDot extends StatelessWidget {
+  const _UserDot();
+
+  @override
+  Widget build(BuildContext context) {
+    final color = context.gold;
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: Colors.white, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.6),
+            blurRadius: 14,
+            spreadRadius: 4,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Filter badge ────────────────────────────────────────────────────────────
+
+class _FilterBadge extends StatelessWidget {
+  final int count;
+  final int total;
+  final VoidCallback onTap;
+
+  const _FilterBadge({
+    required this.count,
+    required this.total,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: context.surfaceClr,
+          border: Border.all(color: context.outlineClr, width: 1),
+          borderRadius: BorderRadius.circular(2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.25),
+              blurRadius: 8,
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.filter_alt_outlined, color: context.gold, size: 14),
+            const SizedBox(width: 6),
+            Text(
+              '$count / $total',
+              style: GoogleFonts.cinzel(
+                color: context.onBg,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Filters sheet ───────────────────────────────────────────────────────────
+
+class _FiltersSheet extends StatelessWidget {
+  final MapStore store;
+  const _FiltersSheet({required this.store});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
+        child: Observer(
+          builder: (_) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Фильтры',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                const GothicDivider(),
+                const SizedBox(height: 12),
+                _section(context, 'Статус'),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _statusChip(context, 'Все', MarkerStatusFilter.all),
+                    _statusChip(
+                        context, 'Пройдено', MarkerStatusFilter.completed),
+                    _statusChip(context, 'Не пройдено',
+                        MarkerStatusFilter.notCompleted),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                _section(context, 'Тип'),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _typeChip(context, 'Все', null),
+                    for (final t in store.availableTypes)
+                      _typeChip(context, t, t),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Закрыть'),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _section(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        title.toUpperCase(),
+        style: GoogleFonts.cinzel(
+          color: context.gold,
+          fontSize: 11,
+          letterSpacing: 2,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget _statusChip(
+      BuildContext context, String label, MarkerStatusFilter value) {
+    final selected = store.statusFilter == value;
+    return ChoiceChip(
+      label: Text(label),
+      selected: selected,
+      onSelected: (_) => store.setStatusFilter(value),
+      selectedColor: context.goldContainer,
+      labelStyle: TextStyle(
+        color: selected ? context.gold : context.onBg,
+        fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+      ),
+      side: BorderSide(
+          color: selected ? context.gold : context.outlineClr),
+    );
+  }
+
+  Widget _typeChip(BuildContext context, String label, String? value) {
+    final selected = store.typeFilter == value;
+    return ChoiceChip(
+      label: Text(label),
+      selected: selected,
+      onSelected: (_) => store.setTypeFilter(value),
+      selectedColor: context.goldContainer,
+      labelStyle: TextStyle(
+        color: selected ? context.gold : context.onBg,
+        fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+      ),
+      side: BorderSide(
+          color: selected ? context.gold : context.outlineClr),
+    );
+  }
+}
+
 // ─── Gothic Pin Marker ───────────────────────────────────────────────────────
 
 class _GothicMarker extends StatelessWidget {
@@ -246,7 +546,6 @@ class _GothicMarker extends StatelessWidget {
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
-          // Glow halo
           Container(
             width: 44,
             height: 44,
@@ -261,7 +560,6 @@ class _GothicMarker extends StatelessWidget {
               ],
             ),
           ),
-          // Pin head — gothic square with ornaments
           Container(
             width: 44,
             height: 44,
@@ -275,11 +573,7 @@ class _GothicMarker extends StatelessWidget {
               children: [
                 Text(
                   isCompleted ? '✦' : '◆',
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 20,
-                    height: 1,
-                  ),
+                  style: TextStyle(color: color, fontSize: 20, height: 1),
                 ),
                 Positioned(
                   top: 3,
@@ -320,7 +614,6 @@ class _GothicMarker extends StatelessWidget {
               ],
             ),
           ),
-          // Spike
           Positioned(
             bottom: 0,
             child: CustomPaint(

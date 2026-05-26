@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import '../../../../core/errors/failures.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/util/dio_failure.dart';
+import '../../../../core/util/result.dart';
 import '../../domain/entities/map_marker_entity.dart';
 import '../../domain/entities/marker_submission_entity.dart';
 import '../../domain/repositories/map_repository.dart';
@@ -13,27 +16,25 @@ class MapRepositoryImpl implements MapRepository {
   MapRepositoryImpl(this._apiClient, this._localDataSource);
 
   @override
-  Future<List<MapMarkerEntity>> getMarkers() async {
+  Future<Result<List<MapMarkerEntity>>> getMarkers() async {
     try {
       final response = await _apiClient.client.get('/get-markers');
-      
-      if (response.statusCode == 200) {
-        final data = response.data as Map<String, dynamic>;
-        final markersList = data['markers'] as List<dynamic>;
-        final completedIds = await _localDataSource.getCompletedMarkerIds();
-        
-        return markersList.map((json) {
-          final model = MapMarkerModel.fromJson(json as Map<String, dynamic>);
-          // Merge with local completion status
-          return model.copyWith(isCompleted: completedIds.contains(model.id));
-        }).toList();
-      } else {
-        throw Exception('Failed to load markers: ${response.statusCode}');
+      final code = response.statusCode ?? 0;
+      if (code < 200 || code >= 300) {
+        return Err(ServerFailure('Ошибка загрузки: $code', statusCode: code));
       }
+      final data = response.data as Map<String, dynamic>;
+      final markersList = data['markers'] as List<dynamic>;
+      final completedIds = await _localDataSource.getCompletedMarkerIds();
+      final markers = markersList.map((json) {
+        final model = MapMarkerModel.fromJson(json as Map<String, dynamic>);
+        return model.copyWith(isCompleted: completedIds.contains(model.id));
+      }).toList();
+      return Ok(markers);
     } on DioException catch (e) {
-      throw Exception('Network error: ${e.message}');
+      return Err(dioToFailure(e));
     } catch (e) {
-      throw Exception('Failed to load markers: $e');
+      return Err(UnknownFailure(e.toString(), e));
     }
   }
 
@@ -43,7 +44,7 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<void> submitMarker(MarkerSubmissionEntity payload) async {
+  Future<Result<void>> submitMarker(MarkerSubmissionEntity payload) async {
     try {
       final response = await _apiClient.client.post(
         '/post-info',
@@ -51,10 +52,14 @@ class MapRepositoryImpl implements MapRepository {
       );
       final code = response.statusCode ?? 0;
       if (code < 200 || code >= 300) {
-        throw Exception('Не удалось создать метку: $code');
+        return Err(ServerFailure('Не удалось создать метку: $code',
+            statusCode: code));
       }
+      return const Ok(null);
     } on DioException catch (e) {
-      throw Exception('Сетевая ошибка: ${e.message ?? e.type.name}');
+      return Err(dioToFailure(e));
+    } catch (e) {
+      return Err(UnknownFailure(e.toString(), e));
     }
   }
 }

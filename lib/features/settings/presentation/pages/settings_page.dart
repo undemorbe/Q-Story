@@ -176,25 +176,30 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (context) => SimpleDialog(
         title: Text(l10n.chooseTheme),
-        children: ThemeMode.values.map((mode) {
-          return ListTile(
-            title: Text(_getThemeModeName(l10n, mode)),
-            leading: Radio<ThemeMode>(
-              value: mode,
-              groupValue: _store.themeMode,
-              onChanged: (value) {
-                if (value != null) {
-                  _store.setThemeMode(value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            onTap: () {
-              _store.setThemeMode(mode);
-              Navigator.pop(context);
+        children: [
+          RadioGroup<ThemeMode>(
+            groupValue: _store.themeMode,
+            onChanged: (value) {
+              if (value != null) {
+                _store.setThemeMode(value);
+                Navigator.pop(context);
+              }
             },
-          );
-        }).toList(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: ThemeMode.values.map((mode) {
+                return ListTile(
+                  title: Text(_getThemeModeName(l10n, mode)),
+                  leading: Radio<ThemeMode>(value: mode),
+                  onTap: () {
+                    _store.setThemeMode(mode);
+                    Navigator.pop(context);
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -205,39 +210,35 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (context) => SimpleDialog(
         title: Text(l10n.selectLanguage),
         children: [
-          ListTile(
-            title: Text(l10n.russian),
-            leading: Radio<String>(
-              value: 'ru',
-              groupValue: _store.locale.languageCode,
-              onChanged: (value) {
-                if (value != null) {
-                  _store.setLocale(Locale(value));
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            onTap: () {
-              _store.setLocale(const Locale('ru'));
-              Navigator.pop(context);
+          RadioGroup<String>(
+            groupValue: _store.locale.languageCode,
+            onChanged: (value) {
+              if (value != null) {
+                _store.setLocale(Locale(value));
+                Navigator.pop(context);
+              }
             },
-          ),
-          ListTile(
-            title: Text(l10n.english),
-            leading: Radio<String>(
-              value: 'en',
-              groupValue: _store.locale.languageCode,
-              onChanged: (value) {
-                if (value != null) {
-                  _store.setLocale(Locale(value));
-                  Navigator.pop(context);
-                }
-              },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(l10n.russian),
+                  leading: const Radio<String>(value: 'ru'),
+                  onTap: () {
+                    _store.setLocale(const Locale('ru'));
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text(l10n.english),
+                  leading: const Radio<String>(value: 'en'),
+                  onTap: () {
+                    _store.setLocale(const Locale('en'));
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
-            onTap: () {
-              _store.setLocale(const Locale('en'));
-              Navigator.pop(context);
-            },
           ),
         ],
       ),

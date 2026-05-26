@@ -637,6 +637,65 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Daily notifications activated at {time}'**
   String dailyNotificationsActivated(String time);
+
+  // ─── Newly added (create marker / picker / daily fact / map filters) ──────
+
+  String get close;
+  String get save;
+  String get done;
+  String get confirmAction;
+
+  String get createMarkerTitle;
+  String get markerSection;
+  String get buildingSection;
+  String get titleField;
+  String get typeField;
+  String get markerCompressedField;
+  String get buildingNameField;
+  String get buildingCompressedField;
+  String get descTopField;
+  String get descMainField;
+  String get descBottomField;
+  String get personField;
+  String get dateStartField;
+  String get dateEndField;
+  String get imageUrlField;
+  String get coordinatesLabel;
+  String get resourcesLabel;
+  String resourceItem(int n);
+  String get addResource;
+  String get atLeastOneResource;
+  String get fieldRequired;
+  String get selectDate;
+  String get submittingLabel;
+  String get publishButton;
+  String get markerPublished;
+
+  String get pickPointTitle;
+  String get tapMapHint;
+
+  String get onThisDayTitle;
+  String get onThisDaySubtitle;
+  String get anotherFact;
+  String get refreshAction;
+  String get loadingLabel;
+  String get openInWikipedia;
+  String get noFactsForToday;
+  String get wikipediaSource;
+  String wikipediaSourceWithCount(int count);
+
+  String get refreshingMap;
+  String get locationDisabled;
+  String get locationDenied;
+  String get locationDeniedForever;
+  String locationError(String error);
+  String get filtersTitle;
+  String get statusFilter;
+  String get filterAll;
+  String get filterCompleted;
+  String get filterNotCompleted;
+  String get markAsCompleted;
+  String get markedAsCompleted;
 }
 
 class _AppLocalizationsDelegate

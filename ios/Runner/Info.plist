@@ -45,6 +45,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>QStory uses your location to show your position on the map of historical landmarks</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	

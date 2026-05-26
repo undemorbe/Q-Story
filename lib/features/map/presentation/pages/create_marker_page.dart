@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/l10n/app_localizations.dart';
+import '../../../../core/util/id_generator.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
 import '../../domain/entities/marker_submission_entity.dart';
@@ -92,11 +92,28 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
     super.dispose();
   }
 
-  String _genId() {
-    final ts = DateTime.now().millisecondsSinceEpoch.toRadixString(36);
-    final rand = Random().nextInt(0x7fffffff).toRadixString(36);
-    return '$ts$rand';
-  }
+  String _genMarkerId() => IdGenerator.generate(
+        prefix: 'm',
+        parts: [
+          _markerTitle.text.trim(),
+          _markerCompressed.text.trim(),
+          _point.latitude.toStringAsFixed(6),
+          _point.longitude.toStringAsFixed(6),
+          _type,
+        ],
+      );
+
+  String _genBuildingId() => IdGenerator.generate(
+        prefix: 'b',
+        parts: [
+          _buildingTitle.text.trim(),
+          _buildingCompressed.text.trim(),
+          _descMain.text.trim(),
+          _person.text.trim(),
+          _dateStart.text.trim(),
+          _dateEnd.text.trim(),
+        ],
+      );
 
   Future<void> _pickDate(TextEditingController target) async {
     final now = DateTime.now();
@@ -106,7 +123,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
       initialDate: initial,
       firstDate: DateTime(800),
       lastDate: DateTime(now.year + 5),
-      helpText: 'Выберите дату',
+      helpText: AppLocalizations.of(context)!.selectDate,
     );
     if (picked != null) {
       target.text = _dateFmt.format(picked);
@@ -126,7 +143,9 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
   }
 
   String? _required(String? v) {
-    if (v == null || v.trim().isEmpty) return 'Обязательное поле';
+    if (v == null || v.trim().isEmpty) {
+      return AppLocalizations.of(context)!.fieldRequired;
+    }
     return null;
   }
 
@@ -142,6 +161,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
   }
 
   Future<void> _submit() async {
+    final l10n = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
@@ -151,14 +171,14 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
         .toList();
     if (resources.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Добавьте хотя бы один источник')),
+        SnackBar(content: Text(l10n.atLeastOneResource)),
       );
       return;
     }
 
     final payload = MarkerSubmissionEntity(
       marker: MarkerPayload(
-        id: _genId(),
+        id: _genMarkerId(),
         lat: _point.latitude,
         lon: _point.longitude,
         title: _markerTitle.text.trim(),
@@ -166,7 +186,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
         compressedDescription: _markerCompressed.text.trim(),
       ),
       building: BuildingPayload(
-        id: _genId(),
+        id: _genBuildingId(),
         title: _buildingTitle.text.trim(),
         compressedDescription: _buildingCompressed.text.trim(),
         descriptionTop: _descTop.text.trim(),
@@ -185,20 +205,21 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
     if (!mounted) return;
     if (ok) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Метка опубликована')),
+        SnackBar(content: Text(l10n.markerPublished)),
       );
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_store.submitError ?? 'Ошибка отправки')),
+        SnackBar(content: Text(_store.submitError ?? l10n.error)),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Создать метку')),
+      appBar: AppBar(title: Text(l10n.createMarkerTitle)),
       body: Observer(
         builder: (_) {
           return AbsorbPointer(
@@ -208,7 +229,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
                 children: [
-                  _sectionHeader(context, 'Метка на карте'),
+                  _sectionHeader(context, l10n.markerSection),
                   const SizedBox(height: 8),
                   GothicCard(
                     padding: const EdgeInsets.all(14),
@@ -216,7 +237,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _field(
-                          label: 'Название',
+                          label: l10n.titleField,
                           controller: _markerTitle,
                           validator: _required,
                         ),
@@ -224,7 +245,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
                         _locationPicker(),
                         _typeDropdown(),
                         _field(
-                          label: 'Сжатое описание (для маркера)',
+                          label: l10n.markerCompressedField,
                           controller: _markerCompressed,
                           validator: _required,
                           maxLines: 2,
@@ -233,7 +254,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  _sectionHeader(context, 'Объект (QR)'),
+                  _sectionHeader(context, l10n.buildingSection),
                   const SizedBox(height: 8),
                   GothicCard(
                     padding: const EdgeInsets.all(14),
@@ -241,36 +262,36 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _field(
-                          label: 'Название объекта',
+                          label: l10n.buildingNameField,
                           controller: _buildingTitle,
                           validator: _required,
                         ),
                         _field(
-                          label: 'Сжатое описание',
+                          label: l10n.buildingCompressedField,
                           controller: _buildingCompressed,
                           validator: _required,
                           maxLines: 2,
                         ),
                         _field(
-                          label: 'Верхнее описание',
+                          label: l10n.descTopField,
                           controller: _descTop,
                           validator: _required,
                           maxLines: 2,
                         ),
                         _field(
-                          label: 'Главное описание',
+                          label: l10n.descMainField,
                           controller: _descMain,
                           validator: _required,
                           maxLines: 4,
                         ),
                         _field(
-                          label: 'Нижнее описание',
+                          label: l10n.descBottomField,
                           controller: _descBottom,
                           validator: _required,
                           maxLines: 2,
                         ),
                         _field(
-                          label: 'Связанная личность',
+                          label: l10n.personField,
                           controller: _person,
                           validator: _required,
                         ),
@@ -278,21 +299,21 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
                           children: [
                             Expanded(
                               child: _dateField(
-                                label: 'Дата начала',
+                                label: l10n.dateStartField,
                                 controller: _dateStart,
                               ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: _dateField(
-                                label: 'Дата конца',
+                                label: l10n.dateEndField,
                                 controller: _dateEnd,
                               ),
                             ),
                           ],
                         ),
                         _field(
-                          label: 'URL изображения',
+                          label: l10n.imageUrlField,
                           controller: _image,
                           validator: _required,
                           keyboardType: TextInputType.url,
@@ -315,8 +336,9 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
                                   strokeWidth: 2, color: context.bgClr),
                             )
                           : const Icon(Icons.send, size: 16),
-                      label: Text(
-                          _store.isSubmitting ? 'Отправка…' : 'Опубликовать'),
+                      label: Text(_store.isSubmitting
+                          ? l10n.submittingLabel
+                          : l10n.publishButton),
                     ),
                   ),
                 ],
@@ -369,6 +391,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
   }
 
   Widget _locationPicker() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: InkWell(
@@ -391,7 +414,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Координаты',
+                      l10n.coordinatesLabel,
                       style: GoogleFonts.cinzel(
                         color: context.gold,
                         fontSize: 11,
@@ -437,11 +460,12 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
   }
 
   Widget _typeDropdown() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: DropdownButtonFormField<String>(
         initialValue: _type,
-        decoration: const InputDecoration(labelText: 'Тип'),
+        decoration: InputDecoration(labelText: l10n.typeField),
         items: _types
             .map((t) => DropdownMenuItem(value: t, child: Text(t)))
             .toList(),
@@ -453,13 +477,14 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
   }
 
   Widget _resourcesEditor() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 4),
           child: Text(
-            'ИСТОЧНИКИ',
+            l10n.resourcesLabel,
             style: GoogleFonts.cinzel(
               color: context.gold,
               fontSize: 11,
@@ -476,7 +501,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
                   child: TextFormField(
                     controller: _resources[i],
                     decoration: InputDecoration(
-                      labelText: 'Источник ${i + 1}',
+                      labelText: l10n.resourceItem(i + 1),
                       hintText: 'wikipedia.org',
                     ),
                   ),
@@ -498,7 +523,7 @@ class _CreateMarkerPageState extends State<CreateMarkerPage> {
           child: TextButton.icon(
             onPressed: _addResourceField,
             icon: const Icon(Icons.add, size: 16),
-            label: const Text('Добавить источник'),
+            label: Text(l10n.addResource),
           ),
         ),
       ],
