@@ -5,16 +5,12 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
 class EmailService {
-  late final String _smtpHost;
-  late final int _smtpPort;
   late final String _smtpUser;
   late final String _smtpPassword;
   late final String _supportEmail;
   late final String _supportSubject;
 
   EmailService() {
-    _smtpHost = dotenv.get('SMTP_HOST', fallback: 'smtp.gmail.com');
-    _smtpPort = int.parse(dotenv.get('SMTP_PORT', fallback: '465'));
     _smtpUser = dotenv.get('SMTP_USER', fallback: '');
     _smtpPassword = dotenv.get('SMTP_PASSWORD', fallback: '');
     _supportEmail = dotenv.get('SUPPORT_EMAIL', fallback: '');
