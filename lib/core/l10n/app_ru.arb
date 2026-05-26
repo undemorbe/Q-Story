@@ -167,5 +167,30 @@
   "filterCompleted": "Пройдено",
   "filterNotCompleted": "Не пройдено",
   "markAsCompleted": "Отметить как пройдено",
-  "markedAsCompleted": "Отмечено как пройдено!"
+  "markedAsCompleted": "Отмечено как пройдено!",
+
+  "report": "Пожаловаться",
+  "reportTitle": "Сообщить о проблеме",
+  "reportCategory": "Категория",
+  "reportText": "Опишите проблему...",
+  "reportSent": "Жалоба успешно отправлена",
+  "reportConfirmTitle": "Подтвердить жалобу",
+  "reportConfirmMessage": "Отправить жалобу по категории: {category}?",
+  "@reportConfirmMessage": {
+    "placeholders": {
+      "category": { "type": "String" }
+    }
+  },
+  "reportCategoryVandalism": "Вандализм",
+  "reportCategoryMisinformation": "Дезинформация",
+  "reportCategoryOffensive": "Оскорбительный контент",
+  "reportCategorySpam": "Спам",
+  "reportCategoryCopyright": "Нарушение авторских прав",
+  "reportCategoryAdult": "Взрослый контент",
+  "reportCategoryHate": "Разжигание ненависти",
+  "reportCategoryFraud": "Мошенничество",
+  "reportCategoryMalware": "Вредоносное ПО/угроза",
+  "reportCategoryPrivacy": "Нарушение приватности",
+  "reportCategoryInvalid": "Неверная информация",
+  "reportCategoryOther": "Другое"
 }

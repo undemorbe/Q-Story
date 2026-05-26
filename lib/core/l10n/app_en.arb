@@ -167,5 +167,30 @@
   "filterCompleted": "Completed",
   "filterNotCompleted": "Not completed",
   "markAsCompleted": "Mark as completed",
-  "markedAsCompleted": "Marked as completed!"
+  "markedAsCompleted": "Marked as completed!",
+
+  "report": "Report",
+  "reportTitle": "Report an issue",
+  "reportCategory": "Category",
+  "reportText": "Describe the issue...",
+  "reportSent": "Report sent successfully",
+  "reportConfirmTitle": "Confirm Report",
+  "reportConfirmMessage": "Send report for category: {category}?",
+  "@reportConfirmMessage": {
+    "placeholders": {
+      "category": { "type": "String" }
+    }
+  },
+  "reportCategoryVandalism": "Vandalism",
+  "reportCategoryMisinformation": "Misinformation",
+  "reportCategoryOffensive": "Offensive content",
+  "reportCategorySpam": "Spam",
+  "reportCategoryCopyright": "Copyright violation",
+  "reportCategoryAdult": "Adult content",
+  "reportCategoryHate": "Hate speech",
+  "reportCategoryFraud": "Fraud",
+  "reportCategoryMalware": "Malware/Security threat",
+  "reportCategoryPrivacy": "Privacy violation",
+  "reportCategoryInvalid": "Invalid information",
+  "reportCategoryOther": "Other"
 }
