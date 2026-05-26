@@ -19,6 +19,7 @@ class ReportSheet extends StatefulWidget {
 
 class _ReportSheetState extends State<ReportSheet> {
   late final TextEditingController _textController;
+  late final ValueNotifier<int> _textLengthNotifier;
   late final ReportService _reportService;
 
   ReportCategory? _selectedCategory;
@@ -29,11 +30,13 @@ class _ReportSheetState extends State<ReportSheet> {
   void initState() {
     super.initState();
     _textController = TextEditingController();
+    _textLengthNotifier = ValueNotifier<int>(0);
     _reportService = getIt<ReportService>();
   }
 
   @override
   void dispose() {
+    _textLengthNotifier.dispose();
     _textController.dispose();
     super.dispose();
   }
@@ -41,7 +44,6 @@ class _ReportSheetState extends State<ReportSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final textLength = _textController.text.length;
 
     return Container(
       padding: EdgeInsets.only(
@@ -136,10 +138,22 @@ class _ReportSheetState extends State<ReportSheet> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              counterText: '$textLength/500',
+              counterText: '',
             ),
-            onChanged: (_) {
-              setState(() {});
+            onChanged: (text) {
+              _textLengthNotifier.value = text.length;
+            },
+          ),
+          ValueListenableBuilder<int>(
+            valueListenable: _textLengthNotifier,
+            builder: (context, textLength, _) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  '$textLength/500',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              );
             },
           ),
           const SizedBox(height: 16),
@@ -199,8 +213,6 @@ class _ReportSheetState extends State<ReportSheet> {
   }
 
   Future<void> _sendReport() async {
-    if (_selectedCategory == null) return;
-
     final l10n = AppLocalizations.of(context)!;
     final category = _selectedCategory!;
     final categoryLabel = _reportService.getCategoryLabel(
@@ -269,7 +281,11 @@ class _ReportSheetState extends State<ReportSheet> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+        if (e is Exception) {
+          _errorMessage = e.toString().replaceFirst('Exception: ', '');
+        } else {
+          _errorMessage = 'An unexpected error occurred';
+        }
       });
     }
   }
