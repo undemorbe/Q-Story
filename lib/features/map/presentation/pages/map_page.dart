@@ -14,6 +14,7 @@ import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
 import '../../domain/entities/map_marker_entity.dart';
 import '../stores/map_store.dart';
+import '../../../reports/presentation/pages/report_sheet.dart';
 import 'create_marker_page.dart';
 
 class MapPage extends StatefulWidget {
@@ -303,6 +304,24 @@ class _MapPageState extends State<MapPage> {
                         label: Text(
                             AppLocalizations.of(context)!.markAsCompleted),
                       ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (_) => ReportSheet(
+                        markerId: marker.id,
+                        markerTitle: marker.title,
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.flag_outlined, size: 16),
+                  label: Text(AppLocalizations.of(context)!.report),
+                ),
               ),
             ],
           ),
