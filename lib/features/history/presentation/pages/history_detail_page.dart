@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../domain/entities/history_entity.dart';
 import '../../../favorites/presentation/stores/favorites_store.dart';
+import '../../../reports/presentation/pages/report_sheet.dart';
 
 class HistoryDetailPage extends StatelessWidget {
   final HistoryEntity entity;
@@ -65,6 +66,27 @@ class HistoryDetailPage extends StatelessWidget {
                     ),
                   );
                 },
+              ),
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.flag_outlined),
+                  color: Colors.white,
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (_) => ReportSheet(
+                        markerId: entity.id,
+                        markerTitle: entity.title,
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
