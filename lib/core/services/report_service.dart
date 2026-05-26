@@ -51,6 +51,10 @@ class ReportService {
 
   /// Validates and sends a report via email
   ///
+  /// The email is sent with the category label in English for admin consistency,
+  /// regardless of the user's language preference. Users see the localized
+  /// category name in the ReportSheet UI on the client side.
+  ///
   /// Throws [ArgumentError] if:
   /// - Marker ID is empty or contains only whitespace
   /// - Marker title is empty or contains only whitespace
@@ -87,7 +91,9 @@ class ReportService {
 
     // Build email body with timestamp
     final timestamp = DateTime.now().toIso8601String();
-    final categoryLabel = getCategoryLabel(category, 'en'); // Use EN for email
+    // Hardcode EN for admin emails for consistency across user languages.
+    // Users see localized category names in the UI (ReportSheet).
+    final categoryLabel = getCategoryLabel(category, 'en');
     final emailBody = '''
 Report Submission
 =================
