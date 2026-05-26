@@ -464,4 +464,63 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get markedAsCompleted => 'Отмечено как пройдено!';
+
+  @override
+  String get report => 'Пожаловаться';
+
+  @override
+  String get reportTitle => 'Сообщить о проблеме';
+
+  @override
+  String get reportCategory => 'Категория';
+
+  @override
+  String get reportText => 'Опишите проблему...';
+
+  @override
+  String get reportSent => 'Жалоба успешно отправлена';
+
+  @override
+  String get reportConfirmTitle => 'Подтвердить жалобу';
+
+  @override
+  String reportConfirmMessage(String category) {
+    return 'Отправить жалобу по категории: $category?';
+  }
+
+  @override
+  String get reportCategoryVandalism => 'Вандализм';
+
+  @override
+  String get reportCategoryMisinformation => 'Дезинформация';
+
+  @override
+  String get reportCategoryOffensive => 'Оскорбительный контент';
+
+  @override
+  String get reportCategorySpam => 'Спам';
+
+  @override
+  String get reportCategoryCopyright => 'Нарушение авторских прав';
+
+  @override
+  String get reportCategoryAdult => 'Взрослый контент';
+
+  @override
+  String get reportCategoryHate => 'Разжигание ненависти';
+
+  @override
+  String get reportCategoryFraud => 'Мошенничество';
+
+  @override
+  String get reportCategoryMalware => 'Вредоносное ПО/угроза';
+
+  @override
+  String get reportCategoryPrivacy => 'Нарушение приватности';
+
+  @override
+  String get reportCategoryInvalid => 'Неверная информация';
+
+  @override
+  String get reportCategoryOther => 'Другое';
 }

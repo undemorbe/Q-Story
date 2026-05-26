@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ApiClient {
   final Dio _dio;
 
   /// API base URL. Override at build time:
   /// `flutter run --dart-define=API_URL=https://api.example.com`
-  static const String baseUrl = String.fromEnvironment(
+  static final String baseUrl = String.fromEnvironment(
     'API_URL',
-    defaultValue:
-        'https://2839bc9a-d491-41f2-94d8-c3c98ffedc32.tunnel4.com/api',
+    defaultValue: dotenv.env['MAP_API_URL_BACKEND'] ?? 'https://api.q-story.app',
   );
 
   ApiClient() : _dio = Dio() {

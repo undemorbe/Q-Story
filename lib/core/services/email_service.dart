@@ -11,10 +11,18 @@ class EmailService {
   late final String _supportSubject;
 
   EmailService() {
-    _smtpUser = dotenv.get('SMTP_USER', fallback: '');
-    _smtpPassword = dotenv.get('SMTP_PASSWORD', fallback: '');
-    _supportEmail = dotenv.get('SUPPORT_EMAIL', fallback: '');
-    _supportSubject = dotenv.get('SUPPORT_SUBJECT', fallback: 'Support Message');
+    _smtpUser = _readEnv('SMTP_USER');
+    _smtpPassword = _readEnv('SMTP_PASSWORD');
+    _supportEmail = _readEnv('SUPPORT_EMAIL');
+    _supportSubject = _readEnv('SUPPORT_SUBJECT', fallback: 'Support Message');
+  }
+
+  String _readEnv(String key, {String fallback = ''}) {
+    try {
+      return dotenv.get(key, fallback: fallback);
+    } catch (_) {
+      return fallback;
+    }
   }
 
   /// Validates and sends a support message via email

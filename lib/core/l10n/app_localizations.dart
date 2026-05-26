@@ -979,6 +979,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Marked as completed!'**
   String get markedAsCompleted;
+
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
+
+  /// No description provided for @reportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report an issue'**
+  String get reportTitle;
+
+  /// No description provided for @reportCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get reportCategory;
+
+  /// No description provided for @reportText.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the issue...'**
+  String get reportText;
+
+  /// No description provided for @reportSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Report sent successfully'**
+  String get reportSent;
+
+  /// No description provided for @reportConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Report'**
+  String get reportConfirmTitle;
+
+  /// No description provided for @reportConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send report for category: {category}?'**
+  String reportConfirmMessage(String category);
+
+  /// No description provided for @reportCategoryVandalism.
+  ///
+  /// In en, this message translates to:
+  /// **'Vandalism'**
+  String get reportCategoryVandalism;
+
+  /// No description provided for @reportCategoryMisinformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Misinformation'**
+  String get reportCategoryMisinformation;
+
+  /// No description provided for @reportCategoryOffensive.
+  ///
+  /// In en, this message translates to:
+  /// **'Offensive content'**
+  String get reportCategoryOffensive;
+
+  /// No description provided for @reportCategorySpam.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam'**
+  String get reportCategorySpam;
+
+  /// No description provided for @reportCategoryCopyright.
+  ///
+  /// In en, this message translates to:
+  /// **'Copyright violation'**
+  String get reportCategoryCopyright;
+
+  /// No description provided for @reportCategoryAdult.
+  ///
+  /// In en, this message translates to:
+  /// **'Adult content'**
+  String get reportCategoryAdult;
+
+  /// No description provided for @reportCategoryHate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hate speech'**
+  String get reportCategoryHate;
+
+  /// No description provided for @reportCategoryFraud.
+  ///
+  /// In en, this message translates to:
+  /// **'Fraud'**
+  String get reportCategoryFraud;
+
+  /// No description provided for @reportCategoryMalware.
+  ///
+  /// In en, this message translates to:
+  /// **'Malware/Security threat'**
+  String get reportCategoryMalware;
+
+  /// No description provided for @reportCategoryPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy violation'**
+  String get reportCategoryPrivacy;
+
+  /// No description provided for @reportCategoryInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid information'**
+  String get reportCategoryInvalid;
+
+  /// No description provided for @reportCategoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get reportCategoryOther;
 }
 
 class _AppLocalizationsDelegate

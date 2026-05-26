@@ -11,7 +11,11 @@ import 'features/settings/presentation/stores/settings_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (_) {
+    // .env is optional in local/test environments; continue with fallbacks.
+  }
   await setupServiceLocator();
   
   // Initialize notifications

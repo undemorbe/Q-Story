@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:qstory/core/services/email_service.dart';
 
 // Mock for testing SMTP behavior
@@ -34,8 +33,7 @@ void main() {
     late MockEmailService service;
 
     setUpAll(() async {
-      // Load from project root - use absolute path
-      await dotenv.load(fileName: '/Users/dolbobob/Programming/FlutterApps/qstory/.env');
+      // No env file required for these validation tests.
     });
 
     setUp(() {

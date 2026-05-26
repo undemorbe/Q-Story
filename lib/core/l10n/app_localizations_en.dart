@@ -465,4 +465,63 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get markedAsCompleted => 'Marked as completed!';
+
+  @override
+  String get report => 'Report';
+
+  @override
+  String get reportTitle => 'Report an issue';
+
+  @override
+  String get reportCategory => 'Category';
+
+  @override
+  String get reportText => 'Describe the issue...';
+
+  @override
+  String get reportSent => 'Report sent successfully';
+
+  @override
+  String get reportConfirmTitle => 'Confirm Report';
+
+  @override
+  String reportConfirmMessage(String category) {
+    return 'Send report for category: $category?';
+  }
+
+  @override
+  String get reportCategoryVandalism => 'Vandalism';
+
+  @override
+  String get reportCategoryMisinformation => 'Misinformation';
+
+  @override
+  String get reportCategoryOffensive => 'Offensive content';
+
+  @override
+  String get reportCategorySpam => 'Spam';
+
+  @override
+  String get reportCategoryCopyright => 'Copyright violation';
+
+  @override
+  String get reportCategoryAdult => 'Adult content';
+
+  @override
+  String get reportCategoryHate => 'Hate speech';
+
+  @override
+  String get reportCategoryFraud => 'Fraud';
+
+  @override
+  String get reportCategoryMalware => 'Malware/Security threat';
+
+  @override
+  String get reportCategoryPrivacy => 'Privacy violation';
+
+  @override
+  String get reportCategoryInvalid => 'Invalid information';
+
+  @override
+  String get reportCategoryOther => 'Other';
 }
