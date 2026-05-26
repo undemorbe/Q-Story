@@ -180,6 +180,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get helpAndSupport => 'Помощь и поддержка';
 
   @override
+  String get sendSupportMessage => 'Отправьте нам сообщение, и мы ответим вам';
+
+  @override
+  String get enterMessage => 'Введите сообщение...';
+
+  @override
+  String get messageSent => 'Сообщение успешно отправлено';
+
+  @override
+  String get send => 'Отправить';
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
   String get appearance => 'Внешний вид';
 
   @override

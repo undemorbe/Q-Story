@@ -434,6 +434,36 @@ abstract class AppLocalizations {
   /// **'Help & Support'**
   String get helpAndSupport;
 
+  /// No description provided for @sendSupportMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send us a message and we\'ll get back to you'**
+  String get sendSupportMessage;
+
+  /// No description provided for @enterMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your message...'**
+  String get enterMessage;
+
+  /// No description provided for @messageSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Message sent successfully'**
+  String get messageSent;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
   /// No description provided for @appearance.
   ///
   /// In en, this message translates to:

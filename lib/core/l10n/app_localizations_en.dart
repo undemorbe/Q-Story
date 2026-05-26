@@ -181,6 +181,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpAndSupport => 'Help & Support';
 
   @override
+  String get sendSupportMessage =>
+      'Send us a message and we\'ll get back to you';
+
+  @override
+  String get enterMessage => 'Enter your message...';
+
+  @override
+  String get messageSent => 'Message sent successfully';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
   String get appearance => 'Appearance';
 
   @override
