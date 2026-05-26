@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/l10n/app_localizations.dart';
 import 'core/di/service_locator.dart';
 import 'core/navigation/app_router.dart';
@@ -10,6 +11,7 @@ import 'features/settings/presentation/stores/settings_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await setupServiceLocator();
   
   // Initialize notifications
