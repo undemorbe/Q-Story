@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qstory/features/settings/presentation/pages/settings_page.dart';
 import '../../../../core/di/service_locator.dart';
+import 'help_support_sheet.dart';
 import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
@@ -172,7 +173,13 @@ class ProfilePage extends StatelessWidget {
                         title: Text(l10n.helpAndSupport),
                         trailing: Icon(Icons.chevron_right,
                             color: context.outlineClr),
-                        onTap: () {},
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (_) => const HelpSupportSheet(),
+                          );
+                        },
                       ),
                     ],
                   ),
