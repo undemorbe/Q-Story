@@ -69,21 +69,21 @@ $trimmedMessage
     } on MailerException catch (e) {
       // Handle mailer-specific exceptions
       if (e.toString().contains('connection')) {
-        throw Exception('Network error: Unable to connect to email server');
+        throw Exception('Network error. Check internet connection.');
       } else if (e.toString().contains('auth') || e.toString().contains('authentication')) {
-        throw Exception('Email service misconfigured: Authentication failed');
+        throw Exception('Email service misconfigured');
       } else {
-        throw Exception('Failed to send message: ${e.message}');
+        throw Exception('Failed to send message');
       }
     } on SocketException catch (_) {
       // Handle socket/network errors
-      throw Exception('Network error: Unable to connect to email server');
+      throw Exception('Network error. Check internet connection.');
     } on TimeoutException catch (_) {
       // Handle timeout errors
-      throw Exception('Request timeout: Email server did not respond in time');
+      throw Exception('Request timeout');
     } catch (e) {
       // Generic error handler
-      throw Exception('Failed to send message: $e');
+      throw Exception('Failed to send message');
     }
   }
 }
