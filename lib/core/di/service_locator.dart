@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../network/api_client.dart';
 import '../services/location_service.dart';
 import '../services/email_service.dart';
+import '../services/report_service.dart';
 import '../../features/qr_operations/data/repositories/qr_repository_impl.dart';
 import '../../features/qr_operations/domain/repositories/qr_repository.dart';
 import '../../features/qr_operations/domain/usecases/process_qr_usecase.dart';
@@ -44,6 +45,7 @@ Future<void> setupServiceLocator() async {
 
   // Core
   getIt.registerSingleton<EmailService>(EmailService());
+  getIt.registerSingleton<ReportService>(ReportService());
   getIt.registerLazySingleton<ApiClient>(() => ApiClient());
   getIt.registerLazySingleton<LocationService>(() => LocationService());
 
