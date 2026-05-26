@@ -4,9 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/services/notification_service.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/gothic_widgets.dart';
+import '../../../../core/theme/theme_ext.dart';
 import '../stores/auth_store.dart';
 
 class LoginPage extends StatefulWidget {
@@ -49,6 +50,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final gold = context.gold;
+
     return Scaffold(
       body: GothicBackground(
         child: SafeArea(
@@ -64,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       '— ✦ ◆ ✦ —',
                       style: TextStyle(
-                        color: AppColors.primaryGold.withValues(alpha: 0.65),
+                        color: gold.withValues(alpha: 0.65),
                         fontSize: 18,
                         letterSpacing: 5,
                       ),
@@ -72,9 +76,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Welcome Back',
+                      l10n.loginTitle,
                       style: GoogleFonts.cinzelDecorative(
-                        color: AppColors.primaryGold,
+                        color: gold,
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
@@ -82,9 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Enter your credentials to continue',
+                      l10n.loginSubtitle,
                       style: GoogleFonts.crimsonText(
-                        color: AppColors.onSurface,
+                        color: context.onBg,
                         fontSize: 16,
                         fontStyle: FontStyle.italic,
                       ),
@@ -94,14 +98,14 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: _emailController,
                       style: GoogleFonts.crimsonText(
-                          color: AppColors.onBackground, fontSize: 18),
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email_outlined),
+                          color: context.onBg, fontSize: 18),
+                      decoration: InputDecoration(
+                        labelText: l10n.emailLabel,
+                        prefixIcon: const Icon(Icons.email_outlined),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return l10n.emailLabel;
                         }
                         return null;
                       },
@@ -110,15 +114,15 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: _passwordController,
                       style: GoogleFonts.crimsonText(
-                          color: AppColors.onBackground, fontSize: 18),
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock_outline),
+                          color: context.onBg, fontSize: 18),
+                      decoration: InputDecoration(
+                        labelText: l10n.passwordLabel,
+                        prefixIcon: const Icon(Icons.lock_outline),
                       ),
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                          return l10n.passwordLabel;
                         }
                         return null;
                       },
@@ -135,14 +139,14 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         Text(
-                          'Remember Me',
+                          l10n.rememberMe,
                           style: GoogleFonts.cinzel(
-                              color: AppColors.onSurface, fontSize: 11),
+                              color: context.onBg, fontSize: 11),
                         ),
                         const Spacer(),
                         TextButton(
                           onPressed: () {},
-                          child: const Text('Forgot Password?'),
+                          child: Text(l10n.forgotPassword),
                         ),
                       ],
                     ),
@@ -168,13 +172,12 @@ class _LoginPageState extends State<LoginPage> {
                                     context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content:
-                                            Text(_store.errorMessage!)),
+                                        content: Text(_store.errorMessage!)),
                                   );
                                 }
                               }
                             },
-                            child: const Text('Login'),
+                            child: Text(l10n.loginButton),
                           ),
                         );
                       },
@@ -190,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         },
                         icon: const Icon(Icons.fingerprint, size: 18),
-                        label: const Text('Login with Biometrics'),
+                        label: Text(l10n.loginWithBiometrics),
                       ),
                     ),
                     const SizedBox(height: 36),
@@ -200,13 +203,13 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Don't have an account? ",
+                          '${l10n.noAccount} ',
                           style: GoogleFonts.crimsonText(
-                              color: AppColors.onSurface, fontSize: 16),
+                              color: context.onBg, fontSize: 16),
                         ),
                         TextButton(
                           onPressed: () => context.push('/register'),
-                          child: const Text('Register'),
+                          child: Text(l10n.registerLink),
                         ),
                       ],
                     ),

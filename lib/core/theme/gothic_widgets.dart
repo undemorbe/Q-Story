@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'app_colors.dart';
+import 'theme_ext.dart';
 
 class GothicBackground extends StatelessWidget {
   final Widget child;
@@ -7,22 +7,24 @@ class GothicBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       fit: StackFit.expand,
       children: [
         child,
-        IgnorePointer(
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment.center,
-                radius: 1.2,
-                colors: [Colors.transparent, Color(0x80000000)],
-                stops: [0.5, 1.0],
+        if (isDark)
+          IgnorePointer(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.center,
+                  radius: 1.2,
+                  colors: [Colors.transparent, Color(0x80000000)],
+                  stops: [0.5, 1.0],
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -42,48 +44,51 @@ class GothicCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gold = context.gold;
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.surface,
-        border: Border.all(color: AppColors.outline, width: 1),
+        color: backgroundColor ?? context.surfaceClr,
+        border: Border.all(color: context.outlineClr, width: 1),
         borderRadius: BorderRadius.circular(2),
       ),
       child: Stack(
         children: [
           Padding(
             padding: padding ?? const EdgeInsets.all(16),
-            child: child,
+            child: Center(
+              child: child,
+            ),
           ),
-          const Positioned(
+          Positioned(
             top: 4,
             left: 4,
             child: Text(
               '✦',
-              style: TextStyle(color: AppColors.primaryGold, fontSize: 7, height: 1),
+              style: TextStyle(color: gold, fontSize: 7, height: 1),
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 4,
             right: 4,
             child: Text(
               '✦',
-              style: TextStyle(color: AppColors.primaryGold, fontSize: 7, height: 1),
+              style: TextStyle(color: gold, fontSize: 7, height: 1),
             ),
           ),
-          const Positioned(
+          Positioned(
             bottom: 4,
             left: 4,
             child: Text(
               '✦',
-              style: TextStyle(color: AppColors.primaryGold, fontSize: 7, height: 1),
+              style: TextStyle(color: gold, fontSize: 7, height: 1),
             ),
           ),
-          const Positioned(
+          Positioned(
             bottom: 4,
             right: 4,
             child: Text(
               '✦',
-              style: TextStyle(color: AppColors.primaryGold, fontSize: 7, height: 1),
+              style: TextStyle(color: gold, fontSize: 7, height: 1),
             ),
           ),
         ],
@@ -101,15 +106,15 @@ class GothicDivider extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Expanded(child: Container(height: 1, color: AppColors.outline)),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+          Expanded(child: Container(height: 1, color: context.outlineClr)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               '◆',
-              style: TextStyle(color: AppColors.primaryGold, fontSize: 10),
+              style: TextStyle(color: context.gold, fontSize: 10),
             ),
           ),
-          Expanded(child: Container(height: 1, color: AppColors.outline)),
+          Expanded(child: Container(height: 1, color: context.outlineClr)),
         ],
       ),
     );
@@ -128,12 +133,13 @@ class GothicOrnamentHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gold = context.gold;
     return Column(
       children: [
         Text(
           '— ✦ ◆ ✦ —',
           style: TextStyle(
-            color: AppColors.primaryGold.withValues(alpha: 0.6),
+            color: gold.withValues(alpha: 0.6),
             fontSize: 16,
             letterSpacing: 4,
           ),
@@ -144,7 +150,7 @@ class GothicOrnamentHeader extends StatelessWidget {
           text,
           style: TextStyle(
             fontFamily: 'CinzelDecorative',
-            color: AppColors.primaryGold,
+            color: gold,
             fontSize: fontSize,
             fontWeight: FontWeight.bold,
           ),

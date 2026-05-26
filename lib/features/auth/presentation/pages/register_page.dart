@@ -3,8 +3,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/theme/gothic_widgets.dart';
+import '../../../../core/theme/theme_ext.dart';
 import '../stores/auth_store.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -31,6 +32,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final gold = context.gold;
+
     return Scaffold(
       body: GothicBackground(
         child: SafeArea(
@@ -46,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Text(
                       '— ✦ ◆ ✦ —',
                       style: TextStyle(
-                        color: AppColors.primaryGold.withValues(alpha: 0.65),
+                        color: gold.withValues(alpha: 0.65),
                         fontSize: 18,
                         letterSpacing: 5,
                       ),
@@ -54,9 +58,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Create Account',
+                      l10n.registerTitle,
                       style: GoogleFonts.cinzelDecorative(
-                        color: AppColors.primaryGold,
+                        color: gold,
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
@@ -64,9 +68,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Begin your journey',
+                      l10n.registerSubtitle,
                       style: GoogleFonts.crimsonText(
-                        color: AppColors.onSurface,
+                        color: context.onBg,
                         fontSize: 16,
                         fontStyle: FontStyle.italic,
                       ),
@@ -76,14 +80,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextFormField(
                       controller: _usernameController,
                       style: GoogleFonts.crimsonText(
-                          color: AppColors.onBackground, fontSize: 18),
-                      decoration: const InputDecoration(
-                        labelText: 'Username',
-                        prefixIcon: Icon(Icons.person_outline),
+                          color: context.onBg, fontSize: 18),
+                      decoration: InputDecoration(
+                        labelText: l10n.usernameLabel,
+                        prefixIcon: const Icon(Icons.person_outline),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a username';
+                          return l10n.usernameLabel;
                         }
                         return null;
                       },
@@ -92,14 +96,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextFormField(
                       controller: _emailController,
                       style: GoogleFonts.crimsonText(
-                          color: AppColors.onBackground, fontSize: 18),
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email_outlined),
+                          color: context.onBg, fontSize: 18),
+                      decoration: InputDecoration(
+                        labelText: l10n.emailLabel,
+                        prefixIcon: const Icon(Icons.email_outlined),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return l10n.emailLabel;
                         }
                         return null;
                       },
@@ -108,15 +112,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextFormField(
                       controller: _passwordController,
                       style: GoogleFonts.crimsonText(
-                          color: AppColors.onBackground, fontSize: 18),
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock_outline),
+                          color: context.onBg, fontSize: 18),
+                      decoration: InputDecoration(
+                        labelText: l10n.passwordLabel,
+                        prefixIcon: const Icon(Icons.lock_outline),
                       ),
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
+                          return l10n.passwordLabel;
                         }
                         return null;
                       },
@@ -144,13 +148,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                     context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content:
-                                            Text(_store.errorMessage!)),
+                                        content: Text(_store.errorMessage!)),
                                   );
                                 }
                               }
                             },
-                            child: const Text('Register'),
+                            child: Text(l10n.registerLink),
                           ),
                         );
                       },
@@ -162,13 +165,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already have an account? ',
+                          '${l10n.alreadyHaveAccount} ',
                           style: GoogleFonts.crimsonText(
-                              color: AppColors.onSurface, fontSize: 16),
+                              color: context.onBg, fontSize: 16),
                         ),
                         TextButton(
                           onPressed: () => context.pop(),
-                          child: const Text('Login'),
+                          child: Text(l10n.loginLink),
                         ),
                       ],
                     ),

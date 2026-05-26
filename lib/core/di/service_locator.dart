@@ -18,9 +18,13 @@ import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/presentation/stores/auth_store.dart';
 import '../../features/favorites/presentation/stores/favorites_store.dart';
 import '../../features/history/data/datasources/history_local_data_source.dart';
+import '../../features/history/data/datasources/daily_fact_remote_data_source.dart';
 import '../../features/history/data/repositories/history_repository_impl.dart';
+import '../../features/history/data/repositories/daily_fact_repository_impl.dart';
 import '../../features/history/domain/repositories/history_repository.dart';
+import '../../features/history/domain/repositories/daily_fact_repository.dart';
 import '../../features/history/presentation/stores/history_store.dart';
+import '../../features/history/presentation/stores/daily_fact_store.dart';
 import '../../features/map/data/datasources/completed_markers_local_data_source.dart';
 import '../../features/history/data/datasources/favorites_local_data_source.dart';
 import '../../features/map/data/repositories/map_repository_impl.dart';
@@ -58,6 +62,9 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<HistoryLocalDataSource>(
     () => HistoryLocalDataSourceImpl(sharedPreferences: getIt()),
   );
+  getIt.registerLazySingleton<DailyFactRemoteDataSource>(
+    () => DailyFactRemoteDataSource(),
+  );
 
   // Repositories
   getIt.registerLazySingleton<QrRepository>(() => QrRepositoryImpl(getIt<ApiClient>()));
@@ -66,6 +73,9 @@ Future<void> setupServiceLocator() async {
   );
   getIt.registerLazySingleton<HistoryRepository>(
     () => HistoryRepositoryImpl(localDataSource: getIt()),
+  );
+  getIt.registerLazySingleton<DailyFactRepository>(
+    () => DailyFactRepositoryImpl(remote: getIt()),
   );
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(localDataSource: getIt()),
@@ -83,5 +93,6 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<AuthStore>(() => AuthStore(getIt()));
   getIt.registerLazySingleton<FavoritesStore>(() => FavoritesStore(getIt()));
   getIt.registerLazySingleton<HistoryStore>(() => HistoryStore(getIt()));
+  getIt.registerLazySingleton<DailyFactStore>(() => DailyFactStore(getIt()));
   getIt.registerLazySingleton<MapStore>(() => MapStore(getIt()));
 }

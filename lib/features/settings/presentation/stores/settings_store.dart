@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import '../../domain/repositories/settings_repository.dart';
@@ -32,6 +34,9 @@ abstract class _SettingsStore with Store {
     final savedLocale = await _repository.getLocale();
     if (savedLocale != null) {
       locale = Locale(savedLocale);
+    } else {
+      final deviceLang = ui.PlatformDispatcher.instance.locale.languageCode;
+      locale = deviceLang == 'ru' ? const Locale('ru') : const Locale('en');
     }
   }
 

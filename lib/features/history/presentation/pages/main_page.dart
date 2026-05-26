@@ -3,7 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/l10n/app_localizations.dart';
+import '../../../../core/theme/theme_ext.dart';
 import '../stores/history_store.dart';
 import '../widgets/history_card.dart';
 
@@ -37,6 +38,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final gold = context.gold;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -46,18 +50,18 @@ class _MainPageState extends State<MainPage> {
             expandedHeight: 120,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'Chronicles',
+                l10n.chroniclesTitle,
                 style: GoogleFonts.cinzelDecorative(
-                  color: AppColors.primaryGold,
+                  color: gold,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               centerTitle: true,
               background: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppColors.surfaceVariant, AppColors.background],
+                    colors: [context.surfaceVar, context.bgClr],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
@@ -66,7 +70,7 @@ class _MainPageState extends State<MainPage> {
                   child: Text(
                     '✦   ◆   ✦',
                     style: TextStyle(
-                      color: AppColors.primaryGold.withValues(alpha: 0.3),
+                      color: gold.withValues(alpha: 0.3),
                       fontSize: 18,
                       letterSpacing: 8,
                     ),
@@ -81,12 +85,12 @@ class _MainPageState extends State<MainPage> {
                 child: TextField(
                   controller: _searchController,
                   style: GoogleFonts.crimsonText(
-                      color: AppColors.onBackground, fontSize: 16),
+                      color: context.onBg, fontSize: 16),
                   decoration: InputDecoration(
-                    hintText: 'Search the chronicles...',
+                    hintText: l10n.searchHint,
                     prefixIcon: const Icon(Icons.search, size: 20),
                     hintStyle: GoogleFonts.crimsonText(
-                        color: const Color(0xFF8A7A60),
+                        color: context.dim,
                         fontSize: 16,
                         fontStyle: FontStyle.italic),
                   ),
@@ -106,9 +110,9 @@ class _MainPageState extends State<MainPage> {
                 return SliverFillRemaining(
                   child: Center(
                     child: Text(
-                      'Error: ${_historyStore.errorMessage}',
+                      '${l10n.error}: ${_historyStore.errorMessage}',
                       style: GoogleFonts.crimsonText(
-                          color: AppColors.error, fontSize: 16),
+                          color: context.errorClr, fontSize: 16),
                     ),
                   ),
                 );
@@ -123,15 +127,13 @@ class _MainPageState extends State<MainPage> {
                         Text(
                           '◆',
                           style: TextStyle(
-                            color: AppColors.outline,
-                            fontSize: 32,
-                          ),
+                              color: context.outlineClr, fontSize: 32),
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'No records found',
+                          l10n.noRecordsFound,
                           style: GoogleFonts.cinzel(
-                              color: AppColors.onSurface, fontSize: 14),
+                              color: context.onBg, fontSize: 14),
                         ),
                       ],
                     ),

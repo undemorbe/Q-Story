@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../theme/app_colors.dart';
+import '../l10n/app_localizations.dart';
+import '../theme/theme_ext.dart';
 
 class ScaffoldWithNavBar extends StatelessWidget {
   const ScaffoldWithNavBar({
@@ -12,12 +13,14 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(height: 1, color: AppColors.outline),
+          Container(height: 1, color: context.outlineClr),
           NavigationBar(
             selectedIndex: navigationShell.currentIndex,
             onDestinationSelected: (index) {
@@ -26,26 +29,26 @@ class ScaffoldWithNavBar extends StatelessWidget {
                 initialLocation: index == navigationShell.currentIndex,
               );
             },
-            destinations: const [
+            destinations: [
               NavigationDestination(
-                icon: Icon(Icons.map_outlined),
-                selectedIcon: Icon(Icons.map),
-                label: 'Карта',
+                icon: const Icon(Icons.map_outlined),
+                selectedIcon: const Icon(Icons.map),
+                label: l10n.navMap,
               ),
               NavigationDestination(
-                icon: Icon(Icons.qr_code_scanner_outlined),
-                selectedIcon: Icon(Icons.qr_code_scanner),
-                label: 'Сканер',
+                icon: const Icon(Icons.qr_code_scanner_outlined),
+                selectedIcon: const Icon(Icons.qr_code_scanner),
+                label: l10n.navScanner,
               ),
               NavigationDestination(
-                icon: Icon(Icons.favorite_outline),
-                selectedIcon: Icon(Icons.favorite),
-                label: 'Избранное',
+                icon: const Icon(Icons.favorite_outline),
+                selectedIcon: const Icon(Icons.favorite),
+                label: l10n.navFavorites,
               ),
               NavigationDestination(
-                icon: Icon(Icons.person_outline),
-                selectedIcon: Icon(Icons.person),
-                label: 'Профиль',
+                icon: const Icon(Icons.person_outline),
+                selectedIcon: const Icon(Icons.person),
+                label: l10n.navProfile,
               ),
             ],
           ),

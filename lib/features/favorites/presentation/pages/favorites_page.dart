@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/l10n/app_localizations.dart';
+import '../../../../core/theme/theme_ext.dart';
 import '../../../history/domain/entities/history_entity.dart';
 import '../stores/favorites_store.dart';
 import '../../../history/presentation/widgets/history_card.dart';
@@ -12,19 +15,25 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FavoritesStore store = getIt<FavoritesStore>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Favorites')),
+      appBar: AppBar(title: Text(l10n.favoritesTitle)),
       body: Observer(
         builder: (_) {
           if (!store.hasFavorites) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.favorite_border, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('No favorites yet'),
+                  Icon(Icons.favorite_outline,
+                      size: 64, color: context.outlineClr),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.noFavoritesYet,
+                    style: GoogleFonts.cinzel(
+                        color: context.onBg, fontSize: 14),
+                  ),
                 ],
               ),
             );
@@ -46,8 +55,8 @@ class FavoritesPage extends StatelessWidget {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 0.75,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
             ),
             itemCount: favoriteEvents.length,
             itemBuilder: (context, index) {

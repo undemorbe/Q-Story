@@ -56,6 +56,46 @@ mixin _$MapStore on _MapStore, Store {
     });
   }
 
+  late final _$isSubmittingAtom =
+      Atom(name: '_MapStore.isSubmitting', context: context);
+
+  @override
+  bool get isSubmitting {
+    _$isSubmittingAtom.reportRead();
+    return super.isSubmitting;
+  }
+
+  @override
+  set isSubmitting(bool value) {
+    _$isSubmittingAtom.reportWrite(value, super.isSubmitting, () {
+      super.isSubmitting = value;
+    });
+  }
+
+  late final _$submitErrorAtom =
+      Atom(name: '_MapStore.submitError', context: context);
+
+  @override
+  String? get submitError {
+    _$submitErrorAtom.reportRead();
+    return super.submitError;
+  }
+
+  @override
+  set submitError(String? value) {
+    _$submitErrorAtom.reportWrite(value, super.submitError, () {
+      super.submitError = value;
+    });
+  }
+
+  late final _$submitMarkerAsyncAction =
+      AsyncAction('_MapStore.submitMarker', context: context);
+
+  @override
+  Future<bool> submitMarker(MarkerSubmissionEntity payload) {
+    return _$submitMarkerAsyncAction.run(() => super.submitMarker(payload));
+  }
+
   late final _$loadMarkersAsyncAction =
       AsyncAction('_MapStore.loadMarkers', context: context);
 
@@ -78,7 +118,9 @@ mixin _$MapStore on _MapStore, Store {
     return '''
 markers: ${markers},
 isLoading: ${isLoading},
-errorMessage: ${errorMessage}
+errorMessage: ${errorMessage},
+isSubmitting: ${isSubmitting},
+submitError: ${submitError}
     ''';
   }
 }

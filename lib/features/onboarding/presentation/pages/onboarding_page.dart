@@ -3,8 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/theme/gothic_widgets.dart';
+import '../../../../core/theme/theme_ext.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -16,29 +17,19 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-
-  final List<OnboardingItem> _items = [
-    OnboardingItem(
-      title: 'Discover History',
-      description:
-          'Explore historical events and figures from around the world.',
-      icon: Icons.history_edu,
-    ),
-    OnboardingItem(
-      title: 'Scan QR Codes',
-      description:
-          'Scan QR codes at museums and historical sites to unlock content.',
-      icon: Icons.qr_code_scanner,
-    ),
-    OnboardingItem(
-      title: 'Save Favorites',
-      description: 'Keep track of your favorite historical moments.',
-      icon: Icons.favorite,
-    ),
-  ];
+  static const int _pageCount = 3;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final gold = context.gold;
+
+    final items = [
+      (icon: Icons.history_edu, title: l10n.onboarding1Title, desc: l10n.onboarding1Desc),
+      (icon: Icons.qr_code_scanner, title: l10n.onboarding2Title, desc: l10n.onboarding2Desc),
+      (icon: Icons.favorite, title: l10n.onboarding3Title, desc: l10n.onboarding3Desc),
+    ];
+
     return Scaffold(
       body: GothicBackground(
         child: SafeArea(
@@ -47,12 +38,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
-                  itemCount: _items.length,
+                  itemCount: _pageCount,
                   onPageChanged: (index) {
                     setState(() => _currentPage = index);
                   },
                   itemBuilder: (context, index) {
-                    final item = _items[index];
+                    final item = items[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 40, vertical: 32),
@@ -65,26 +56,24 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                  color: AppColors.outline, width: 1),
-                              color: AppColors.surfaceVariant,
+                                  color: context.outlineClr, width: 1),
+                              color: context.surfaceVar,
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.primaryGold
-                                      .withValues(alpha: 0.2),
+                                  color: gold.withValues(alpha: 0.2),
                                   blurRadius: 28,
                                   spreadRadius: 4,
                                 ),
                               ],
                             ),
                             child: Icon(item.icon,
-                                size: 52, color: AppColors.primaryGold),
+                                size: 52, color: gold),
                           ),
                           const SizedBox(height: 16),
                           Text(
                             '◆',
                             style: TextStyle(
-                              color:
-                                  AppColors.primaryGold.withValues(alpha: 0.4),
+                              color: gold.withValues(alpha: 0.4),
                               fontSize: 12,
                             ),
                           ),
@@ -92,7 +81,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           Text(
                             item.title,
                             style: GoogleFonts.cinzelDecorative(
-                              color: AppColors.onBackground,
+                              color: context.onBg,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -100,9 +89,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            item.description,
+                            item.desc,
                             style: GoogleFonts.crimsonText(
-                              color: AppColors.onSurface,
+                              color: context.onBg,
                               fontSize: 18,
                               height: 1.6,
                             ),
@@ -121,15 +110,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   children: [
                     Row(
                       children: List.generate(
-                        _items.length,
+                        _pageCount,
                         (index) => Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 200),
                             style: TextStyle(
                               color: _currentPage == index
-                                  ? AppColors.primaryGold
-                                  : AppColors.outline,
+                                  ? gold
+                                  : context.outlineClr,
                               fontSize: _currentPage == index ? 14 : 9,
                             ),
                             child: const Text('◆'),
@@ -139,7 +128,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        if (_currentPage < _items.length - 1) {
+                        if (_currentPage < _pageCount - 1) {
                           _pageController.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
@@ -147,13 +136,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         } else {
                           final prefs = getIt<SharedPreferences>();
                           await prefs.setBool('has_seen_onboarding', true);
-                          if (context.mounted) {
-                            context.go('/map');
-                          }
+                          if (context.mounted) context.go('/map');
                         }
                       },
-                      child: Text(
-                          _currentPage < _items.length - 1 ? 'Continue' : 'Begin'),
+                      child: Text(_currentPage < _pageCount - 1
+                          ? l10n.continueButton
+                          : l10n.beginButton),
                     ),
                   ],
                 ),
@@ -164,16 +152,4 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
     );
   }
-}
-
-class OnboardingItem {
-  final String title;
-  final String description;
-  final IconData icon;
-
-  OnboardingItem({
-    required this.title,
-    required this.description,
-    required this.icon,
-  });
 }

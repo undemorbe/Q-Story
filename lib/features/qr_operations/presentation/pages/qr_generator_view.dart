@@ -27,8 +27,7 @@ class _QrGeneratorViewState extends State<QrGeneratorView> {
           TextField(
             controller: _controller,
             decoration: InputDecoration(
-              labelText: 'Enter Data',
-              border: const OutlineInputBorder(),
+              labelText: l10n.enterData,
               suffixIcon: IconButton(
                 icon: const Icon(Icons.check),
                 onPressed: () {

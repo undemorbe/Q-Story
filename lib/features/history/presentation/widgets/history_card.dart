@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/theme_ext.dart';
 import '../../domain/entities/history_entity.dart';
 
 class HistoryCard extends StatelessWidget {
@@ -16,12 +16,13 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gold = context.gold;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          border: Border.all(color: AppColors.outline, width: 1),
+          color: context.surfaceClr,
+          border: Border.all(color: context.outlineClr, width: 1),
           borderRadius: BorderRadius.circular(2),
         ),
         child: Stack(
@@ -38,13 +39,13 @@ class HistoryCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       width: double.infinity,
                       placeholder: (context, url) => Container(
-                        color: AppColors.surfaceVariant,
+                        color: context.surfaceVar,
                         child: const Center(child: CircularProgressIndicator()),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        color: AppColors.surfaceVariant,
-                        child: const Icon(Icons.image_outlined,
-                            color: AppColors.outline, size: 32),
+                        color: context.surfaceVar,
+                        child: Icon(Icons.image_outlined,
+                            color: context.outlineClr, size: 32),
                       ),
                     ),
                   ),
@@ -57,7 +58,7 @@ class HistoryCard extends StatelessWidget {
                       Text(
                         entity.yearRange,
                         style: GoogleFonts.cinzel(
-                          color: AppColors.primaryGold,
+                          color: gold,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.8,
@@ -67,7 +68,7 @@ class HistoryCard extends StatelessWidget {
                       Text(
                         entity.title,
                         style: GoogleFonts.cinzel(
-                          color: AppColors.onBackground,
+                          color: context.onBg,
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),
@@ -78,7 +79,7 @@ class HistoryCard extends StatelessWidget {
                       Text(
                         entity.subtitle,
                         style: GoogleFonts.crimsonText(
-                            color: AppColors.onSurface, fontSize: 13),
+                            color: context.onBg, fontSize: 13),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -87,33 +88,29 @@ class HistoryCard extends StatelessWidget {
                 ),
               ],
             ),
-            const Positioned(
+            Positioned(
               top: 4,
               left: 4,
               child: Text('✦',
-                  style: TextStyle(
-                      color: AppColors.primaryGold, fontSize: 7, height: 1)),
+                  style: TextStyle(color: gold, fontSize: 7, height: 1)),
             ),
-            const Positioned(
+            Positioned(
               top: 4,
               right: 4,
               child: Text('✦',
-                  style: TextStyle(
-                      color: AppColors.primaryGold, fontSize: 7, height: 1)),
+                  style: TextStyle(color: gold, fontSize: 7, height: 1)),
             ),
-            const Positioned(
+            Positioned(
               bottom: 4,
               left: 4,
               child: Text('✦',
-                  style: TextStyle(
-                      color: AppColors.primaryGold, fontSize: 7, height: 1)),
+                  style: TextStyle(color: gold, fontSize: 7, height: 1)),
             ),
-            const Positioned(
+            Positioned(
               bottom: 4,
               right: 4,
               child: Text('✦',
-                  style: TextStyle(
-                      color: AppColors.primaryGold, fontSize: 7, height: 1)),
+                  style: TextStyle(color: gold, fontSize: 7, height: 1)),
             ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import '../../domain/entities/map_marker_entity.dart';
+import '../../domain/entities/marker_submission_entity.dart';
 import '../../domain/repositories/map_repository.dart';
 
 part 'map_store.g.dart';
@@ -19,6 +20,29 @@ abstract class _MapStore with Store {
 
   @observable
   String? errorMessage;
+
+  @observable
+  bool isSubmitting = false;
+
+  @observable
+  String? submitError;
+
+  /// Returns `true` on success. On failure sets [submitError] and returns `false`.
+  @action
+  Future<bool> submitMarker(MarkerSubmissionEntity payload) async {
+    isSubmitting = true;
+    submitError = null;
+    try {
+      await _repository.submitMarker(payload);
+      await loadMarkers();
+      return true;
+    } catch (e) {
+      submitError = e.toString();
+      return false;
+    } finally {
+      isSubmitting = false;
+    }
+  }
 
   @action
   Future<void> loadMarkers() async {

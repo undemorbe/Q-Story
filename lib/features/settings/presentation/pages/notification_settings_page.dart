@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/services/notification_service.dart';
+import '../../../../core/theme/theme_ext.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key});
 
   @override
-  State<NotificationSettingsPage> createState() => _NotificationSettingsPageState();
+  State<NotificationSettingsPage> createState() =>
+      _NotificationSettingsPageState();
 }
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
@@ -22,7 +25,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   Future<void> _loadNotificationSettings() async {
     final enabled = await NotificationService.getNotificationEnabled();
     final time = await NotificationService.getNotificationTime();
-    
     setState(() {
       _notificationsEnabled = enabled;
       _selectedTime = time;
@@ -31,21 +33,17 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   }
 
   Future<void> _selectTime() async {
+    final l10n = AppLocalizations.of(context)!;
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _selectedTime,
-      helpText: 'Выберите время для ежедневных уведомлений',
-      confirmText: 'ОК',
-      cancelText: 'Отмена',
+      helpText: l10n.notificationTime,
+      confirmText: l10n.ok,
+      cancelText: l10n.cancel,
     );
-    
     if (picked != null && picked != _selectedTime) {
-      setState(() {
-        _selectedTime = picked;
-      });
-      
+      setState(() => _selectedTime = picked);
       await NotificationService.setNotificationTime(picked);
-      
       if (_notificationsEnabled) {
         await NotificationService.scheduleDailyNotification();
       }
@@ -53,36 +51,38 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   }
 
   Future<void> _toggleNotifications(bool value) async {
-    setState(() {
-      _notificationsEnabled = value;
-    });
-    
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _notificationsEnabled = value);
     await NotificationService.setNotificationEnabled(value);
-    
-    if (mounted) {
-      if (value) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Уведомления включены')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Уведомления отключены')),
-        );
-      }
-    }
-  }
-
-  Future<void> _testNotification() async {
-    await NotificationService.showTestNotification();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Тестовое уведомление отправлено')),
+        SnackBar(
+          content: Text(
+            value ? l10n.notificationsEnabledMsg : l10n.notificationsDisabledMsg,
+          ),
+        ),
       );
     }
   }
 
+  Future<void> _testNotification() async {
+    final l10n = AppLocalizations.of(context)!;
+    await NotificationService.showTestNotification();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.testNotificationSent)),
+      );
+    }
+  }
+
+  String _formatTime() =>
+      '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}';
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final gold = context.gold;
+
     if (_isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -90,17 +90,13 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Уведомления'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
+      appBar: AppBar(title: Text(l10n.notifSettingsTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
-              elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -109,57 +105,54 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Ежедневные уведомления',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.dailyNotificationsTitle,
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Получайте интересные исторические факты',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Colors.grey[600],
+                              const SizedBox(height: 4),
+                              Text(
+                                l10n.dailyNotificationsDesc,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         Switch(
                           value: _notificationsEnabled,
                           onChanged: _toggleNotifications,
-                          activeThumbColor: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
                     if (_notificationsEnabled) ...[
-                      const Divider(),
-                      const SizedBox(height: 8),
+                      const Divider(height: 24),
                       ListTile(
-                        leading: Icon(
-                          Icons.schedule,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        title: const Text('Время уведомлений'),
+                        contentPadding: EdgeInsets.zero,
+                        leading: Icon(Icons.schedule, color: gold),
+                        title: Text(l10n.notificationTime),
                         subtitle: Text(
-                          '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          _formatTime(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: gold),
                         ),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: Icon(Icons.chevron_right,
+                            color: context.outlineClr),
                         onTap: _selectTime,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       ListTile(
-                        leading: Icon(
-                          Icons.notifications_active,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        title: const Text('Тестовое уведомление'),
-                        subtitle: const Text('Проверьте, как работают уведомления'),
-                        trailing: const Icon(Icons.send, size: 16),
+                        contentPadding: EdgeInsets.zero,
+                        leading:
+                            Icon(Icons.notifications_active, color: gold),
+                        title: Text(l10n.testNotification),
+                        subtitle: Text(l10n.testNotificationDesc),
+                        trailing: Icon(Icons.send,
+                            size: 16, color: context.outlineClr),
                         onTap: _testNotification,
                       ),
                     ],
@@ -167,40 +160,31 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             Card(
-              elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'О уведомлениях',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      l10n.aboutNotificationsTitle,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Каждый день в выбранное время вы будете получать уведомления с интересными историческими фактами и событиями.',
+                      l10n.aboutNotificationsText,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        Icon(
-                          Icons.info_outline,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 16,
-                        ),
+                        Icon(Icons.info_outline, color: gold, size: 16),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'Уведомления работают даже в режиме "Не беспокоить"',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                            l10n.notificationsWorkInDnd,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),
                       ],
@@ -210,36 +194,30 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               ),
             ),
             const Spacer(),
-            if (_notificationsEnabled) ...[
+            if (_notificationsEnabled)
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
-                  ),
+                  color: context.goldContainer,
+                  borderRadius: BorderRadius.circular(2),
+                  border: Border.all(color: context.outlineClr),
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.check_circle,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    Icon(Icons.check_circle, color: gold),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Ежедневные уведомления активированы на ${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        l10n.dailyNotificationsActivated(_formatTime()),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: gold),
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
           ],
         ),
       ),

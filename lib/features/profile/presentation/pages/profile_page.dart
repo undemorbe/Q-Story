@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qstory/features/settings/presentation/pages/settings_page.dart';
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/theme/gothic_widgets.dart';
+import '../../../../core/theme/theme_ext.dart';
 import '../../../history/presentation/pages/daily_history_page.dart';
 import '../../../qr_operations/presentation/stores/qr_store.dart';
 import '../../../favorites/presentation/stores/favorites_store.dart';
@@ -18,10 +20,12 @@ class ProfilePage extends StatelessWidget {
     final qrStore = getIt<QrStore>();
     final favoritesStore = getIt<FavoritesStore>();
     final mapStore = getIt<MapStore>();
+    final l10n = AppLocalizations.of(context)!;
+    final gold = context.gold;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(l10n.profileTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined),
@@ -29,7 +33,7 @@ class ProfilePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const NotificationSettingsPage(),
+                  builder: (context) => const SettingsPage(),
                 ),
               );
             },
@@ -47,10 +51,10 @@ class ProfilePage extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primaryGold, width: 2),
+                    border: Border.all(color: gold, width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primaryGold.withValues(alpha: 0.25),
+                        color: gold.withValues(alpha: 0.25),
                         blurRadius: 20,
                         spreadRadius: 3,
                       ),
@@ -58,15 +62,14 @@ class ProfilePage extends StatelessWidget {
                   ),
                   child: const CircleAvatar(
                     radius: 52,
-                    backgroundImage:
-                        NetworkImage('https://i.pravatar.cc/300'),
+                    backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   '✦',
                   style: TextStyle(
-                    color: AppColors.primaryGold.withValues(alpha: 0.5),
+                    color: gold.withValues(alpha: 0.5),
                     fontSize: 12,
                   ),
                 ),
@@ -74,7 +77,7 @@ class ProfilePage extends StatelessWidget {
                 Text(
                   'Историк',
                   style: GoogleFonts.cinzelDecorative(
-                    color: AppColors.onBackground,
+                    color: context.onBg,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -83,7 +86,7 @@ class ProfilePage extends StatelessWidget {
                 Text(
                   'user@qstory.com',
                   style: GoogleFonts.crimsonText(
-                    color: AppColors.onSurface,
+                    color: context.onBg,
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
                   ),
@@ -96,7 +99,7 @@ class ProfilePage extends StatelessWidget {
                     Expanded(
                       child: _buildStatCard(
                         context,
-                        'Сканировано',
+                        l10n.scanned,
                         qrStore.scanHistory.length.toString(),
                         Icons.qr_code_scanner,
                       ),
@@ -105,7 +108,7 @@ class ProfilePage extends StatelessWidget {
                     Expanded(
                       child: _buildStatCard(
                         context,
-                        'Избранное',
+                        l10n.favorites,
                         favoritesStore.favoriteItems.length.toString(),
                         Icons.favorite,
                       ),
@@ -114,7 +117,7 @@ class ProfilePage extends StatelessWidget {
                     Expanded(
                       child: _buildStatCard(
                         context,
-                        'Посещено',
+                        l10n.visited,
                         mapStore.markers
                             .where((m) => m.isCompleted)
                             .length
@@ -133,10 +136,10 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       ListTile(
                         leading: const Icon(Icons.history),
-                        title: const Text('История дня'),
-                        subtitle: const Text('Откройте для себя сегодняшнюю историю'),
-                        trailing: const Icon(Icons.chevron_right,
-                            color: AppColors.outline),
+                        title: Text(l10n.dailyHistory),
+                        subtitle: Text(l10n.dailyHistorySubtitle),
+                        trailing: Icon(Icons.chevron_right,
+                            color: context.outlineClr),
                         onTap: () {
                           Navigator.push(
                             context,
@@ -146,13 +149,13 @@ class ProfilePage extends StatelessWidget {
                           );
                         },
                       ),
-                      Container(height: 1, color: AppColors.outlineVariant),
+                      Container(height: 1, color: context.outlineVar),
                       ListTile(
                         leading: const Icon(Icons.notifications_outlined),
-                        title: const Text('Уведомления'),
-                        subtitle: const Text('Настройте ежедневные уведомления'),
-                        trailing: const Icon(Icons.chevron_right,
-                            color: AppColors.outline),
+                        title: Text(l10n.notifications),
+                        subtitle: Text(l10n.notificationsSubtitle),
+                        trailing: Icon(Icons.chevron_right,
+                            color: context.outlineClr),
                         onTap: () {
                           Navigator.push(
                             context,
@@ -163,12 +166,12 @@ class ProfilePage extends StatelessWidget {
                           );
                         },
                       ),
-                      Container(height: 1, color: AppColors.outlineVariant),
+                      Container(height: 1, color: context.outlineVar),
                       ListTile(
                         leading: const Icon(Icons.help_outline),
-                        title: const Text('Помощь и поддержка'),
-                        trailing: const Icon(Icons.chevron_right,
-                            color: AppColors.outline),
+                        title: Text(l10n.helpAndSupport),
+                        trailing: Icon(Icons.chevron_right,
+                            color: context.outlineClr),
                         onTap: () {},
                       ),
                     ],
@@ -193,12 +196,12 @@ class ProfilePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       child: Column(
         children: [
-          Icon(icon, size: 26, color: AppColors.primaryGold),
+          Icon(icon, size: 26, color: context.gold),
           const SizedBox(height: 8),
           Text(
             value,
             style: GoogleFonts.cinzelDecorative(
-              color: AppColors.onBackground,
+              color: context.onBg,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -207,7 +210,7 @@ class ProfilePage extends StatelessWidget {
           Text(
             label,
             style: GoogleFonts.cinzel(
-                color: AppColors.onSurface, fontSize: 9, letterSpacing: 0.3),
+                color: context.onBg, fontSize: 9, letterSpacing: 0.3),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

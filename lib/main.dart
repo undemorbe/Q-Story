@@ -43,8 +43,8 @@ class MainApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: const [
-            Locale('en'), // English
-            Locale('es'), // Spanish
+            Locale('en'),
+            Locale('ru'),
           ],
           locale: settingsStore.locale,
           theme: AppTheme.lightTheme,

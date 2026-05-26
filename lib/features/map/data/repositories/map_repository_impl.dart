@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../../../core/network/api_client.dart';
 import '../../domain/entities/map_marker_entity.dart';
+import '../../domain/entities/marker_submission_entity.dart';
 import '../../domain/repositories/map_repository.dart';
 import '../datasources/completed_markers_local_data_source.dart';
 import '../models/map_marker_model.dart';
@@ -39,5 +40,21 @@ class MapRepositoryImpl implements MapRepository {
   @override
   Future<void> markAsCompleted(String markerId) async {
     await _localDataSource.markAsCompleted(markerId);
+  }
+
+  @override
+  Future<void> submitMarker(MarkerSubmissionEntity payload) async {
+    try {
+      final response = await _apiClient.client.post(
+        '/post-info',
+        data: payload.toJson(),
+      );
+      final code = response.statusCode ?? 0;
+      if (code < 200 || code >= 300) {
+        throw Exception('Не удалось создать метку: $code');
+      }
+    } on DioException catch (e) {
+      throw Exception('Сетевая ошибка: ${e.message ?? e.type.name}');
+    }
   }
 }

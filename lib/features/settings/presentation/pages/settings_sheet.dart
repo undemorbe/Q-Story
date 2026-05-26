@@ -30,45 +30,43 @@ class SettingsSheet extends StatelessWidget {
           const SizedBox(height: 8),
           Observer(
             builder: (_) {
-              return StatefulBuilder(
-                builder: (context, setState) => Column(
-                  children: [
-                    ListTile(
-                      title: const Text('English'),
-                      leading: Radio<String>(
-                        value: 'en',
-                        groupValue: settingsStore.locale.languageCode,
-                        onChanged: (value) {
-                          if (value != null) {
-                            settingsStore.setLocale(Locale(value));
-                            Navigator.pop(context);
-                          }
-                        },
-                      ),
-                      onTap: () {
-                        settingsStore.setLocale(const Locale('en'));
-                        Navigator.pop(context);
+              return Column(
+                children: [
+                  ListTile(
+                    title: Text(l10n.russian),
+                    leading: Radio<String>(
+                      value: 'ru',
+                      groupValue: settingsStore.locale.languageCode,
+                      onChanged: (value) {
+                        if (value != null) {
+                          settingsStore.setLocale(Locale(value));
+                          Navigator.pop(context);
+                        }
                       },
                     ),
-                    ListTile(
-                      title: const Text('Español'),
-                      leading: Radio<String>(
-                        value: 'es',
-                        groupValue: settingsStore.locale.languageCode,
-                        onChanged: (value) {
-                          if (value != null) {
-                            settingsStore.setLocale(Locale(value));
-                            Navigator.pop(context);
-                          }
-                        },
-                      ),
-                      onTap: () {
-                        settingsStore.setLocale(const Locale('es'));
-                        Navigator.pop(context);
+                    onTap: () {
+                      settingsStore.setLocale(const Locale('ru'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(l10n.english),
+                    leading: Radio<String>(
+                      value: 'en',
+                      groupValue: settingsStore.locale.languageCode,
+                      onChanged: (value) {
+                        if (value != null) {
+                          settingsStore.setLocale(Locale(value));
+                          Navigator.pop(context);
+                        }
                       },
                     ),
-                  ],
-                ),
+                    onTap: () {
+                      settingsStore.setLocale(const Locale('en'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               );
             },
           ),

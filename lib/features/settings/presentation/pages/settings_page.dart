@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/services/notification_service.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/gothic_widgets.dart';
+import '../../../../core/theme/theme_ext.dart';
 import '../stores/settings_store.dart';
 import 'notification_settings_page.dart';
 
@@ -20,32 +21,34 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Настройки')),
+      appBar: AppBar(title: Text(l10n.settings)),
       body: Observer(
         builder: (_) {
           return ListView(
             children: [
-              _buildSectionHeader(context, 'Внешний вид'),
+              _buildSectionHeader(context, l10n.appearance),
               ListTile(
                 leading: const Icon(Icons.brightness_6_outlined),
-                title: const Text('Тема'),
-                subtitle: Text(_getThemeModeName(_store.themeMode)),
-                onTap: () => _showThemeDialog(context),
+                title: Text(l10n.theme),
+                subtitle: Text(_getThemeModeName(l10n, _store.themeMode)),
+                onTap: () => _showThemeDialog(context, l10n),
               ),
               ListTile(
                 leading: const Icon(Icons.language_outlined),
-                title: const Text('Язык'),
-                subtitle: Text(_getLanguageName(_store.locale)),
-                onTap: () => _showLanguageDialog(context),
+                title: Text(l10n.language),
+                subtitle: Text(_getLanguageName(l10n, _store.locale)),
+                onTap: () => _showLanguageDialog(context, l10n),
               ),
-              _buildSectionHeader(context, 'Уведомления'),
+              _buildSectionHeader(context, l10n.notifications),
               ListTile(
                 leading: const Icon(Icons.notifications_outlined),
-                title: const Text('Уведомления'),
-                subtitle: const Text('Настройте ежедневные исторические уведомления'),
+                title: Text(l10n.notifications),
+                subtitle: Text(l10n.notificationsSubtitle),
                 trailing:
-                    const Icon(Icons.chevron_right, color: AppColors.outline),
+                    Icon(Icons.chevron_right, color: context.outlineClr),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -57,8 +60,8 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SwitchListTile.adaptive(
                 secondary: const Icon(Icons.notifications_active_outlined),
-                title: const Text('Push-уведомления'),
-                subtitle: const Text('Получайте ежедневные исторические факты'),
+                title: Text(l10n.pushNotifications),
+                subtitle: Text(l10n.pushNotificationsSubtitle),
                 value: _store.notificationsEnabled,
                 onChanged: (bool? value) async {
                   if (value != null) {
@@ -73,60 +76,52 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               ListTile(
                 leading: const Icon(Icons.notification_important_outlined),
-                title: const Text('Проверить уведомление'),
-                subtitle: const Text('Отправить тестовое уведомление сейчас'),
+                title: Text(l10n.checkNotification),
+                subtitle: Text(l10n.checkNotificationSubtitle),
                 onTap: () async {
                   await NotificationService.showTestNotification();
                 },
               ),
-              _buildSectionHeader(context, 'Предпочтения'),
+              _buildSectionHeader(context, l10n.preferences),
               SwitchListTile.adaptive(
                 secondary: const Icon(Icons.data_usage_outlined),
-                title: const Text('Экономия трафика'),
-                subtitle: const Text('Снижайте качество изображений'),
+                title: Text(l10n.dataSaver),
+                subtitle: Text(l10n.dataSaverSubtitle),
                 value: _store.dataSaverEnabled,
                 onChanged: (bool? value) {
                   if (value != null) _store.toggleDataSaver(value);
                 },
               ),
-              _buildSectionHeader(context, 'Данные'),
+              _buildSectionHeader(context, l10n.data),
               ListTile(
                 leading: const Icon(Icons.file_download_outlined),
-                title: const Text('Экспорт данных'),
+                title: Text(l10n.exportData),
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Данные экспортированы успешно')),
+                    SnackBar(content: Text(l10n.dataExported)),
                   );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.file_upload_outlined),
-                title: const Text('Импорт данных'),
+                title: Text(l10n.importData),
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Данные импортированы успешно')),
+                    SnackBar(content: Text(l10n.dataImported)),
                   );
                 },
               ),
-              _buildSectionHeader(context, 'О приложении'),
+              _buildSectionHeader(context, l10n.about),
               ListTile(
                 leading: const Icon(Icons.info_outline),
-                title: const Text('О приложении'),
-                subtitle: const Text('Версия 1.0.0'),
+                title: Text(l10n.about),
+                subtitle: Text(l10n.version),
                 onTap: () {
                   showAboutDialog(
                     context: context,
                     applicationName: 'QStory',
                     applicationVersion: '1.0.0',
                     applicationLegalese: '© 2024 QStory Inc.',
-                    children: [
-                      const Text(
-                          'Политика конфиденциальности: https://qstory.com/privacy'),
-                      const Text(
-                          'Условия использования: https://qstory.com/terms'),
-                    ],
                   );
                 },
               ),
@@ -149,7 +144,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Text(
             title.toUpperCase(),
             style: GoogleFonts.cinzel(
-              color: AppColors.primaryGold,
+              color: context.gold,
               fontSize: 11,
               fontWeight: FontWeight.w600,
               letterSpacing: 2,
@@ -160,31 +155,30 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  String _getThemeModeName(ThemeMode mode) {
+  String _getThemeModeName(AppLocalizations l10n, ThemeMode mode) {
     switch (mode) {
       case ThemeMode.system:
-        return 'Системная';
+        return l10n.systemTheme;
       case ThemeMode.light:
-        return 'Светлая';
+        return l10n.lightTheme;
       case ThemeMode.dark:
-        return 'Темная';
+        return l10n.darkTheme;
     }
   }
 
-  String _getLanguageName(Locale locale) {
-    if (locale.languageCode == 'en') return 'English';
-    if (locale.languageCode == 'es') return 'Español';
-    return locale.languageCode;
+  String _getLanguageName(AppLocalizations l10n, Locale locale) {
+    if (locale.languageCode == 'ru') return l10n.russian;
+    return l10n.english;
   }
 
-  void _showThemeDialog(BuildContext context) {
+  void _showThemeDialog(BuildContext context, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: const Text('Выберите тему'),
+        title: Text(l10n.chooseTheme),
         children: ThemeMode.values.map((mode) {
           return ListTile(
-            title: Text(_getThemeModeName(mode)),
+            title: Text(_getThemeModeName(l10n, mode)),
             leading: Radio<ThemeMode>(
               value: mode,
               groupValue: _store.themeMode,
@@ -205,33 +199,47 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _showLanguageDialog(BuildContext context) {
+  void _showLanguageDialog(BuildContext context, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: const Text('Выберите язык'),
-        children: const [
-          Locale('en'),
-          Locale('es'),
-        ].map((locale) {
-          return ListTile(
-            title: Text(_getLanguageName(locale)),
-            leading: Radio<Locale>(
-              value: locale,
-              groupValue: _store.locale,
+        title: Text(l10n.selectLanguage),
+        children: [
+          ListTile(
+            title: Text(l10n.russian),
+            leading: Radio<String>(
+              value: 'ru',
+              groupValue: _store.locale.languageCode,
               onChanged: (value) {
                 if (value != null) {
-                  _store.setLocale(value);
+                  _store.setLocale(Locale(value));
                   Navigator.pop(context);
                 }
               },
             ),
             onTap: () {
-              _store.setLocale(locale);
+              _store.setLocale(const Locale('ru'));
               Navigator.pop(context);
             },
-          );
-        }).toList(),
+          ),
+          ListTile(
+            title: Text(l10n.english),
+            leading: Radio<String>(
+              value: 'en',
+              groupValue: _store.locale.languageCode,
+              onChanged: (value) {
+                if (value != null) {
+                  _store.setLocale(Locale(value));
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            onTap: () {
+              _store.setLocale(const Locale('en'));
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }
