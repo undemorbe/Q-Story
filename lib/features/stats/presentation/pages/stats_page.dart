@@ -1,18 +1,24 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:mobx/mobx.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/app_localizations.dart';
+import '../../../../core/services/share_service.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
+import '../../../../core/util/geo.dart';
 import '../../../activity/domain/entities/activity.dart';
-import '../../../activity/presentation/stores/journal_store.dart';
 import '../../../activity/presentation/stores/tracking_store.dart';
 import '../../../places/presentation/widgets/place_labels.dart';
+import '../../domain/data_export.dart';
 import '../../domain/stats_snapshot.dart';
+import '../stores/milestone_service.dart';
 import '../stores/stats_store.dart';
+import '../widgets/achievement_text.dart';
 import '../widgets/stats_widgets.dart';
 
 class StatsPage extends StatefulWidget {
@@ -25,24 +31,29 @@ class StatsPage extends StatefulWidget {
 class _StatsPageState extends State<StatsPage> {
   final StatsStore _store = getIt<StatsStore>();
   final TrackingStore _tracking = getIt<TrackingStore>();
-  final List<ReactionDisposer> _disposers = [];
 
   @override
   void initState() {
     super.initState();
+    // MilestoneService keeps the snapshot fresh while the app runs.
     _store.refresh();
-    // Refresh whenever something is logged or a hunt ends.
-    _disposers
-      ..add(reaction((_) => getIt<JournalStore>().revision, (_) => _store.refresh(), delay: 800))
-      ..add(reaction((_) => _tracking.activeHunt?.status, (_) => _store.refresh(), delay: 800));
   }
 
-  @override
-  void dispose() {
-    for (final d in _disposers) {
-      d();
+  Future<void> _export() async {
+    final l = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final now = DateTime.now();
+      final json = await _store.exportJson(now: now);
+      await getIt<ShareService>().shareFile(
+        Uint8List.fromList(utf8.encode(json)),
+        fileName: DataExport.fileName(now),
+        mimeType: 'application/json',
+        subject: l.exportSubject,
+      );
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(content: Text(l.exportFailed)));
     }
-    super.dispose();
   }
 
   Future<void> _confirmReset() async {
@@ -64,6 +75,7 @@ class _StatsPageState extends State<StatsPage> {
     );
     if (ok != true) return;
     await _store.resetAll();
+    await getIt<MilestoneService>().reset();
     if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.statsResetDone)));
   }
 
@@ -75,8 +87,17 @@ class _StatsPageState extends State<StatsPage> {
         title: Text(l.statsTitle),
         actions: [
           PopupMenuButton<String>(
-            onSelected: (_) => _confirmReset(),
-            itemBuilder: (_) => [PopupMenuItem(value: 'reset', child: Text(l.statsReset))],
+            onSelected: (v) => v == 'export' ? _export() : _confirmReset(),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                value: 'export',
+                child: ListTile(leading: const Icon(Icons.ios_share), title: Text(l.exportData)),
+              ),
+              PopupMenuItem(
+                value: 'reset',
+                child: ListTile(leading: const Icon(Icons.delete_sweep_outlined), title: Text(l.statsReset)),
+              ),
+            ],
           ),
         ],
       ),
@@ -137,6 +158,10 @@ class _Header extends StatelessWidget {
           center: _n(context, todaySteps),
           caption: [
             l.statsGoal('${(ratio * 100).round()}', _n(context, s.dailyGoal)),
+            if (s.dailyGoal > 0)
+              todaySteps >= s.dailyGoal
+                  ? l.statsGoalReached
+                  : l.statsStepsToGoal(_n(context, s.dailyGoal - todaySteps)),
             '${l.statsDistance}: ${l.distance(tracking.todayDistanceM > s.todayDistanceM ? tracking.todayDistanceM : s.todayDistanceM)}',
             '${l.statsStreak}: ${l.statsDays(s.currentStreak)}',
           ].join('\n'),
@@ -161,6 +186,19 @@ class _Movement extends StatelessWidget {
     return StatsSection(title: l.statsMovement, icon: Icons.directions_walk, children: [
       StatGrid(tiles: [
         StatTile(icon: Icons.directions_walk, label: l.statsSteps, value: _n(context, s.totalSteps)),
+        StatTile(
+          icon: Icons.date_range,
+          label: l.statsWeekSteps,
+          value: [_n(context, s.thisWeekSteps), if (s.weekStepsChange != null) formatChange(s.weekStepsChange!)]
+              .join('  '),
+          hint: l.statsWeekHint(_n(context, s.lastWeekSteps)),
+        ),
+        StatTile(
+          icon: Icons.timeline,
+          label: l.statsWeekDistance,
+          value: l.distance(s.thisWeekDistanceM),
+          hint: l.statsWeekHint(l.distance(s.lastWeekDistanceM)),
+        ),
         StatTile(icon: Icons.route, label: l.statsDistance, value: l.distance(s.totalDistanceM)),
         StatTile(icon: Icons.timer_outlined, label: l.statsActiveTime, value: l.duration(s.activeTime)),
         StatTile(
@@ -434,25 +472,6 @@ class _Achievements extends StatelessWidget {
   const _Achievements({required this.s});
   final StatsSnapshot s;
 
-  (String, String, IconData) _text(AppLocalizations l, AchievementId id) => switch (id) {
-        AchievementId.firstDiscovery => (l.achFirstDiscovery, l.achFirstDiscoveryDesc, Icons.place_outlined),
-        AchievementId.tenDiscoveries => (l.achTenDiscoveries, l.achTenDiscoveriesDesc, Icons.map_outlined),
-        AchievementId.fiftyDiscoveries => (l.achFiftyDiscoveries, l.achFiftyDiscoveriesDesc, Icons.auto_stories),
-        AchievementId.firstHunt => (l.achFirstHunt, l.achFirstHuntDesc, Icons.explore_outlined),
-        AchievementId.fiveHunts => (l.achFiveHunts, l.achFiveHuntsDesc, Icons.diamond_outlined),
-        AchievementId.straightShooter => (l.achStraightShooter, l.achStraightShooterDesc, Icons.straight),
-        AchievementId.tenKDay => (l.achTenKDay, l.achTenKDayDesc, Icons.directions_run),
-        AchievementId.hundredKTotal => (l.achHundredKTotal, l.achHundredKTotalDesc, Icons.military_tech_outlined),
-        AchievementId.marathon => (l.achMarathon, l.achMarathonDesc, Icons.sports_score),
-        AchievementId.explorer => (l.achExplorer, l.achExplorerDesc, Icons.travel_explore),
-        AchievementId.scanner => (l.achScanner, l.achScannerDesc, Icons.qr_code_scanner),
-        AchievementId.allSources => (l.achAllSources, l.achAllSourcesDesc, Icons.library_books_outlined),
-        AchievementId.weekStreak => (l.achWeekStreak, l.achWeekStreakDesc, Icons.whatshot_outlined),
-        AchievementId.timeTraveler => (l.achTimeTraveler, l.achTimeTravelerDesc, Icons.hourglass_bottom),
-        AchievementId.curator => (l.achCurator, l.achCuratorDesc, Icons.favorite_outline),
-        AchievementId.cartographer => (l.achCartographer, l.achCartographerDesc, Icons.edit_location_alt_outlined),
-      };
-
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -463,7 +482,7 @@ class _Achievements extends StatelessWidget {
       children: [
         for (final a in list)
           Builder(builder: (context) {
-            final (title, desc, icon) = _text(l, a.id);
+            final (title, desc, icon) = achievementText(l, a.id);
             final color = a.unlocked ? context.gold : context.dim;
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),

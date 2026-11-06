@@ -1,7 +1,7 @@
 # QStory
 
-[![CI](https://github.com/undemorbe/Q-Story/actions/workflows/ci.yml/badge.svg?branch=frontend-dev)](https://github.com/undemorbe/Q-Story/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/undemorbe/Q-Story/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/undemorbe/Q-Story/actions/workflows/ci.yml)
+[![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm%20NC%201.0-orange.svg)](LICENSE)
 ![Flutter](https://img.shields.io/badge/Flutter-3.47-02569B?logo=flutter)
 ![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS-lightgrey)
 
@@ -17,10 +17,12 @@
 |---|---|
 | 🗺️ **Карта** | Кластеры мест, фильтры по источнику / категории / статусу посещения, поиск, ваша позиция с направлением движения и следом маршрута. |
 | 📍 **Непрерывный трекинг** | Режим «следовать за мной», запись маршрута, опционально — в фоне (foreground-service на Android, background location на iOS). |
-| 🎯 **Поиск места («охота»)** | Выбираете место — приложение показывает направление и расстояние, считает шаги и путь. Когда вы оказываетесь в радиусе геозоны (по умолчанию 40 м), место засчитывается как найденное. |
+| 🎯 **Поиск места («охота»)** | Выбираете место — приложение показывает направление, расстояние и примерное время / шаги до цели (по вашей реальной скорости), считает шаги и путь. В радиусе геозоны (по умолчанию 40 м) место засчитывается как найденное. |
+| 📋 **Места рядом** | Список ближайших мест с расстоянием и стрелкой направления — от вашей позиции или от центра карты. |
+| 🚶 **Маршрут и «поделиться»** | Кнопка «Пешком туда» открывает навигатор (Google/Apple Maps или OSM в браузере); место можно отправить ссылкой. |
 | 👣 **Шаги** | Аппаратный шагомер (Android `ACTIVITY_RECOGNITION`, iOS Motion). Если датчика нет — оценка по пройденному расстоянию и длине шага из настроек. |
 | 📷 **QR-коды** | Формат `qstory:<источник>:<id>` или ссылки на Википедию / Wikidata / OSM / PastVu. Каждое место можно отдать как QR. |
-| 📊 **Статистика** | Шаги за день / неделю / всё время, цель и серии, путь, активное время, макс. скорость, «шагов на находку», средний путь до места, коэффициент петляния, самая быстрая и самая длинная охота, разведанная площадь, активность по часам и дням недели, источники и категории находок, 16 достижений. |
+| 📊 **Статистика** | Шаги за день / неделю / всё время, цель и серии, путь, активное время, макс. скорость, «шагов на находку», средний путь до места, коэффициент петляния, самая быстрая и самая длинная охота, разведанная площадь, активность по часам и дням недели, сравнение с прошлой неделей, источники и категории находок, 16 достижений. Уведомление о достижении цели дня и новых достижениях. Экспорт всех данных в JSON. |
 | ⭐ **Избранное, свои места** | Свои метки хранятся локально и участвуют в поиске наравне с внешними. |
 | 🌐 **RU / EN**, светлая / тёмная тема | |
 
@@ -42,7 +44,8 @@
 
 - Нет аккаунтов, нет своего сервера, нет аналитики и рекламы.
 - Координаты уходят только в запросы к выбранным источникам (чтобы найти места рядом). Маршрут, шаги и журнал не покидают устройство.
-- Статистику можно полностью стереть: *Статистика → Сбросить*.
+- Статистику можно выгрузить в JSON (*Статистика → ⋮ → Экспорт*) или полностью стереть (*Статистика → Сбросить*).
+- Шрифты встроены в приложение — никаких запросов к Google Fonts.
 - Подробнее — [PRIVACY.md](PRIVACY.md).
 
 ## Архитектура
@@ -80,68 +83,35 @@ dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 
-Проверки (то же самое запускает CI):
+## Тесты
 
-```bash
-dart format --set-exit-if-changed lib test
-```
-
-CI дополнительно перегенерирует l10n и MobX-код и проверяет, что результат совпадает с закоммиченным.
-
-```bash
-flutter analyze
-```
+~290 unit- и widget-тестов: доменная логика (статистика, ETA, QR, геометрия, экспорт), репозитории и стор'ы на in-memory БД, HTTP-клиенты источников на фейковом Dio, виджеты и «дымовой» тест запуска всего приложения.
 
 ```bash
 flutter test
 ```
 
-### Подпись релиза Android
-
-Создайте ключ один раз:
+Интеграционный тест на устройстве или эмуляторе:
 
 ```bash
-keytool -genkey -v -keystore ~/qstory-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias qstory
+flutter test integration_test
 ```
 
-И файл `android/key.properties` (он в `.gitignore`):
-
-```properties
-storeFile=/Users/you/qstory-release.jks
-storePassword=…
-keyAlias=qstory
-keyPassword=…
-```
-
-Вместо файла можно задать переменные окружения `ANDROID_KEYSTORE_PATH`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`. Без них релиз собирается с debug-ключом (только для локальной проверки).
+Проверки, как в CI:
 
 ```bash
-flutter build appbundle --release
+dart format --set-exit-if-changed lib test
 ```
-
-### iOS
 
 ```bash
-flutter build ipa --release
+flutter analyze
 ```
 
-Bundle ID: `io.github.undemorbe.qstory`. Подпись — через вашу команду в Xcode (`ios/Runner.xcworkspace`).
+CI ([`ci.yml`](.github/workflows/ci.yml)) на каждый push и PR перегенерирует l10n и MobX-код, проверяет формат, запускает анализатор и тесты и собирает debug-APK.
 
-## CI/CD
+## Презентация
 
-| Workflow | Когда | Что делает |
-|---|---|---|
-| [`ci.yml`](.github/workflows/ci.yml) | push / PR | формат, `flutter analyze`, тесты с покрытием, debug-APK как артефакт |
-| [`release.yml`](.github/workflows/release.yml) | тег `v*` | подписанные AAB + APK, iOS-сборка без подписи, GitHub Release с заметками из `CHANGELOG.md` |
-| [`dependabot.yml`](.github/dependabot.yml) | еженедельно | обновления pub и GitHub Actions |
-
-Секреты репозитория для релиза: `ANDROID_KEYSTORE_BASE64` (`base64 -i qstory-release.jks`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`. Без них релизный workflow соберёт APK с debug-ключом и предупредит об этом.
-
-Выпуск версии: поднимите `version:` в `pubspec.yaml`, допишите `CHANGELOG.md`, затем:
-
-```bash
-git tag v1.0.0 && git push origin v1.0.0
-```
+[Презентация проекта](https://canva.link/7npuh9rsfwmkna5)
 
 ## Команда
 
@@ -152,4 +122,6 @@ git tag v1.0.0 && git push origin v1.0.0
 
 ## Лицензия
 
-Код — [MIT](LICENSE). Данные о местах принадлежат своим источникам и распространяются на их условиях (см. таблицу выше); в карточке каждого места указано, откуда оно взято.
+Код — [PolyForm Noncommercial 1.0.0](LICENSE): можно смотреть, изучать, изменять и использовать в некоммерческих целях (личные, учебные, исследовательские, некоммерческие организации). **Коммерческое использование запрещено** без отдельного письменного разрешения авторов — пишите на stankovb08@gmail.com.
+
+Данные о местах принадлежат своим источникам и распространяются на их условиях (см. таблицу выше); в карточке каждого места указано, откуда оно взято.

@@ -1035,4 +1035,79 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get details => 'Подробнее';
+
+  @override
+  String huntEta(Object time, Object steps) {
+    return '≈ $time · ещё ≈ $steps шагов';
+  }
+
+  @override
+  String nearbyTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count места рядом',
+      many: '$count мест рядом',
+      few: '$count места рядом',
+      one: '$count место рядом',
+      zero: 'Рядом ничего нет',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get nearbyFromMapCenter => 'Расстояния от центра карты — включите геолокацию, чтобы считать от вас.';
+
+  @override
+  String get nearbyEmpty => 'Здесь пока ничего не найдено. Сдвиньте карту или увеличьте радиус поиска в настройках.';
+
+  @override
+  String get nearbyAction => 'Список мест';
+
+  @override
+  String get share => 'Поделиться';
+
+  @override
+  String get directions => 'Проложить маршрут';
+
+  @override
+  String get directionsUnavailable => 'Не удалось открыть маршрут ни в одном приложении карт';
+
+  @override
+  String get exportData => 'Экспорт данных (JSON)';
+
+  @override
+  String get exportSubject => 'QStory — мои данные';
+
+  @override
+  String get exportFailed => 'Не удалось экспортировать данные';
+
+  @override
+  String get statsGoalReached => 'Цель на сегодня выполнена!';
+
+  @override
+  String statsStepsToGoal(Object steps) {
+    return 'До цели: $steps шагов';
+  }
+
+  @override
+  String get statsWeekSteps => 'Шаги за 7 дней';
+
+  @override
+  String get statsWeekDistance => 'Путь за 7 дней';
+
+  @override
+  String statsWeekHint(Object value) {
+    return 'Предыдущие 7 дней: $value';
+  }
+
+  @override
+  String milestoneGoal(Object goal) {
+    return 'Цель дня выполнена: $goal шагов!';
+  }
+
+  @override
+  String milestoneAchievement(Object name) {
+    return 'Новое достижение: $name';
+  }
 }

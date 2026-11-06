@@ -86,7 +86,7 @@ class AboutPage extends StatelessWidget {
             subtitle: Text('History research'),
           ),
           header(l.aboutLicenseTitle),
-          Text('${AppInfo.license} License · © 2024–${DateTime.now().year} QStory contributors',
+          Text('${AppInfo.license} · © 2024–${DateTime.now().year} Boris Stankov, Andrey Kornev',
               style: theme.textTheme.bodyMedium),
           const SizedBox(height: 12),
           Wrap(spacing: 8, runSpacing: 8, children: [
@@ -102,7 +102,7 @@ class AboutPage extends StatelessWidget {
               onPressed: () => showLicensePage(
                 context: context,
                 applicationName: AppInfo.name,
-                applicationLegalese: '${AppInfo.license} License',
+                applicationLegalese: AppInfo.license,
               ),
               icon: const Icon(Icons.gavel_outlined),
               label: Text(l.openSourceLicenses),

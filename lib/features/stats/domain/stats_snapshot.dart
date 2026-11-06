@@ -118,6 +118,10 @@ class StatsSnapshot {
     required this.exploredKm2,
     required this.stepsPerDiscovery,
     required this.metersPerDiscovery,
+    this.thisWeekSteps = 0,
+    this.lastWeekSteps = 0,
+    this.thisWeekDistanceM = 0,
+    this.lastWeekDistanceM = 0,
   });
 
   final DateTime generatedAt;
@@ -170,6 +174,19 @@ class StatsSnapshot {
   final double exploredKm2;
   final double? stepsPerDiscovery;
   final double? metersPerDiscovery;
+
+  // Rolling 7-day windows: [today-6 … today] vs the 7 days before.
+  final int thisWeekSteps;
+  final int lastWeekSteps;
+  final double thisWeekDistanceM;
+  final double lastWeekDistanceM;
+
+  /// Relative change of steps vs the previous 7 days (0.25 = +25 %),
+  /// or null when there is nothing to compare with.
+  double? get weekStepsChange => lastWeekSteps == 0 ? null : (thisWeekSteps - lastWeekSteps) / lastWeekSteps;
+
+  /// Steps still missing to reach today's goal (0 once reached).
+  int get stepsToGoal => dailyGoal <= 0 ? 0 : (dailyGoal - todaySteps).clamp(0, dailyGoal);
 
   late final List<Achievement> achievements = _computeAchievements();
 

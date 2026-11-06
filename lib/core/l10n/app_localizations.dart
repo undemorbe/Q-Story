@@ -2059,6 +2059,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Details'**
   String get details;
+
+  /// No description provided for @huntEta.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {time} · ≈ {steps} steps to go'**
+  String huntEta(Object time, Object steps);
+
+  /// No description provided for @nearbyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No places nearby} =1{1 place nearby} other{{count} places nearby}}'**
+  String nearbyTitle(int count);
+
+  /// No description provided for @nearbyFromMapCenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Distances from the map centre — turn on location for distances from you.'**
+  String get nearbyFromMapCenter;
+
+  /// No description provided for @nearbyEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing found here yet. Move the map or widen the search radius in Settings.'**
+  String get nearbyEmpty;
+
+  /// No description provided for @nearbyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Places list'**
+  String get nearbyAction;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @directions.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk there'**
+  String get directions;
+
+  /// No description provided for @directionsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No map app could open the route'**
+  String get directionsUnavailable;
+
+  /// No description provided for @exportData.
+  ///
+  /// In en, this message translates to:
+  /// **'Export my data (JSON)'**
+  String get exportData;
+
+  /// No description provided for @exportSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'QStory — my data'**
+  String get exportSubject;
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not export the data'**
+  String get exportFailed;
+
+  /// No description provided for @statsGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal reached!'**
+  String get statsGoalReached;
+
+  /// No description provided for @statsStepsToGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'{steps} steps to the goal'**
+  String statsStepsToGoal(Object steps);
+
+  /// No description provided for @statsWeekSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps, last 7 days'**
+  String get statsWeekSteps;
+
+  /// No description provided for @statsWeekDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance, last 7 days'**
+  String get statsWeekDistance;
+
+  /// No description provided for @statsWeekHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous 7 days: {value}'**
+  String statsWeekHint(Object value);
+
+  /// No description provided for @milestoneGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal reached: {goal} steps!'**
+  String milestoneGoal(Object goal);
+
+  /// No description provided for @milestoneAchievement.
+  ///
+  /// In en, this message translates to:
+  /// **'New achievement: {name}'**
+  String milestoneAchievement(Object name);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

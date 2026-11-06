@@ -7,6 +7,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/services/directions.dart';
+import '../../../../core/services/share_service.dart';
 import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
@@ -19,6 +21,7 @@ import '../../../favorites/presentation/stores/favorites_store.dart';
 import '../../../reports/presentation/pages/report_sheet.dart';
 import '../../domain/entities/place.dart';
 import '../../domain/entities/place_source.dart';
+import '../../domain/services/place_share.dart';
 import '../../domain/services/qr_payload_parser.dart';
 import '../stores/places_store.dart';
 import '../widgets/place_labels.dart';
@@ -86,6 +89,11 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
             expandedHeight: p.imageUrl != null ? 320 : 120,
             pinned: true,
             actions: [
+              IconButton(
+                tooltip: l.share,
+                icon: const Icon(Icons.share_outlined),
+                onPressed: () => getIt<ShareService>().shareText(PlaceShare.text(p), subject: p.title),
+              ),
               Observer(builder: (_) {
                 final fav = _favorites.isFavorite(p.id);
                 return IconButton(
@@ -225,7 +233,28 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
     );
   }
 
+  Future<void> _openDirections(AppLocalizations l, Place p) async {
+    final ok = await openDirections(lat: p.lat, lon: p.lon, label: p.title);
+    if (!ok && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.directionsUnavailable)));
+    }
+  }
+
   Widget _actions(BuildContext context, AppLocalizations l, Place p) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      _mainActions(context, l, p),
+      if (p.hasLocation) ...[
+        const SizedBox(height: 8),
+        TextButton.icon(
+          icon: const Icon(Icons.directions_walk, size: 18),
+          label: Text(l.directions),
+          onPressed: () => _openDirections(l, p),
+        ),
+      ],
+    ]);
+  }
+
+  Widget _mainActions(BuildContext context, AppLocalizations l, Place p) {
     return Observer(builder: (_) {
       final visited = _journal.visitedIds.contains(p.id);
       final hunting = _tracking.activeHunt?.placeId == p.id;

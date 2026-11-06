@@ -2,6 +2,7 @@
 
 import 'package:mobx/mobx.dart';
 
+import '../../../../core/constants/app_info.dart';
 import '../../../activity/domain/entities/activity.dart';
 import '../../../activity/domain/repositories/activity_repository.dart';
 import '../../../activity/presentation/stores/journal_store.dart';
@@ -9,6 +10,7 @@ import '../../../activity/presentation/stores/tracking_store.dart';
 import '../../../favorites/presentation/stores/favorites_store.dart';
 import '../../../places/domain/repositories/places_repository.dart';
 import '../../../settings/presentation/stores/settings_store.dart';
+import '../../domain/data_export.dart';
 import '../../domain/stats_calculator.dart';
 import '../../domain/stats_snapshot.dart';
 
@@ -66,6 +68,22 @@ abstract class _StatsStore with Store {
       DateTime.now(),
     );
     isLoading = false;
+  }
+
+  /// All local data as a pretty-printed JSON document (see [DataExport]).
+  Future<String> exportJson({DateTime? now}) async {
+    await _tracking.flush();
+    final data = DataExport.build(
+      now: now ?? DateTime.now(),
+      appVersion: AppInfo.version,
+      days: await _activity.days(),
+      visits: await _activity.visits(),
+      hunts: await _activity.hunts(),
+      events: await _activity.events(),
+      favorites: _favorites.items.toList(),
+      userPlaces: await _places.userPlaces(),
+    );
+    return DataExport.encode(data);
   }
 
   @action

@@ -151,4 +151,32 @@ void main() {
     expect(s.exploredKm2, closeTo(2.0, 1e-9)); // 32 × 0.0625 km²
     expect(s.activeDays, 1);
   });
+
+  test('week over week: rolling 7-day windows', () {
+    final s = StatsCalculator.compute(
+      StatsInput(days: [
+        day(0, 1000, dist: 800),
+        day(6, 500, dist: 400), // still this week
+        day(7, 1000, dist: 700), // previous week
+        day(13, 200),
+        day(14, 9999), // older, ignored
+      ]),
+      now,
+    );
+    expect(s.thisWeekSteps, 1500);
+    expect(s.lastWeekSteps, 1200);
+    expect(s.thisWeekDistanceM, 1200);
+    expect(s.lastWeekDistanceM, 700);
+    expect(s.weekStepsChange, closeTo(0.25, 1e-9));
+  });
+
+  test('week change is null without a previous week; steps to goal', () {
+    final s = StatsCalculator.compute(StatsInput(dailyGoal: 5000, days: [day(0, 1200)]), now);
+    expect(s.weekStepsChange, isNull);
+    expect(s.stepsToGoal, 3800);
+    final done = StatsCalculator.compute(StatsInput(dailyGoal: 5000, days: [day(0, 7000)]), now);
+    expect(done.stepsToGoal, 0);
+    final noGoal = StatsCalculator.compute(StatsInput(dailyGoal: 0, days: [day(0, 7000)]), now);
+    expect(noGoal.stepsToGoal, 0);
+  });
 }

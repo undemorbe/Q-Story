@@ -436,5 +436,56 @@
   "emailOpened": "Opening your email app…",
   "locationNeeded": "Location is needed for the map and tracking",
   "visited": "Visited",
-  "details": "Details"
+  "details": "Details",
+  "huntEta": "≈ {time} · ≈ {steps} steps to go",
+  "@huntEta": {
+    "placeholders": {
+      "time": {},
+      "steps": {}
+    }
+  },
+  "nearbyTitle": "{count, plural, =0{No places nearby} =1{1 place nearby} other{{count} places nearby}}",
+  "@nearbyTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearbyFromMapCenter": "Distances from the map centre — turn on location for distances from you.",
+  "nearbyEmpty": "Nothing found here yet. Move the map or widen the search radius in Settings.",
+  "nearbyAction": "Places list",
+  "share": "Share",
+  "directions": "Walk there",
+  "directionsUnavailable": "No map app could open the route",
+  "exportData": "Export my data (JSON)",
+  "exportSubject": "QStory — my data",
+  "exportFailed": "Could not export the data",
+  "statsGoalReached": "Daily goal reached!",
+  "statsStepsToGoal": "{steps} steps to the goal",
+  "@statsStepsToGoal": {
+    "placeholders": {
+      "steps": {}
+    }
+  },
+  "statsWeekSteps": "Steps, last 7 days",
+  "statsWeekDistance": "Distance, last 7 days",
+  "statsWeekHint": "Previous 7 days: {value}",
+  "@statsWeekHint": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "milestoneGoal": "Daily goal reached: {goal} steps!",
+  "@milestoneGoal": {
+    "placeholders": {
+      "goal": {}
+    }
+  },
+  "milestoneAchievement": "New achievement: {name}",
+  "@milestoneAchievement": {
+    "placeholders": {
+      "name": {}
+    }
+  }
 }

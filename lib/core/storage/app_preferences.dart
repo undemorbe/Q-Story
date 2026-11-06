@@ -19,6 +19,8 @@ class AppPreferences {
   static const _kStepGoal = 'daily_step_goal';
   static const _kStepLength = 'step_length_cm';
   static const _kGeofence = 'geofence_radius_m';
+  static const _kGoalNotified = 'goal_notified_day';
+  static const _kSeenAchievements = 'seen_achievements';
 
   String? get localeCode => _prefs.getString(_kLocale);
   Future<void> setLocaleCode(String code) => _prefs.setString(_kLocale, code);
@@ -55,4 +57,18 @@ class AppPreferences {
 
   int get geofenceRadiusM => _prefs.getInt(_kGeofence) ?? 40;
   Future<void> setGeofenceRadiusM(int v) => _prefs.setInt(_kGeofence, v);
+
+  /// Day key (yyyy-MM-dd) on which the "daily goal reached" toast was shown.
+  String? get goalNotifiedDay => _prefs.getString(_kGoalNotified);
+  Future<void> setGoalNotifiedDay(String day) => _prefs.setString(_kGoalNotified, day);
+
+  /// Achievements already announced; null until the first check seeds it.
+  Set<String>? get seenAchievements => _prefs.getStringList(_kSeenAchievements)?.toSet();
+  Future<void> setSeenAchievements(Set<String> ids) => _prefs.setStringList(_kSeenAchievements, ids.toList()..sort());
+
+  /// Clears the milestone bookkeeping (used when statistics are reset).
+  Future<void> clearMilestones() async {
+    await _prefs.remove(_kGoalNotified);
+    await _prefs.remove(_kSeenAchievements);
+  }
 }

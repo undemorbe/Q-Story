@@ -20,6 +20,17 @@ mixin _$TrackingStore on _TrackingStore, Store {
   double? get distanceToTargetM => (_$distanceToTargetMComputed ??=
           Computed<double?>(() => super.distanceToTargetM, name: '_TrackingStore.distanceToTargetM'))
       .value;
+  Computed<double?>? _$walkingSpeedMpsComputed;
+
+  @override
+  double? get walkingSpeedMps => (_$walkingSpeedMpsComputed ??=
+          Computed<double?>(() => super.walkingSpeedMps, name: '_TrackingStore.walkingSpeedMps'))
+      .value;
+  Computed<HuntEta?>? _$huntEtaComputed;
+
+  @override
+  HuntEta? get huntEta =>
+      (_$huntEtaComputed ??= Computed<HuntEta?>(() => super.huntEta, name: '_TrackingStore.huntEta')).value;
   Computed<double?>? _$bearingToTargetDegComputed;
 
   @override
@@ -159,6 +170,21 @@ mixin _$TrackingStore on _TrackingStore, Store {
   set sessionSteps(int value) {
     _$sessionStepsAtom.reportWrite(value, super.sessionSteps, () {
       super.sessionSteps = value;
+    });
+  }
+
+  late final _$sessionActiveSecondsAtom = Atom(name: '_TrackingStore.sessionActiveSeconds', context: context);
+
+  @override
+  int get sessionActiveSeconds {
+    _$sessionActiveSecondsAtom.reportRead();
+    return super.sessionActiveSeconds;
+  }
+
+  @override
+  set sessionActiveSeconds(int value) {
+    _$sessionActiveSecondsAtom.reportWrite(value, super.sessionActiveSeconds, () {
+      super.sessionActiveSeconds = value;
     });
   }
 
@@ -318,12 +344,15 @@ track: ${track},
 sessionStartedAt: ${sessionStartedAt},
 sessionDistanceM: ${sessionDistanceM},
 sessionSteps: ${sessionSteps},
+sessionActiveSeconds: ${sessionActiveSeconds},
 todaySteps: ${todaySteps},
 todayDistanceM: ${todayDistanceM},
 activeHunt: ${activeHunt},
 lastFoundHunt: ${lastFoundHunt},
 latLng: ${latLng},
 distanceToTargetM: ${distanceToTargetM},
+walkingSpeedMps: ${walkingSpeedMps},
+huntEta: ${huntEta},
 bearingToTargetDeg: ${bearingToTargetDeg}
     ''';
   }

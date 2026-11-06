@@ -8,30 +8,9 @@ import 'package:qstory/features/places/domain/entities/place.dart';
 import 'package:qstory/features/places/domain/entities/place_query.dart';
 import 'package:qstory/features/places/domain/entities/place_source.dart';
 
-class FakeClient implements PlaceSourceClient {
-  FakeClient(this.source, {this.places = const [], this.error, this.detail});
-  @override
-  final PlaceSource source;
-  List<Place> places;
-  Object? error;
-  Place? detail;
-  int nearbyCalls = 0;
+import '../../helpers/fakes.dart';
 
-  @override
-  Future<List<Place>> nearby(PlaceQuery query) async {
-    nearbyCalls++;
-    if (error != null) throw error!;
-    return places;
-  }
-
-  @override
-  Future<Place?> fetch(String sourceId, {String language = 'ru'}) async {
-    if (error != null) throw error!;
-    return detail;
-  }
-}
-
-Place place(PlaceSource s, String id, String title, double lat, double lon,
+Place mk(PlaceSource s, String id, String title, double lat, double lon,
         {PlaceCategory c = PlaceCategory.monument, String? image}) =>
     Place(source: s, sourceId: id, title: title, lat: lat, lon: lon, category: c, imageUrl: image);
 
@@ -50,9 +29,8 @@ void main() {
       PlacesRepositoryImpl(database: db, clients: clients, clock: () => now);
 
   test('merges sources, sorts by distance, isolates failures', () async {
-    final osm = FakeClient(PlaceSource.osm, places: [place(PlaceSource.osm, 'node/1', 'Далеко', 59.01, 30.0)]);
-    final wiki =
-        FakeClient(PlaceSource.wikipedia, places: [place(PlaceSource.wikipedia, 'ru:1', 'Близко', 59.001, 30.0)]);
+    final osm = FakeClient(PlaceSource.osm, places: [mk(PlaceSource.osm, 'node/1', 'Далеко', 59.01, 30.0)]);
+    final wiki = FakeClient(PlaceSource.wikipedia, places: [mk(PlaceSource.wikipedia, 'ru:1', 'Близко', 59.001, 30.0)]);
     final broken = FakeClient(PlaceSource.pastvu, error: Exception('boom'));
     final r = await repo([osm, wiki, broken])
         .nearby(q, sources: {PlaceSource.osm, PlaceSource.wikipedia, PlaceSource.pastvu});
@@ -62,14 +40,14 @@ void main() {
   });
 
   test('disabled sources are not queried', () async {
-    final osm = FakeClient(PlaceSource.osm, places: [place(PlaceSource.osm, 'node/1', 'A', 59, 30)]);
+    final osm = FakeClient(PlaceSource.osm, places: [mk(PlaceSource.osm, 'node/1', 'A', 59, 30)]);
     final r = await repo([osm]).nearby(q, sources: {PlaceSource.wikipedia});
     expect(r.places, isEmpty);
     expect(osm.nearbyCalls, 0);
   });
 
   test('caches results within TTL and falls back to stale cache on error', () async {
-    final osm = FakeClient(PlaceSource.osm, places: [place(PlaceSource.osm, 'node/1', 'A', 59, 30)]);
+    final osm = FakeClient(PlaceSource.osm, places: [mk(PlaceSource.osm, 'node/1', 'A', 59, 30)]);
     final r = repo([osm]);
     await r.nearby(q, sources: {PlaceSource.osm});
     final cached = await r.nearby(q, sources: {PlaceSource.osm});
@@ -87,11 +65,11 @@ void main() {
 
   test('dedupe merges same object across sources, keeps richest, never merges photos', () {
     final list = PlacesRepositoryImpl.dedupe([
-      place(PlaceSource.osm, 'node/1', 'Памятник Пушкину', 59.0, 30.0),
-      place(PlaceSource.wikidata, 'Q1', 'памятник пушкину', 59.0001, 30.0, image: 'x'),
-      place(PlaceSource.pastvu, '1', 'Фото', 59.0, 30.0, c: PlaceCategory.photo),
-      place(PlaceSource.pastvu, '2', 'Фото', 59.0, 30.0, c: PlaceCategory.photo),
-      place(PlaceSource.osm, 'node/9', 'Памятник Пушкину', 59.5, 30.0), // same name, far away
+      mk(PlaceSource.osm, 'node/1', 'Памятник Пушкину', 59.0, 30.0),
+      mk(PlaceSource.wikidata, 'Q1', 'памятник пушкину', 59.0001, 30.0, image: 'x'),
+      mk(PlaceSource.pastvu, '1', 'Фото', 59.0, 30.0, c: PlaceCategory.photo),
+      mk(PlaceSource.pastvu, '2', 'Фото', 59.0, 30.0, c: PlaceCategory.photo),
+      mk(PlaceSource.osm, 'node/9', 'Памятник Пушкину', 59.5, 30.0), // same name, far away
     ]);
     expect(list.map((p) => p.id), containsAll(['wikidata:Q1', 'pastvu:1', 'pastvu:2', 'osm:node/9']));
     expect(list.map((p) => p.id), isNot(contains('osm:node/1')));
@@ -99,7 +77,7 @@ void main() {
 
   test('user places are stored locally and returned for user source', () async {
     final r = repo([]);
-    await r.saveUserPlace(place(PlaceSource.user, 'u1', 'Мой дом', 59.0, 30.0));
+    await r.saveUserPlace(mk(PlaceSource.user, 'u1', 'Мой дом', 59.0, 30.0));
     final res = await r.nearby(q, sources: {PlaceSource.user});
     expect(res.places.single.title, 'Мой дом');
     expect((await r.details(PlaceSource.user, 'u1')).valueOrNull?.title, 'Мой дом');
@@ -108,7 +86,7 @@ void main() {
   });
 
   test('details caches and serves cache when source fails', () async {
-    final osm = FakeClient(PlaceSource.osm, detail: place(PlaceSource.osm, 'node/1', 'Подробно', 59, 30));
+    final osm = FakeClient(PlaceSource.osm, detail: mk(PlaceSource.osm, 'node/1', 'Подробно', 59, 30));
     final r = repo([osm]);
     expect((await r.details(PlaceSource.osm, 'node/1')).valueOrNull?.title, 'Подробно');
     osm.error = Exception('down');

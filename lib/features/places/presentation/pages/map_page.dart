@@ -24,6 +24,7 @@ import '../../domain/entities/place.dart';
 import '../../domain/entities/place_source.dart';
 import '../stores/places_store.dart';
 import '../widgets/map_widgets.dart';
+import '../widgets/nearby_list.dart';
 import '../widgets/place_labels.dart';
 import 'add_place_page.dart';
 
@@ -316,6 +317,8 @@ class _MapPageState extends State<MapPage> {
             const SizedBox(height: 6),
             GothicFab(small: true, icon: Icons.remove, onPressed: () => _zoom(-1)),
             const SizedBox(height: 10),
+            GothicFab(icon: Icons.format_list_bulleted, tooltip: l.nearbyAction, onPressed: _openNearby),
+            const SizedBox(height: 10),
             GothicFab(icon: Icons.refresh, tooltip: l.refreshAction, busy: _places.isLoading, onPressed: _searchHere),
             const SizedBox(height: 10),
             GothicFab(icon: Icons.add_location_alt_outlined, tooltip: l.addMyPlace, onPressed: _addPlace),
@@ -341,6 +344,35 @@ class _MapPageState extends State<MapPage> {
       context: context,
       isScrollControlled: true,
       builder: (_) => _FiltersSheet(store: _places, enabled: _settings.enabledSources.toSet()),
+    );
+  }
+
+  void _openNearby() {
+    final me = _tracking.position;
+    final center = _mapReady ? _map.camera.center : _fallbackCenter;
+    final lat = me?.lat ?? center.latitude;
+    final lon = me?.lon ?? center.longitude;
+    final items = NearbyItem.build(_places.filtered, lat, lon);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (ctx) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.6,
+        minChildSize: 0.3,
+        maxChildSize: 0.92,
+        builder: (ctx, controller) => NearbyList(
+          items: items,
+          visitedIds: _journal.visitedIds.toSet(),
+          fromMyLocation: me != null,
+          scrollController: controller,
+          onOpen: (p) {
+            Navigator.pop(ctx);
+            context.push('/place', extra: p);
+          },
+        ),
+      ),
     );
   }
 
@@ -528,6 +560,7 @@ class _HuntBanner extends StatelessWidget {
       if (h == null) return const SizedBox.shrink();
       final d = tracking.distanceToTargetM;
       final bearing = tracking.bearingToTargetDeg;
+      final eta = tracking.huntEta;
       return GothicCard(
         padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
         child: Row(children: [
@@ -549,6 +582,13 @@ class _HuntBanner extends StatelessWidget {
                 ].join(' · '),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              if (eta != null && d != null && d > 0) ...[
+                const SizedBox(height: 2),
+                Text(
+                  l.huntEta(l.duration(eta.duration), '${eta.steps}'),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(color: context.dim),
+                ),
+              ],
             ]),
           ),
           TextButton(onPressed: () => tracking.finishHunt(found: false), child: Text(l.huntGiveUp)),

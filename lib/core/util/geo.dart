@@ -54,3 +54,10 @@ String formatDuration(Duration d, {String h = 'h', String min = 'min', String s 
   if (d.inMinutes > 0) return '${d.inMinutes} $min';
   return '${d.inSeconds} $s';
 }
+
+/// Signed percentage for a relative change: 0.254 → "+25%", -0.1 → "−10%".
+String formatChange(double ratio) {
+  final pct = (ratio * 100).round();
+  if (pct == 0) return '±0%';
+  return pct > 0 ? '+$pct%' : '\u2212${-pct}%';
+}

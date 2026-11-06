@@ -45,12 +45,15 @@ class GothicCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gold = context.gold;
-    return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor ?? context.surfaceClr,
-        border: Border.all(color: context.outlineClr, width: 1),
+    // A Material (not a decorated Container) so ListTiles and InkWells inside
+    // the card show their ripple and selection colours.
+    return Material(
+      color: backgroundColor ?? context.surfaceClr,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: context.outlineClr, width: 1),
         borderRadius: BorderRadius.circular(2),
       ),
+      clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
           Padding(

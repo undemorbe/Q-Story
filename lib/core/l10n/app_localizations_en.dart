@@ -1035,4 +1035,77 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get details => 'Details';
+
+  @override
+  String huntEta(Object time, Object steps) {
+    return '≈ $time · ≈ $steps steps to go';
+  }
+
+  @override
+  String nearbyTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count places nearby',
+      one: '1 place nearby',
+      zero: 'No places nearby',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get nearbyFromMapCenter => 'Distances from the map centre — turn on location for distances from you.';
+
+  @override
+  String get nearbyEmpty => 'Nothing found here yet. Move the map or widen the search radius in Settings.';
+
+  @override
+  String get nearbyAction => 'Places list';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get directions => 'Walk there';
+
+  @override
+  String get directionsUnavailable => 'No map app could open the route';
+
+  @override
+  String get exportData => 'Export my data (JSON)';
+
+  @override
+  String get exportSubject => 'QStory — my data';
+
+  @override
+  String get exportFailed => 'Could not export the data';
+
+  @override
+  String get statsGoalReached => 'Daily goal reached!';
+
+  @override
+  String statsStepsToGoal(Object steps) {
+    return '$steps steps to the goal';
+  }
+
+  @override
+  String get statsWeekSteps => 'Steps, last 7 days';
+
+  @override
+  String get statsWeekDistance => 'Distance, last 7 days';
+
+  @override
+  String statsWeekHint(Object value) {
+    return 'Previous 7 days: $value';
+  }
+
+  @override
+  String milestoneGoal(Object goal) {
+    return 'Daily goal reached: $goal steps!';
+  }
+
+  @override
+  String milestoneAchievement(Object name) {
+    return 'New achievement: $name';
+  }
 }

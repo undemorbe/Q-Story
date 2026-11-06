@@ -12,6 +12,7 @@ import '../../../places/domain/entities/place_source.dart';
 import '../../../settings/presentation/stores/settings_store.dart';
 import '../../domain/entities/activity.dart';
 import '../../domain/repositories/activity_repository.dart';
+import '../../domain/services/hunt_eta.dart';
 import '../../domain/services/movement_accumulator.dart';
 import 'journal_store.dart';
 
@@ -84,6 +85,10 @@ abstract class _TrackingStore with Store {
   @observable
   int sessionSteps = 0;
 
+  /// Seconds of actual movement in this session (stops excluded).
+  @observable
+  int sessionActiveSeconds = 0;
+
   @observable
   int todaySteps = 0;
 
@@ -105,6 +110,18 @@ abstract class _TrackingStore with Store {
     final p = position, h = activeHunt;
     if (p == null || h == null) return null;
     return Geo.distanceM(p.lat, p.lon, h.targetLat, h.targetLon);
+  }
+
+  /// Average walking speed this session, once there is enough data.
+  @computed
+  double? get walkingSpeedMps => sessionActiveSeconds < 60 ? null : sessionDistanceM / sessionActiveSeconds;
+
+  /// Time and steps still needed to reach the hunt target.
+  @computed
+  HuntEta? get huntEta {
+    final d = distanceToTargetM;
+    if (d == null) return null;
+    return HuntEta.estimate(d, observedSpeedMps: walkingSpeedMps, stepLengthCm: _settings.stepLengthCm);
   }
 
   @computed
@@ -136,6 +153,7 @@ abstract class _TrackingStore with Store {
     sessionStartedAt = _now();
     sessionDistanceM = 0;
     sessionSteps = 0;
+    sessionActiveSeconds = 0;
     track.clear();
     _acc.reset();
 
@@ -211,6 +229,7 @@ abstract class _TrackingStore with Store {
       final day = _day!;
       day.distanceM += delta.distanceM;
       day.activeSeconds += delta.activeSeconds;
+      sessionActiveSeconds += delta.activeSeconds;
       if (delta.speedMps > day.maxSpeedMps) day.maxSpeedMps = delta.speedMps;
       final h = activeHunt;
       if (h != null) activeHunt = h.copyWith(distanceM: h.distanceM + delta.distanceM);

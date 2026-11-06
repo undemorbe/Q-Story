@@ -74,6 +74,20 @@ abstract final class StatsCalculator {
       return DayPoint(date, d?.steps ?? 0, d?.distanceM ?? 0);
     });
 
+    (int, double) week(int weeksAgo) {
+      var steps = 0;
+      var dist = 0.0;
+      for (var i = 0; i < 7; i++) {
+        final d = dayMap[DayActivity.keyOf(today.subtract(Duration(days: weeksAgo * 7 + i)))];
+        steps += d?.steps ?? 0;
+        dist += d?.distanceM ?? 0;
+      }
+      return (steps, dist);
+    }
+
+    final thisWeekMove = week(0);
+    final lastWeekMove = week(1);
+
     // A day is "active" if the user walked or discovered something.
     final activeDaySet = <DateTime>{
       for (final d in input.days)
@@ -159,6 +173,10 @@ abstract final class StatsCalculator {
       exploredKm2: input.exploredCells * cellKm2,
       stepsPerDiscovery: visits == 0 ? null : totalSteps / visits,
       metersPerDiscovery: visits == 0 ? null : totalDist / visits,
+      thisWeekSteps: thisWeekMove.$1,
+      lastWeekSteps: lastWeekMove.$1,
+      thisWeekDistanceM: thisWeekMove.$2,
+      lastWeekDistanceM: lastWeekMove.$2,
     );
   }
 

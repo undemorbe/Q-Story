@@ -21,12 +21,14 @@ import '../../features/places/domain/repositories/places_repository.dart';
 import '../../features/places/presentation/stores/places_store.dart';
 import '../../features/scanner/domain/scan_resolver.dart';
 import '../../features/settings/presentation/stores/settings_store.dart';
+import '../../features/stats/presentation/stores/milestone_service.dart';
 import '../../features/stats/presentation/stores/stats_store.dart';
 import '../network/http_client.dart';
 import '../services/email_service.dart';
 import '../services/mail_launcher.dart';
 import '../services/motion_sensors.dart';
 import '../services/report_service.dart';
+import '../services/share_service.dart';
 import '../storage/app_database.dart';
 import '../storage/app_preferences.dart';
 
@@ -39,6 +41,8 @@ Future<void> setupServiceLocator({
   SharedPreferences? preferences,
   MotionSensors? sensors,
   Dio? dio,
+  ShareService? share,
+  MailLauncher? mail,
 }) async {
   // ─── Infrastructure ────────────────────────────────────────────────
   final prefs = preferences ?? await SharedPreferences.getInstance();
@@ -52,7 +56,8 @@ Future<void> setupServiceLocator({
     ..registerSingleton<Dio>(http)
     ..registerSingleton<MotionSensors>(sensors ?? DeviceMotionSensors())
     ..registerSingleton<ValueNotifier<int>>(ValueNotifier<int>(0), instanceName: 'currentTab')
-    ..registerLazySingleton<MailLauncher>(UrlMailLauncher.new)
+    ..registerLazySingleton<MailLauncher>(() => mail ?? UrlMailLauncher())
+    ..registerLazySingleton<ShareService>(() => share ?? const SystemShareService())
     ..registerLazySingleton<EmailService>(() => EmailService(getIt()))
     ..registerLazySingleton<ReportService>(() => ReportService(getIt()));
 
@@ -80,11 +85,19 @@ Future<void> setupServiceLocator({
     ..registerSingleton<TrackingStore>(TrackingStore(getIt(), getIt(), getIt(), getIt()))
     ..registerLazySingleton<PlacesStore>(() => PlacesStore(getIt(), getIt(), getIt()))
     ..registerLazySingleton<StatsStore>(() => StatsStore(getIt(), getIt(), getIt(), getIt(), getIt(), getIt()))
-    ..registerLazySingleton<DailyFactStore>(() => DailyFactStore(getIt()));
+    ..registerLazySingleton<DailyFactStore>(() => DailyFactStore(getIt()))
+    ..registerLazySingleton<MilestoneService>(() => MilestoneService(
+          tracking: getIt(),
+          journal: getIt(),
+          stats: getIt(),
+          settings: getIt(),
+          prefs: getIt(),
+        ));
 
   await Future.wait([
     getIt<JournalStore>().init(),
     getIt<FavoritesStore>().load(),
     getIt<TrackingStore>().init(),
   ]);
+  getIt<MilestoneService>().start();
 }

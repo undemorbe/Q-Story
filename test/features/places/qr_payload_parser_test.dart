@@ -60,4 +60,39 @@ void main() {
       expect((QrPayloadParser.parse(QrPayloadParser.encode(mine)) as QrInlinePlace).place.title, 'Мой дом');
     });
   });
+
+  test('user place survives encode → parse with the same id (regression)', () {
+    const mine = Place(
+      source: PlaceSource.user,
+      sourceId: 'abc123',
+      title: 'Мемориальная доска',
+      lat: 59.9,
+      lon: 30.3,
+      yearStart: 1890,
+      yearEnd: 1917,
+      author: 'Я',
+    );
+    final back = QrPayloadParser.parse(QrPayloadParser.encode(mine));
+    expect(back, isA<QrInlinePlace>());
+    final p = (back as QrInlinePlace).place;
+    expect(p.id, mine.id);
+    expect(p.yearStart, 1890);
+    expect(p.yearEnd, 1917);
+    expect(p.author, 'Я');
+  });
+
+  test('hand-written JSON plaque gets a stable qr- id', () {
+    final a = QrPayloadParser.parse('{"title":"Дом купца","lat":1,"lon":2}') as QrInlinePlace;
+    final b = QrPayloadParser.parse('{"title":"Дом купца","lat":1,"lon":2}') as QrInlinePlace;
+    expect(a.place.sourceId, startsWith('qr-'));
+    expect(a.place.id, b.place.id);
+    final withId = QrPayloadParser.parse('{"id":"plate-7","title":"Дом"}') as QrInlinePlace;
+    expect(withId.place.sourceId, 'qr-plate-7');
+  });
+
+  test('JSON from another source cannot spoof a user id', () {
+    final p = QrPayloadParser.parse('{"source":"osm","sourceId":"node/1","title":"X"}') as QrInlinePlace;
+    expect(p.place.source, PlaceSource.user);
+    expect(p.place.sourceId, startsWith('qr-'));
+  });
 }

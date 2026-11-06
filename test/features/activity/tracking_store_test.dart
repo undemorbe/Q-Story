@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qstory/core/services/motion_sensors.dart';
 import 'package:qstory/core/storage/app_database.dart';
@@ -13,32 +11,7 @@ import 'package:qstory/features/places/domain/entities/place_source.dart';
 import 'package:qstory/features/settings/presentation/stores/settings_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FakeSensors implements MotionSensors {
-  final pos = StreamController<GeoFix>.broadcast();
-  final steps = StreamController<int>.broadcast();
-  LocationAccess access = LocationAccess.granted;
-  bool stepAccess = true;
-  bool? lastBackground;
-
-  @override
-  Future<LocationAccess> ensureLocationAccess() async => access;
-  @override
-  Future<GeoFix?> currentFix() async => null;
-  @override
-  Stream<GeoFix> positions({required bool background, int distanceFilterM = 5}) {
-    lastBackground = background;
-    return pos.stream;
-  }
-
-  @override
-  Future<bool> ensureStepAccess() async => stepAccess;
-  @override
-  Stream<int> stepCount() => steps.stream;
-  @override
-  Future<void> openAppSettings() async {}
-  @override
-  Future<void> openLocationSettings() async {}
-}
+import '../../helpers/fakes.dart';
 
 void main() {
   late AppDatabase db;
@@ -194,5 +167,32 @@ void main() {
     await store.stop();
     expect((await repo.day('2026-11-06')).steps, 50);
     expect((await repo.day('2026-11-07')).steps, 10);
+  });
+
+  test('walking speed appears after a minute of movement and drives the hunt ETA', () async {
+    await store.start();
+    await emit(fix(59.0, 30.0));
+    expect(store.walkingSpeedMps, isNull);
+    for (var i = 1; i <= 4; i++) {
+      t = t.add(const Duration(seconds: 25));
+      await emit(fix(59.0 + 0.00025 * i, 30.0)); // ~27.8 m each
+    }
+    expect(store.sessionActiveSeconds, 100);
+    expect(store.walkingSpeedMps, closeTo(1.11, 0.05));
+
+    const target = Place(source: PlaceSource.osm, sourceId: 'node/9', title: 'Далеко', lat: 59.01, lon: 30.0);
+    await store.startHunt(target);
+    final eta = store.huntEta!;
+    expect(eta.speedMps, closeTo(1.11, 0.05));
+    // ~1000 m left × 1.25 detour / 1.11 m/s ≈ 15 min
+    expect(eta.duration.inMinutes, inInclusiveRange(14, 20));
+    expect(eta.steps, greaterThan(1000));
+  });
+
+  test('no ETA without a hunt or a position', () async {
+    expect(store.huntEta, isNull);
+    const target = Place(source: PlaceSource.osm, sourceId: 'node/8', title: 'X', lat: 59.01, lon: 30.0);
+    await store.startHunt(target);
+    expect(store.huntEta, isNull); // no fix yet
   });
 }
