@@ -14,39 +14,39 @@ dependencies:
   
   # State Management
   mobx: ^2.3.0
-  flutter_mobx: ^2.1.0
+  flutter_mobx: ^2.4.0
   
   # Dependency Injection
-  get_it: ^9.2.1
+  get_it: ^9.3.0
   
   # Networking
-  dio: ^5.4.0
+  dio: ^5.11.1
   
   # Localization
   intl: ^0.20.2
   
   # QR Operations
   qr_flutter: ^4.1.0
-  mobile_scanner: ^7.2.0
+  mobile_scanner: ^7.5.0
   
   # Permissions
   permission_handler: ^12.0.1
 
   # Maps
-  flutter_map: ^8.0.0
+  flutter_map: ^8.3.2
   flutter_map_marker_cluster: ^8.2.2
   latlong2: ^0.9.1
   geolocator: ^13.0.1
 
   # Navigation
   go_router: ^17.1.0
-  shared_preferences: ^2.5.4
+  shared_preferences: ^2.5.6
   cached_network_image: ^3.4.1
   google_fonts: ^8.0.1
-  url_launcher: ^6.2.5
+  url_launcher: ^6.3.3
   flutter_local_notifications: ^21.0.0
-  flutter_timezone: ^5.0.1
-  timezone: ^0.11.0
+  flutter_timezone: ^5.1.1
+  timezone: ^0.11.2
   sembast: ^3.10.0
   path_provider: ^2.1.6
   pedometer: ^4.2.0
@@ -62,7 +62,7 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  build_runner: ^2.4.8
+  build_runner: ^2.16.2
   mobx_codegen: ^2.3.0
   mockito: ^5.4.4
 
