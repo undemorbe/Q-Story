@@ -1,0 +1,491 @@
+{
+  "appTitle": "QStory",
+  "scanQr": "Scan QR",
+  "cameraPermissionRequired": "Camera permission is required to scan QR codes.",
+  "openSettings": "Open Settings",
+  "permissionDenied": "Permission Denied",
+  "error": "Error",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "close": "Close",
+  "save": "Save",
+  "settings": "Settings",
+  "language": "Language",
+  "selectLanguage": "Select Language",
+  "navMap": "Map",
+  "navScanner": "Scanner",
+  "navFavorites": "Favorites",
+  "navProfile": "Profile",
+  "onboarding1Title": "Discover",
+  "onboarding1Desc": "Historical places, retro photos and heritage sites around you — from open history communities.",
+  "onboarding2Title": "Search",
+  "onboarding2Desc": "Pick a place and walk to it. QStory tracks your route and steps until you arrive.",
+  "onboarding3Title": "Remember",
+  "onboarding3Desc": "Scan QR plaques, collect discoveries and watch your statistics grow — all stored only on your phone.",
+  "continueButton": "Continue",
+  "beginButton": "Begin",
+  "favoritesTitle": "Favorites",
+  "noFavoritesYet": "No favorites yet",
+  "profileTitle": "Profile",
+  "favorites": "Favorites",
+  "dailyHistory": "Daily History",
+  "dailyHistorySubtitle": "Discover today's history",
+  "notifications": "Notifications",
+  "notificationsSubtitle": "Configure daily notifications",
+  "helpAndSupport": "Help & Support",
+  "sendSupportMessage": "Send us a message and we'll get back to you",
+  "enterMessage": "Enter your message...",
+  "messageSent": "Message sent successfully",
+  "send": "Send",
+  "retry": "Retry",
+  "appearance": "Appearance",
+  "theme": "Theme",
+  "systemTheme": "System",
+  "lightTheme": "Light",
+  "darkTheme": "Dark",
+  "pushNotifications": "Push Notifications",
+  "pushNotificationsSubtitle": "Receive daily historical facts",
+  "checkNotification": "Test Notification",
+  "checkNotificationSubtitle": "Send test notification now",
+  "preferences": "Preferences",
+  "about": "About",
+  "version": "Version 1.0.0",
+  "chooseTheme": "Choose Theme",
+  "russian": "Russian",
+  "english": "English",
+  "notifSettingsTitle": "Notifications",
+  "dailyNotificationsTitle": "Daily Notifications",
+  "dailyNotificationsDesc": "Receive interesting historical facts",
+  "notificationTime": "Notification Time",
+  "testNotification": "Test Notification",
+  "testNotificationDesc": "Check how notifications work",
+  "aboutNotificationsTitle": "About Notifications",
+  "aboutNotificationsText": "Each day at the selected time you will receive notifications with interesting historical facts and events.",
+  "notificationsWorkInDnd": "Notifications work even in Do Not Disturb mode",
+  "notificationsEnabledMsg": "Notifications enabled",
+  "notificationsDisabledMsg": "Notifications disabled",
+  "testNotificationSent": "Test notification sent",
+  "dailyNotificationsActivated": "Daily notifications activated at {time}",
+  "@dailyNotificationsActivated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "titleField": "Title",
+  "typeField": "Type",
+  "imageUrlField": "Image URL",
+  "coordinatesLabel": "Coordinates",
+  "fieldRequired": "Required field",
+  "selectDate": "Select date",
+  "pickPointTitle": "Pick a point",
+  "tapMapHint": "Tap on the map to choose coordinates",
+  "done": "Done",
+  "confirmAction": "Confirm",
+  "onThisDayTitle": "On this day",
+  "onThisDaySubtitle": "events of the day in Russian history",
+  "anotherFact": "Another fact",
+  "refreshAction": "Refresh",
+  "loadingLabel": "Loading…",
+  "openInWikipedia": "Open in Wikipedia",
+  "noFactsForToday": "No facts from Russian or Soviet history for this day.",
+  "wikipediaSource": "Source: Wikipedia",
+  "wikipediaSourceWithCount": "Source: Wikipedia · {count} facts",
+  "@wikipediaSourceWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "locationDisabled": "Location is disabled in device settings",
+  "locationDenied": "Location access not granted",
+  "locationDeniedForever": "Location is permanently denied. Enable it in app settings",
+  "locationError": "Could not determine coordinates: {error}",
+  "@locationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "filtersTitle": "Filters",
+  "filterAll": "All",
+  "report": "Report",
+  "reportTitle": "Report an issue",
+  "reportCategory": "Category",
+  "reportText": "Describe the issue...",
+  "reportSent": "Report sent successfully",
+  "reportConfirmTitle": "Confirm Report",
+  "reportConfirmMessage": "Send report for category: {category}?",
+  "@reportConfirmMessage": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "reportCategoryVandalism": "Vandalism",
+  "reportCategoryMisinformation": "Misinformation",
+  "reportCategoryOffensive": "Offensive content",
+  "reportCategorySpam": "Spam",
+  "reportCategoryCopyright": "Copyright violation",
+  "reportCategoryAdult": "Adult content",
+  "reportCategoryHate": "Hate speech",
+  "reportCategoryFraud": "Fraud",
+  "reportCategoryMalware": "Malware/Security threat",
+  "reportCategoryPrivacy": "Privacy violation",
+  "reportCategoryInvalid": "Invalid information",
+  "reportCategoryOther": "Other",
+  "navStats": "Stats",
+  "trackingOn": "Tracking on",
+  "trackingOff": "Tracking off",
+  "startTracking": "Start tracking",
+  "stopTracking": "Stop tracking",
+  "followMe": "Follow me",
+  "stepsToday": "{count} steps today",
+  "@stepsToday": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "placesCount": "{count} places",
+  "@placesCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "loadingPlaces": "Looking for history around…",
+  "sourcesUnavailable": "Unavailable: {sources}",
+  "@sourcesUnavailable": {
+    "placeholders": {
+      "sources": {}
+    }
+  },
+  "offlineCache": "Offline — showing saved places",
+  "searchPlaces": "Search places",
+  "searchHere": "Search this area",
+  "filterVisited": "Visited",
+  "filterNotVisited": "Not visited",
+  "visitFilterLabel": "Status",
+  "sourcesLabel": "Sources",
+  "categoryLabel": "Category",
+  "resetFilters": "Reset",
+  "addMyPlace": "Add my place",
+  "nearPlace": "You are next to «{title}»",
+  "@nearPlace": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "markVisited": "I'm here — mark as visited",
+  "markedVisited": "Added to your discoveries",
+  "visitedBadge": "Visited",
+  "huntSearching": "Searching: {title}",
+  "@huntSearching": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "huntLeft": "{distance} left",
+  "@huntLeft": {
+    "placeholders": {
+      "distance": {}
+    }
+  },
+  "huntGiveUp": "Give up",
+  "huntFoundTitle": "Found!",
+  "huntFoundBody": "«{title}»: {steps} steps, {distance}, {time}",
+  "@huntFoundBody": {
+    "placeholders": {
+      "title": {},
+      "steps": {},
+      "distance": {},
+      "time": {}
+    }
+  },
+  "startHunt": "Find this place",
+  "huntInProgress": "Search in progress",
+  "huntNeedsLocation": "Turn on location to start a search",
+  "openSource": "Open on {source}",
+  "@openSource": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "linksLabel": "Links",
+  "authorLabel": "Author",
+  "distanceFromYou": "{distance} from you",
+  "@distanceFromYou": {
+    "placeholders": {
+      "distance": {}
+    }
+  },
+  "placeQrTitle": "QR code for this place",
+  "placeQrHint": "Print it and put it on site — other explorers can scan it.",
+  "attribution": "Data: {source} · {license}",
+  "@attribution": {
+    "placeholders": {
+      "source": {},
+      "license": {}
+    }
+  },
+  "deletePlace": "Delete place",
+  "detailsLoadError": "Couldn't load the full description",
+  "noDescription": "No description yet.",
+  "showOnMap": "Show on map",
+  "sourceUser": "My places",
+  "catMonument": "Monuments",
+  "catMemorial": "Memorials",
+  "catBuilding": "Buildings",
+  "catReligious": "Churches",
+  "catMuseum": "Museums",
+  "catArchaeology": "Archaeology",
+  "catFortification": "Fortifications",
+  "catPhoto": "Retro photos",
+  "catArticle": "Articles",
+  "catOther": "Other",
+  "manualInput": "Enter code",
+  "enterQrHint": "Paste a link to Wikipedia, PastVu, OSM…",
+  "submit": "Open",
+  "scanHistory": "Recent scans",
+  "noScansYet": "Nothing scanned yet",
+  "qrUnknown": "This code doesn't point to a place",
+  "qrExternal": "This code contains a link",
+  "openLink": "Open link",
+  "resolvingPlace": "Looking up the place…",
+  "placeNotFound": "Place not found",
+  "scannerHint": "Point at a QR code on a plaque or a link to Wikipedia / PastVu / OSM",
+  "addPlaceTitle": "New place",
+  "descriptionField": "Description",
+  "yearField": "Year",
+  "useMyLocation": "Use my location",
+  "placeSaved": "Place saved on this device",
+  "invalidYear": "Enter a valid year",
+  "statsTitle": "Statistics",
+  "statsLocalOnly": "Everything is stored on this device only",
+  "statsEstimated": "No step sensor — steps are estimated from distance",
+  "statsToday": "Today",
+  "statsGoal": "{percent}% of daily goal ({goal})",
+  "@statsGoal": {
+    "placeholders": {
+      "percent": {},
+      "goal": {}
+    }
+  },
+  "statsMovement": "Movement",
+  "statsSteps": "Steps",
+  "statsDistance": "Distance",
+  "statsActiveTime": "Active time",
+  "statsCalories": "Calories",
+  "statsAvgDaily": "Avg per day",
+  "statsBestDay": "Best day",
+  "statsGoalDays": "Goal reached",
+  "statsMaxSpeed": "Top speed",
+  "statsLongestDay": "Longest walk",
+  "statsStreak": "Current streak",
+  "statsLongestStreak": "Longest streak",
+  "statsActiveDays": "Active days",
+  "statsDays": "{count} d",
+  "@statsDays": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "stats30Days": "Steps, last 30 days",
+  "statsByHour": "When you walk (by hour)",
+  "statsByWeekday": "By weekday",
+  "statsMostActive": "Most active: {day}, around {hour}:00",
+  "@statsMostActive": {
+    "placeholders": {
+      "day": {},
+      "hour": {}
+    }
+  },
+  "statsDiscoveries": "Discoveries",
+  "statsVisitsTotal": "Places discovered",
+  "statsVisitsWeek": "This week",
+  "statsBySource": "By source",
+  "statsByCategory": "By category",
+  "statsByMethod": "How confirmed",
+  "methodQr": "QR scan",
+  "methodGeofence": "Arrived (GPS)",
+  "methodManual": "Marked manually",
+  "statsFirstDiscovery": "First discovery",
+  "statsLastDiscovery": "Latest discovery",
+  "statsOldestYear": "Oldest era touched",
+  "statsHunts": "Searches",
+  "statsHuntsTotal": "Started",
+  "statsHuntsFound": "Found",
+  "statsHuntsAbandoned": "Gave up",
+  "statsSuccessRate": "Success rate",
+  "statsAvgStepsHunt": "Steps per search",
+  "statsAvgDistanceHunt": "Distance per search",
+  "statsAvgTimeHunt": "Time per search",
+  "statsTotalHuntSteps": "Steps while searching",
+  "statsDetour": "Detour ratio",
+  "statsDetourHint": "Walked ÷ straight-line distance. 1.0 = perfect path",
+  "statsFewestSteps": "Fewest steps",
+  "statsMostSteps": "Most steps",
+  "statsFastest": "Fastest find",
+  "statsRecentHunts": "Recent searches",
+  "huntStatusFound": "found",
+  "huntStatusAbandoned": "gave up",
+  "huntStatusActive": "in progress",
+  "statsEngagement": "Curiosity",
+  "statsScans": "QR scans",
+  "statsUniqueScans": "Unique codes",
+  "statsViews": "Places opened",
+  "statsUniqueViews": "Unique places read",
+  "statsFavorites": "In favorites",
+  "statsUserPlaces": "Places added",
+  "statsPlacesLoaded": "Places fetched from sources",
+  "statsExploration": "Exploration",
+  "statsExploredArea": "Area explored",
+  "statsExploredCells": "Map cells visited",
+  "statsStepsPerDiscovery": "Steps per discovery",
+  "statsMetersPerDiscovery": "Distance per discovery",
+  "statsAchievements": "Achievements {unlocked}/{total}",
+  "@statsAchievements": {
+    "placeholders": {
+      "unlocked": {},
+      "total": {}
+    }
+  },
+  "statsReset": "Reset statistics",
+  "statsResetConfirm": "All steps, routes, searches and discoveries will be deleted from this device. Favorites and your places stay.",
+  "statsResetDone": "Statistics cleared",
+  "statsEmpty": "Go for a walk — stats will appear here",
+  "noData": "—",
+  "unitM": "m",
+  "unitKm": "km",
+  "unitH": "h",
+  "unitMin": "min",
+  "unitS": "s",
+  "unitKmh": "km/h",
+  "unitKcal": "kcal",
+  "unitKm2": "km²",
+  "achFirstDiscovery": "First find",
+  "achFirstDiscoveryDesc": "Discover your first place",
+  "achTenDiscoveries": "Local historian",
+  "achTenDiscoveriesDesc": "Discover 10 places",
+  "achFiftyDiscoveries": "Chronicler",
+  "achFiftyDiscoveriesDesc": "Discover 50 places",
+  "achFirstHunt": "Pathfinder",
+  "achFirstHuntDesc": "Complete a search",
+  "achFiveHunts": "Treasure hunter",
+  "achFiveHuntsDesc": "Complete 5 searches",
+  "achStraightShooter": "Straight to the point",
+  "achStraightShooterDesc": "Find a place with detour ratio ≤ 1.3",
+  "achTenKDay": "10,000 steps",
+  "achTenKDayDesc": "Walk 10,000 steps in one day",
+  "achHundredKTotal": "Centurion",
+  "achHundredKTotalDesc": "100,000 steps in total",
+  "achMarathon": "Marathon",
+  "achMarathonDesc": "Walk 42.2 km in total",
+  "achExplorer": "Explorer",
+  "achExplorerDesc": "Explore 1 km² of the map",
+  "achScanner": "Code breaker",
+  "achScannerDesc": "Scan 10 QR codes",
+  "achAllSources": "Polymath",
+  "achAllSourcesDesc": "Discover a place from every source",
+  "achWeekStreak": "Week of history",
+  "achWeekStreakDesc": "Be active 7 days in a row",
+  "achTimeTraveler": "Time traveler",
+  "achTimeTravelerDesc": "Discover something from before 1917",
+  "achCurator": "Curator",
+  "achCuratorDesc": "Save 10 favorites",
+  "achCartographer": "Cartographer",
+  "achCartographerDesc": "Add 3 places of your own",
+  "sectionSources": "Data sources",
+  "sectionTracking": "Tracking",
+  "searchRadius": "Search radius",
+  "backgroundTracking": "Background tracking",
+  "backgroundTrackingSubtitle": "Keep counting steps and route with the screen off (shows a notification)",
+  "autoTracking": "Start tracking automatically",
+  "autoTrackingSubtitle": "When the map opens",
+  "dailyGoal": "Daily step goal",
+  "stepLength": "Step length",
+  "unitCm": "cm",
+  "geofenceRadius": "Arrival radius",
+  "geofenceRadiusSubtitle": "How close counts as \"found\"",
+  "sourcePastvuDesc": "Retro photos from a community of local historians",
+  "sourceWikipediaDesc": "Articles about places nearby",
+  "sourceWikidataDesc": "Registered cultural heritage sites",
+  "sourceOsmDesc": "Monuments, memorials, ruins from OpenStreetMap",
+  "aboutTitle": "About QStory",
+  "aboutTagline": "Discover history around you",
+  "aboutDescription": "QStory finds historical places, retro photos and heritage sites around you using open data from history communities and encyclopedias. Pick a place, walk to it, and track how far you went to find it.",
+  "aboutDataTitle": "Where the data comes from",
+  "aboutPrivacyTitle": "Privacy",
+  "aboutPrivacyText": "No accounts, no servers of our own. Your location, steps, routes and statistics never leave the device. The app only sends map coordinates to the public open-data APIs listed above to find places nearby.",
+  "aboutLicenseTitle": "License",
+  "aboutSourceCode": "Source code",
+  "aboutReportIssue": "Report an issue",
+  "aboutTeam": "Team",
+  "openSourceLicenses": "Open-source licenses",
+  "explorerTitle": "Explorer",
+  "statsOpen": "Open statistics",
+  "openEmailFailed": "No email app found. Write to {email}",
+  "@openEmailFailed": {
+    "placeholders": {
+      "email": {}
+    }
+  },
+  "emailOpened": "Opening your email app…",
+  "locationNeeded": "Location is needed for the map and tracking",
+  "visited": "Visited",
+  "details": "Details",
+  "huntEta": "≈ {time} · ≈ {steps} steps to go",
+  "@huntEta": {
+    "placeholders": {
+      "time": {},
+      "steps": {}
+    }
+  },
+  "nearbyTitle": "{count, plural, =0{No places nearby} =1{1 place nearby} other{{count} places nearby}}",
+  "@nearbyTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearbyFromMapCenter": "Distances from the map centre — turn on location for distances from you.",
+  "nearbyEmpty": "Nothing found here yet. Move the map or widen the search radius in Settings.",
+  "nearbyAction": "Places list",
+  "share": "Share",
+  "directions": "Walk there",
+  "directionsUnavailable": "No map app could open the route",
+  "exportData": "Export my data (JSON)",
+  "exportSubject": "QStory — my data",
+  "exportFailed": "Could not export the data",
+  "statsGoalReached": "Daily goal reached!",
+  "statsStepsToGoal": "{steps} steps to the goal",
+  "@statsStepsToGoal": {
+    "placeholders": {
+      "steps": {}
+    }
+  },
+  "statsWeekSteps": "Steps, last 7 days",
+  "statsWeekDistance": "Distance, last 7 days",
+  "statsWeekHint": "Previous 7 days: {value}",
+  "@statsWeekHint": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "milestoneGoal": "Daily goal reached: {goal} steps!",
+  "@milestoneGoal": {
+    "placeholders": {
+      "goal": {}
+    }
+  },
+  "milestoneAchievement": "New achievement: {name}",
+  "@milestoneAchievement": {
+    "placeholders": {
+      "name": {}
+    }
+  }
+}
