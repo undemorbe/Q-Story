@@ -1,8 +1,5 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
+import '../constants/app_info.dart';
+import 'mail_launcher.dart';
 
 enum ReportCategory {
   vandalism,
@@ -19,125 +16,75 @@ enum ReportCategory {
   other,
 }
 
+/// Lets users report a wrong or harmful place through their email client.
 class ReportService {
-  late final String _smtpUser;
-  late final String _smtpPassword;
-  late final String _supportEmail;
+  ReportService(this._mail, {this.supportEmail = AppInfo.supportEmail});
 
-  ReportService() {
-    _smtpUser = dotenv.get('SMTP_USER', fallback: '');
-    _smtpPassword = dotenv.get('SMTP_PASSWORD', fallback: '');
-    _supportEmail = dotenv.get('SUPPORT_EMAIL', fallback: '');
-  }
+  final MailLauncher _mail;
+  final String supportEmail;
 
-  /// Get localized category label for display
+  static const int maxLength = 500;
+
   String getCategoryLabel(ReportCategory category, String languageCode) {
-    final isRussian = languageCode == 'ru';
+    final ru = languageCode == 'ru';
     return switch (category) {
-      ReportCategory.vandalism => isRussian ? 'Вандализм' : 'Vandalism',
-      ReportCategory.misinformation => isRussian ? 'Дезинформация' : 'Misinformation',
-      ReportCategory.offensive => isRussian ? 'Оскорбительный контент' : 'Offensive content',
-      ReportCategory.spam => isRussian ? 'Спам' : 'Spam',
-      ReportCategory.copyright => isRussian ? 'Нарушение авторских прав' : 'Copyright violation',
-      ReportCategory.adult => isRussian ? 'Взрослый контент' : 'Adult content',
-      ReportCategory.hate => isRussian ? 'Разжигание ненависти' : 'Hate speech',
-      ReportCategory.fraud => isRussian ? 'Мошенничество' : 'Fraud',
-      ReportCategory.malware => isRussian ? 'Вредоносное ПО/угроза' : 'Malware/Security threat',
-      ReportCategory.privacy => isRussian ? 'Нарушение приватности' : 'Privacy violation',
-      ReportCategory.invalid => isRussian ? 'Неверная информация' : 'Invalid information',
-      ReportCategory.other => isRussian ? 'Другое' : 'Other',
+      ReportCategory.vandalism => ru ? 'Вандализм' : 'Vandalism',
+      ReportCategory.misinformation => ru ? 'Дезинформация' : 'Misinformation',
+      ReportCategory.offensive => ru ? 'Оскорбительный контент' : 'Offensive content',
+      ReportCategory.spam => ru ? 'Спам' : 'Spam',
+      ReportCategory.copyright => ru ? 'Нарушение авторских прав' : 'Copyright violation',
+      ReportCategory.adult => ru ? 'Взрослый контент' : 'Adult content',
+      ReportCategory.hate => ru ? 'Разжигание ненависти' : 'Hate speech',
+      ReportCategory.fraud => ru ? 'Мошенничество' : 'Fraud',
+      ReportCategory.malware => ru ? 'Вредоносное ПО/угроза' : 'Malware/Security threat',
+      ReportCategory.privacy => ru ? 'Нарушение приватности' : 'Privacy violation',
+      ReportCategory.invalid => ru ? 'Неверная информация' : 'Invalid information',
+      ReportCategory.other => ru ? 'Другое' : 'Other',
     };
   }
 
-  /// Validates and sends a report via email
-  ///
-  /// The email is sent with the category label in English for admin consistency,
-  /// regardless of the user's language preference. Users see the localized
-  /// category name in the ReportSheet UI on the client side.
-  ///
-  /// Throws [ArgumentError] if:
-  /// - Marker ID is empty or contains only whitespace
-  /// - Marker title is empty or contains only whitespace
-  /// - Report text is empty or contains only whitespace
-  /// - Report text exceeds 500 characters
-  ///
-  /// Throws general exception with descriptive message if SMTP sending fails
+  /// Builds the report body. The category is always in English so the
+  /// maintainers get consistent reports regardless of UI language.
+  String buildBody({
+    required String markerId,
+    required String markerTitle,
+    required ReportCategory category,
+    required String text,
+    DateTime? now,
+  }) =>
+      '''
+Report
+======
+Place ID: $markerId
+Title: $markerTitle
+Category: ${getCategoryLabel(category, 'en')}
+Created: ${(now ?? DateTime.now()).toIso8601String()}
+
+$text
+
+—
+${AppInfo.name} ${AppInfo.version}
+''';
+
+  /// Throws [ArgumentError] on invalid input and [MailUnavailableException]
+  /// if no email app is available.
   Future<void> sendReport({
     required String markerId,
     required String markerTitle,
     required ReportCategory category,
     required String text,
   }) async {
-    // Trim whitespace
-    final trimmedText = text.trim();
-    final trimmedId = markerId.trim();
-    final trimmedTitle = markerTitle.trim();
+    final t = text.trim(), id = markerId.trim(), title = markerTitle.trim();
+    if (id.isEmpty) throw ArgumentError('Marker ID cannot be empty');
+    if (title.isEmpty) throw ArgumentError('Marker title cannot be empty');
+    if (t.isEmpty) throw ArgumentError('Report text cannot be empty');
+    if (t.length > maxLength) throw ArgumentError('Report text cannot exceed $maxLength characters');
 
-    // Validate: empty fields
-    if (trimmedId.isEmpty) {
-      throw ArgumentError('Marker ID cannot be empty');
-    }
-    if (trimmedTitle.isEmpty) {
-      throw ArgumentError('Marker title cannot be empty');
-    }
-    if (trimmedText.isEmpty) {
-      throw ArgumentError('Report text cannot be empty');
-    }
-
-    // Validate: max 500 characters
-    if (trimmedText.length > 500) {
-      throw ArgumentError('Report text cannot exceed 500 characters');
-    }
-
-    // Build email body with timestamp
-    final timestamp = DateTime.now().toIso8601String();
-    // Hardcode EN for admin emails for consistency across user languages.
-    // Users see localized category names in the UI (ReportSheet).
-    final categoryLabel = getCategoryLabel(category, 'en');
-    final emailBody = '''
-Report Submission
-=================
-Marker/Card ID: $trimmedId
-Title: $trimmedTitle
-Category: $categoryLabel
-Received: $timestamp
-
-Report:
-$trimmedText
-''';
-
-    try {
-      // Create SMTP server connection
-      final smtpServer = gmailSaslXoauth2(_smtpUser, _smtpPassword);
-
-      // Build email
-      final email = Message()
-        ..from = Address(_smtpUser)
-        ..recipients.add(_supportEmail)
-        ..subject = 'User Report'
-        ..text = emailBody;
-
-      // Send email
-      await send(email, smtpServer);
-    } on MailerException catch (e) {
-      // Handle mailer-specific exceptions
-      if (e.toString().contains('connection')) {
-        throw Exception('Network error. Check internet connection.');
-      } else if (e.toString().contains('auth') || e.toString().contains('authentication')) {
-        throw Exception('Email service misconfigured');
-      } else {
-        throw Exception('Failed to send message');
-      }
-    } on SocketException catch (_) {
-      // Handle socket/network errors
-      throw Exception('Network error. Check internet connection.');
-    } on TimeoutException catch (_) {
-      // Handle timeout errors
-      throw Exception('Request timeout');
-    } catch (e) {
-      // Generic error handler
-      throw Exception('Failed to send message');
-    }
+    final ok = await _mail.compose(
+      to: supportEmail,
+      subject: '${AppInfo.name} report: $title',
+      body: buildBody(markerId: id, markerTitle: title, category: category, text: t),
+    );
+    if (!ok) throw MailUnavailableException(supportEmail);
   }
-
 }

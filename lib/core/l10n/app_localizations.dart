@@ -62,8 +62,7 @@ import 'app_localizations_ru.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,8 +82,7 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -93,22 +90,13 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('ru')
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('ru')];
 
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
   /// **'QStory'**
   String get appTitle;
-
-  /// No description provided for @generateQr.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate QR'**
-  String get generateQr;
 
   /// No description provided for @scanQr.
   ///
@@ -164,12 +152,6 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get save;
 
-  /// No description provided for @scanResult.
-  ///
-  /// In en, this message translates to:
-  /// **'Scan Result'**
-  String get scanResult;
-
   /// No description provided for @settings.
   ///
   /// In en, this message translates to:
@@ -212,130 +194,40 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get navProfile;
 
-  /// No description provided for @loginTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome Back'**
-  String get loginTitle;
-
-  /// No description provided for @loginSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your credentials to continue'**
-  String get loginSubtitle;
-
-  /// No description provided for @emailLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Email'**
-  String get emailLabel;
-
-  /// No description provided for @passwordLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get passwordLabel;
-
-  /// No description provided for @rememberMe.
-  ///
-  /// In en, this message translates to:
-  /// **'Remember Me'**
-  String get rememberMe;
-
-  /// No description provided for @forgotPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Forgot Password?'**
-  String get forgotPassword;
-
-  /// No description provided for @loginButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Login'**
-  String get loginButton;
-
-  /// No description provided for @loginWithBiometrics.
-  ///
-  /// In en, this message translates to:
-  /// **'Login with Biometrics'**
-  String get loginWithBiometrics;
-
-  /// No description provided for @noAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Don\'t have an account?'**
-  String get noAccount;
-
-  /// No description provided for @registerLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get registerLink;
-
-  /// No description provided for @registerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Account'**
-  String get registerTitle;
-
-  /// No description provided for @registerSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Begin your journey'**
-  String get registerSubtitle;
-
-  /// No description provided for @usernameLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Username'**
-  String get usernameLabel;
-
-  /// No description provided for @alreadyHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Already have an account?'**
-  String get alreadyHaveAccount;
-
-  /// No description provided for @loginLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Login'**
-  String get loginLink;
-
   /// No description provided for @onboarding1Title.
   ///
   /// In en, this message translates to:
-  /// **'Discover History'**
+  /// **'Discover'**
   String get onboarding1Title;
 
   /// No description provided for @onboarding1Desc.
   ///
   /// In en, this message translates to:
-  /// **'Explore historical events and figures from around the world.'**
+  /// **'Historical places, retro photos and heritage sites around you — from open history communities.'**
   String get onboarding1Desc;
 
   /// No description provided for @onboarding2Title.
   ///
   /// In en, this message translates to:
-  /// **'Scan QR Codes'**
+  /// **'Search'**
   String get onboarding2Title;
 
   /// No description provided for @onboarding2Desc.
   ///
   /// In en, this message translates to:
-  /// **'Scan QR codes at museums and historical sites to unlock content.'**
+  /// **'Pick a place and walk to it. QStory tracks your route and steps until you arrive.'**
   String get onboarding2Desc;
 
   /// No description provided for @onboarding3Title.
   ///
   /// In en, this message translates to:
-  /// **'Save Favorites'**
+  /// **'Remember'**
   String get onboarding3Title;
 
   /// No description provided for @onboarding3Desc.
   ///
   /// In en, this message translates to:
-  /// **'Keep track of your favorite historical moments.'**
+  /// **'Scan QR plaques, collect discoveries and watch your statistics grow — all stored only on your phone.'**
   String get onboarding3Desc;
 
   /// No description provided for @continueButton.
@@ -349,24 +241,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Begin'**
   String get beginButton;
-
-  /// No description provided for @chroniclesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Chronicles'**
-  String get chroniclesTitle;
-
-  /// No description provided for @searchHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Search the chronicles...'**
-  String get searchHint;
-
-  /// No description provided for @noRecordsFound.
-  ///
-  /// In en, this message translates to:
-  /// **'No records found'**
-  String get noRecordsFound;
 
   /// No description provided for @favoritesTitle.
   ///
@@ -385,18 +259,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get profileTitle;
-
-  /// No description provided for @scanned.
-  ///
-  /// In en, this message translates to:
-  /// **'Scanned'**
-  String get scanned;
-
-  /// No description provided for @visited.
-  ///
-  /// In en, this message translates to:
-  /// **'Visited'**
-  String get visited;
 
   /// No description provided for @favorites.
   ///
@@ -524,48 +386,6 @@ abstract class AppLocalizations {
   /// **'Preferences'**
   String get preferences;
 
-  /// No description provided for @dataSaver.
-  ///
-  /// In en, this message translates to:
-  /// **'Data Saver'**
-  String get dataSaver;
-
-  /// No description provided for @dataSaverSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Reduce image quality'**
-  String get dataSaverSubtitle;
-
-  /// No description provided for @data.
-  ///
-  /// In en, this message translates to:
-  /// **'Data'**
-  String get data;
-
-  /// No description provided for @exportData.
-  ///
-  /// In en, this message translates to:
-  /// **'Export Data'**
-  String get exportData;
-
-  /// No description provided for @importData.
-  ///
-  /// In en, this message translates to:
-  /// **'Import Data'**
-  String get importData;
-
-  /// No description provided for @dataExported.
-  ///
-  /// In en, this message translates to:
-  /// **'Data exported successfully'**
-  String get dataExported;
-
-  /// No description provided for @dataImported.
-  ///
-  /// In en, this message translates to:
-  /// **'Data imported successfully'**
-  String get dataImported;
-
   /// No description provided for @about.
   ///
   /// In en, this message translates to:
@@ -595,12 +415,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'English'**
   String get english;
-
-  /// No description provided for @enterData.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter Data'**
-  String get enterData;
 
   /// No description provided for @notifSettingsTitle.
   ///
@@ -680,24 +494,6 @@ abstract class AppLocalizations {
   /// **'Daily notifications activated at {time}'**
   String dailyNotificationsActivated(String time);
 
-  /// No description provided for @createMarkerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Marker'**
-  String get createMarkerTitle;
-
-  /// No description provided for @markerSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Map Marker'**
-  String get markerSection;
-
-  /// No description provided for @buildingSection.
-  ///
-  /// In en, this message translates to:
-  /// **'Object (QR)'**
-  String get buildingSection;
-
   /// No description provided for @titleField.
   ///
   /// In en, this message translates to:
@@ -709,60 +505,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Type'**
   String get typeField;
-
-  /// No description provided for @markerCompressedField.
-  ///
-  /// In en, this message translates to:
-  /// **'Compressed description (marker)'**
-  String get markerCompressedField;
-
-  /// No description provided for @buildingNameField.
-  ///
-  /// In en, this message translates to:
-  /// **'Object name'**
-  String get buildingNameField;
-
-  /// No description provided for @buildingCompressedField.
-  ///
-  /// In en, this message translates to:
-  /// **'Compressed description'**
-  String get buildingCompressedField;
-
-  /// No description provided for @descTopField.
-  ///
-  /// In en, this message translates to:
-  /// **'Upper description'**
-  String get descTopField;
-
-  /// No description provided for @descMainField.
-  ///
-  /// In en, this message translates to:
-  /// **'Main description'**
-  String get descMainField;
-
-  /// No description provided for @descBottomField.
-  ///
-  /// In en, this message translates to:
-  /// **'Lower description'**
-  String get descBottomField;
-
-  /// No description provided for @personField.
-  ///
-  /// In en, this message translates to:
-  /// **'Related person'**
-  String get personField;
-
-  /// No description provided for @dateStartField.
-  ///
-  /// In en, this message translates to:
-  /// **'Start date'**
-  String get dateStartField;
-
-  /// No description provided for @dateEndField.
-  ///
-  /// In en, this message translates to:
-  /// **'End date'**
-  String get dateEndField;
 
   /// No description provided for @imageUrlField.
   ///
@@ -776,30 +518,6 @@ abstract class AppLocalizations {
   /// **'Coordinates'**
   String get coordinatesLabel;
 
-  /// No description provided for @resourcesLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'SOURCES'**
-  String get resourcesLabel;
-
-  /// No description provided for @resourceItem.
-  ///
-  /// In en, this message translates to:
-  /// **'Source {n}'**
-  String resourceItem(int n);
-
-  /// No description provided for @addResource.
-  ///
-  /// In en, this message translates to:
-  /// **'Add source'**
-  String get addResource;
-
-  /// No description provided for @atLeastOneResource.
-  ///
-  /// In en, this message translates to:
-  /// **'Add at least one source'**
-  String get atLeastOneResource;
-
   /// No description provided for @fieldRequired.
   ///
   /// In en, this message translates to:
@@ -811,24 +529,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select date'**
   String get selectDate;
-
-  /// No description provided for @submittingLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Submitting…'**
-  String get submittingLabel;
-
-  /// No description provided for @publishButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Publish'**
-  String get publishButton;
-
-  /// No description provided for @markerPublished.
-  ///
-  /// In en, this message translates to:
-  /// **'Marker published'**
-  String get markerPublished;
 
   /// No description provided for @pickPointTitle.
   ///
@@ -908,12 +608,6 @@ abstract class AppLocalizations {
   /// **'Source: Wikipedia · {count} facts'**
   String wikipediaSourceWithCount(int count);
 
-  /// No description provided for @refreshingMap.
-  ///
-  /// In en, this message translates to:
-  /// **'Refreshing the map…'**
-  String get refreshingMap;
-
   /// No description provided for @locationDisabled.
   ///
   /// In en, this message translates to:
@@ -944,41 +638,11 @@ abstract class AppLocalizations {
   /// **'Filters'**
   String get filtersTitle;
 
-  /// No description provided for @statusFilter.
-  ///
-  /// In en, this message translates to:
-  /// **'Status'**
-  String get statusFilter;
-
   /// No description provided for @filterAll.
   ///
   /// In en, this message translates to:
   /// **'All'**
   String get filterAll;
-
-  /// No description provided for @filterCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Completed'**
-  String get filterCompleted;
-
-  /// No description provided for @filterNotCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Not completed'**
-  String get filterNotCompleted;
-
-  /// No description provided for @markAsCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Mark as completed'**
-  String get markAsCompleted;
-
-  /// No description provided for @markedAsCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Marked as completed!'**
-  String get markedAsCompleted;
 
   /// No description provided for @report.
   ///
@@ -1093,10 +757,1311 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get reportCategoryOther;
+
+  /// No description provided for @navStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get navStats;
+
+  /// No description provided for @trackingOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking on'**
+  String get trackingOn;
+
+  /// No description provided for @trackingOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking off'**
+  String get trackingOff;
+
+  /// No description provided for @startTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tracking'**
+  String get startTracking;
+
+  /// No description provided for @stopTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop tracking'**
+  String get stopTracking;
+
+  /// No description provided for @followMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow me'**
+  String get followMe;
+
+  /// No description provided for @stepsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} steps today'**
+  String stepsToday(Object count);
+
+  /// No description provided for @placesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} places'**
+  String placesCount(Object count);
+
+  /// No description provided for @loadingPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for history around…'**
+  String get loadingPlaces;
+
+  /// No description provided for @sourcesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable: {sources}'**
+  String sourcesUnavailable(Object sources);
+
+  /// No description provided for @offlineCache.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline — showing saved places'**
+  String get offlineCache;
+
+  /// No description provided for @searchPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Search places'**
+  String get searchPlaces;
+
+  /// No description provided for @searchHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Search this area'**
+  String get searchHere;
+
+  /// No description provided for @filterVisited.
+  ///
+  /// In en, this message translates to:
+  /// **'Visited'**
+  String get filterVisited;
+
+  /// No description provided for @filterNotVisited.
+  ///
+  /// In en, this message translates to:
+  /// **'Not visited'**
+  String get filterNotVisited;
+
+  /// No description provided for @visitFilterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get visitFilterLabel;
+
+  /// No description provided for @sourcesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sources'**
+  String get sourcesLabel;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// No description provided for @resetFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get resetFilters;
+
+  /// No description provided for @addMyPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Add my place'**
+  String get addMyPlace;
+
+  /// No description provided for @nearPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'You are next to «{title}»'**
+  String nearPlace(Object title);
+
+  /// No description provided for @markVisited.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m here — mark as visited'**
+  String get markVisited;
+
+  /// No description provided for @markedVisited.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to your discoveries'**
+  String get markedVisited;
+
+  /// No description provided for @visitedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Visited'**
+  String get visitedBadge;
+
+  /// No description provided for @huntSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching: {title}'**
+  String huntSearching(Object title);
+
+  /// No description provided for @huntLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{distance} left'**
+  String huntLeft(Object distance);
+
+  /// No description provided for @huntGiveUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Give up'**
+  String get huntGiveUp;
+
+  /// No description provided for @huntFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Found!'**
+  String get huntFoundTitle;
+
+  /// No description provided for @huntFoundBody.
+  ///
+  /// In en, this message translates to:
+  /// **'«{title}»: {steps} steps, {distance}, {time}'**
+  String huntFoundBody(Object title, Object steps, Object distance, Object time);
+
+  /// No description provided for @startHunt.
+  ///
+  /// In en, this message translates to:
+  /// **'Find this place'**
+  String get startHunt;
+
+  /// No description provided for @huntInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Search in progress'**
+  String get huntInProgress;
+
+  /// No description provided for @huntNeedsLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on location to start a search'**
+  String get huntNeedsLocation;
+
+  /// No description provided for @openSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Open on {source}'**
+  String openSource(Object source);
+
+  /// No description provided for @linksLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Links'**
+  String get linksLabel;
+
+  /// No description provided for @authorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get authorLabel;
+
+  /// No description provided for @distanceFromYou.
+  ///
+  /// In en, this message translates to:
+  /// **'{distance} from you'**
+  String distanceFromYou(Object distance);
+
+  /// No description provided for @placeQrTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code for this place'**
+  String get placeQrTitle;
+
+  /// No description provided for @placeQrHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Print it and put it on site — other explorers can scan it.'**
+  String get placeQrHint;
+
+  /// No description provided for @attribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Data: {source} · {license}'**
+  String attribution(Object source, Object license);
+
+  /// No description provided for @deletePlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete place'**
+  String get deletePlace;
+
+  /// No description provided for @detailsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the full description'**
+  String get detailsLoadError;
+
+  /// No description provided for @noDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No description yet.'**
+  String get noDescription;
+
+  /// No description provided for @showOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on map'**
+  String get showOnMap;
+
+  /// No description provided for @sourceUser.
+  ///
+  /// In en, this message translates to:
+  /// **'My places'**
+  String get sourceUser;
+
+  /// No description provided for @catMonument.
+  ///
+  /// In en, this message translates to:
+  /// **'Monuments'**
+  String get catMonument;
+
+  /// No description provided for @catMemorial.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorials'**
+  String get catMemorial;
+
+  /// No description provided for @catBuilding.
+  ///
+  /// In en, this message translates to:
+  /// **'Buildings'**
+  String get catBuilding;
+
+  /// No description provided for @catReligious.
+  ///
+  /// In en, this message translates to:
+  /// **'Churches'**
+  String get catReligious;
+
+  /// No description provided for @catMuseum.
+  ///
+  /// In en, this message translates to:
+  /// **'Museums'**
+  String get catMuseum;
+
+  /// No description provided for @catArchaeology.
+  ///
+  /// In en, this message translates to:
+  /// **'Archaeology'**
+  String get catArchaeology;
+
+  /// No description provided for @catFortification.
+  ///
+  /// In en, this message translates to:
+  /// **'Fortifications'**
+  String get catFortification;
+
+  /// No description provided for @catPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Retro photos'**
+  String get catPhoto;
+
+  /// No description provided for @catArticle.
+  ///
+  /// In en, this message translates to:
+  /// **'Articles'**
+  String get catArticle;
+
+  /// No description provided for @catOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get catOther;
+
+  /// No description provided for @manualInput.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter code'**
+  String get manualInput;
+
+  /// No description provided for @enterQrHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a link to Wikipedia, PastVu, OSM…'**
+  String get enterQrHint;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get submit;
+
+  /// No description provided for @scanHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent scans'**
+  String get scanHistory;
+
+  /// No description provided for @noScansYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing scanned yet'**
+  String get noScansYet;
+
+  /// No description provided for @qrUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'This code doesn\'t point to a place'**
+  String get qrUnknown;
+
+  /// No description provided for @qrExternal.
+  ///
+  /// In en, this message translates to:
+  /// **'This code contains a link'**
+  String get qrExternal;
+
+  /// No description provided for @openLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Open link'**
+  String get openLink;
+
+  /// No description provided for @resolvingPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking up the place…'**
+  String get resolvingPlace;
+
+  /// No description provided for @placeNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Place not found'**
+  String get placeNotFound;
+
+  /// No description provided for @scannerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Point at a QR code on a plaque or a link to Wikipedia / PastVu / OSM'**
+  String get scannerHint;
+
+  /// No description provided for @addPlaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New place'**
+  String get addPlaceTitle;
+
+  /// No description provided for @descriptionField.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get descriptionField;
+
+  /// No description provided for @yearField.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get yearField;
+
+  /// No description provided for @useMyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my location'**
+  String get useMyLocation;
+
+  /// No description provided for @placeSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Place saved on this device'**
+  String get placeSaved;
+
+  /// No description provided for @invalidYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid year'**
+  String get invalidYear;
+
+  /// No description provided for @statsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statsTitle;
+
+  /// No description provided for @statsLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything is stored on this device only'**
+  String get statsLocalOnly;
+
+  /// No description provided for @statsEstimated.
+  ///
+  /// In en, this message translates to:
+  /// **'No step sensor — steps are estimated from distance'**
+  String get statsEstimated;
+
+  /// No description provided for @statsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get statsToday;
+
+  /// No description provided for @statsGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% of daily goal ({goal})'**
+  String statsGoal(Object percent, Object goal);
+
+  /// No description provided for @statsMovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement'**
+  String get statsMovement;
+
+  /// No description provided for @statsSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get statsSteps;
+
+  /// No description provided for @statsDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get statsDistance;
+
+  /// No description provided for @statsActiveTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Active time'**
+  String get statsActiveTime;
+
+  /// No description provided for @statsCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get statsCalories;
+
+  /// No description provided for @statsAvgDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg per day'**
+  String get statsAvgDaily;
+
+  /// No description provided for @statsBestDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Best day'**
+  String get statsBestDay;
+
+  /// No description provided for @statsGoalDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached'**
+  String get statsGoalDays;
+
+  /// No description provided for @statsMaxSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Top speed'**
+  String get statsMaxSpeed;
+
+  /// No description provided for @statsLongestDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest walk'**
+  String get statsLongestDay;
+
+  /// No description provided for @statsStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current streak'**
+  String get statsStreak;
+
+  /// No description provided for @statsLongestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest streak'**
+  String get statsLongestStreak;
+
+  /// No description provided for @statsActiveDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Active days'**
+  String get statsActiveDays;
+
+  /// No description provided for @statsDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} d'**
+  String statsDays(Object count);
+
+  /// No description provided for @stats30Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps, last 30 days'**
+  String get stats30Days;
+
+  /// No description provided for @statsByHour.
+  ///
+  /// In en, this message translates to:
+  /// **'When you walk (by hour)'**
+  String get statsByHour;
+
+  /// No description provided for @statsByWeekday.
+  ///
+  /// In en, this message translates to:
+  /// **'By weekday'**
+  String get statsByWeekday;
+
+  /// No description provided for @statsMostActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Most active: {day}, around {hour}:00'**
+  String statsMostActive(Object day, Object hour);
+
+  /// No description provided for @statsDiscoveries.
+  ///
+  /// In en, this message translates to:
+  /// **'Discoveries'**
+  String get statsDiscoveries;
+
+  /// No description provided for @statsVisitsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Places discovered'**
+  String get statsVisitsTotal;
+
+  /// No description provided for @statsVisitsWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get statsVisitsWeek;
+
+  /// No description provided for @statsBySource.
+  ///
+  /// In en, this message translates to:
+  /// **'By source'**
+  String get statsBySource;
+
+  /// No description provided for @statsByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'By category'**
+  String get statsByCategory;
+
+  /// No description provided for @statsByMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'How confirmed'**
+  String get statsByMethod;
+
+  /// No description provided for @methodQr.
+  ///
+  /// In en, this message translates to:
+  /// **'QR scan'**
+  String get methodQr;
+
+  /// No description provided for @methodGeofence.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrived (GPS)'**
+  String get methodGeofence;
+
+  /// No description provided for @methodManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked manually'**
+  String get methodManual;
+
+  /// No description provided for @statsFirstDiscovery.
+  ///
+  /// In en, this message translates to:
+  /// **'First discovery'**
+  String get statsFirstDiscovery;
+
+  /// No description provided for @statsLastDiscovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest discovery'**
+  String get statsLastDiscovery;
+
+  /// No description provided for @statsOldestYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest era touched'**
+  String get statsOldestYear;
+
+  /// No description provided for @statsHunts.
+  ///
+  /// In en, this message translates to:
+  /// **'Searches'**
+  String get statsHunts;
+
+  /// No description provided for @statsHuntsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Started'**
+  String get statsHuntsTotal;
+
+  /// No description provided for @statsHuntsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get statsHuntsFound;
+
+  /// No description provided for @statsHuntsAbandoned.
+  ///
+  /// In en, this message translates to:
+  /// **'Gave up'**
+  String get statsHuntsAbandoned;
+
+  /// No description provided for @statsSuccessRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Success rate'**
+  String get statsSuccessRate;
+
+  /// No description provided for @statsAvgStepsHunt.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps per search'**
+  String get statsAvgStepsHunt;
+
+  /// No description provided for @statsAvgDistanceHunt.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance per search'**
+  String get statsAvgDistanceHunt;
+
+  /// No description provided for @statsAvgTimeHunt.
+  ///
+  /// In en, this message translates to:
+  /// **'Time per search'**
+  String get statsAvgTimeHunt;
+
+  /// No description provided for @statsTotalHuntSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps while searching'**
+  String get statsTotalHuntSteps;
+
+  /// No description provided for @statsDetour.
+  ///
+  /// In en, this message translates to:
+  /// **'Detour ratio'**
+  String get statsDetour;
+
+  /// No description provided for @statsDetourHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Walked ÷ straight-line distance. 1.0 = perfect path'**
+  String get statsDetourHint;
+
+  /// No description provided for @statsFewestSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Fewest steps'**
+  String get statsFewestSteps;
+
+  /// No description provided for @statsMostSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Most steps'**
+  String get statsMostSteps;
+
+  /// No description provided for @statsFastest.
+  ///
+  /// In en, this message translates to:
+  /// **'Fastest find'**
+  String get statsFastest;
+
+  /// No description provided for @statsRecentHunts.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent searches'**
+  String get statsRecentHunts;
+
+  /// No description provided for @huntStatusFound.
+  ///
+  /// In en, this message translates to:
+  /// **'found'**
+  String get huntStatusFound;
+
+  /// No description provided for @huntStatusAbandoned.
+  ///
+  /// In en, this message translates to:
+  /// **'gave up'**
+  String get huntStatusAbandoned;
+
+  /// No description provided for @huntStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'in progress'**
+  String get huntStatusActive;
+
+  /// No description provided for @statsEngagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Curiosity'**
+  String get statsEngagement;
+
+  /// No description provided for @statsScans.
+  ///
+  /// In en, this message translates to:
+  /// **'QR scans'**
+  String get statsScans;
+
+  /// No description provided for @statsUniqueScans.
+  ///
+  /// In en, this message translates to:
+  /// **'Unique codes'**
+  String get statsUniqueScans;
+
+  /// No description provided for @statsViews.
+  ///
+  /// In en, this message translates to:
+  /// **'Places opened'**
+  String get statsViews;
+
+  /// No description provided for @statsUniqueViews.
+  ///
+  /// In en, this message translates to:
+  /// **'Unique places read'**
+  String get statsUniqueViews;
+
+  /// No description provided for @statsFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'In favorites'**
+  String get statsFavorites;
+
+  /// No description provided for @statsUserPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Places added'**
+  String get statsUserPlaces;
+
+  /// No description provided for @statsPlacesLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Places fetched from sources'**
+  String get statsPlacesLoaded;
+
+  /// No description provided for @statsExploration.
+  ///
+  /// In en, this message translates to:
+  /// **'Exploration'**
+  String get statsExploration;
+
+  /// No description provided for @statsExploredArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Area explored'**
+  String get statsExploredArea;
+
+  /// No description provided for @statsExploredCells.
+  ///
+  /// In en, this message translates to:
+  /// **'Map cells visited'**
+  String get statsExploredCells;
+
+  /// No description provided for @statsStepsPerDiscovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps per discovery'**
+  String get statsStepsPerDiscovery;
+
+  /// No description provided for @statsMetersPerDiscovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance per discovery'**
+  String get statsMetersPerDiscovery;
+
+  /// No description provided for @statsAchievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements {unlocked}/{total}'**
+  String statsAchievements(Object unlocked, Object total);
+
+  /// No description provided for @statsReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset statistics'**
+  String get statsReset;
+
+  /// No description provided for @statsResetConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'All steps, routes, searches and discoveries will be deleted from this device. Favorites and your places stay.'**
+  String get statsResetConfirm;
+
+  /// No description provided for @statsResetDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics cleared'**
+  String get statsResetDone;
+
+  /// No description provided for @statsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Go for a walk — stats will appear here'**
+  String get statsEmpty;
+
+  /// No description provided for @noData.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get noData;
+
+  /// No description provided for @unitM.
+  ///
+  /// In en, this message translates to:
+  /// **'m'**
+  String get unitM;
+
+  /// No description provided for @unitKm.
+  ///
+  /// In en, this message translates to:
+  /// **'km'**
+  String get unitKm;
+
+  /// No description provided for @unitH.
+  ///
+  /// In en, this message translates to:
+  /// **'h'**
+  String get unitH;
+
+  /// No description provided for @unitMin.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get unitMin;
+
+  /// No description provided for @unitS.
+  ///
+  /// In en, this message translates to:
+  /// **'s'**
+  String get unitS;
+
+  /// No description provided for @unitKmh.
+  ///
+  /// In en, this message translates to:
+  /// **'km/h'**
+  String get unitKmh;
+
+  /// No description provided for @unitKcal.
+  ///
+  /// In en, this message translates to:
+  /// **'kcal'**
+  String get unitKcal;
+
+  /// No description provided for @unitKm2.
+  ///
+  /// In en, this message translates to:
+  /// **'km²'**
+  String get unitKm2;
+
+  /// No description provided for @achFirstDiscovery.
+  ///
+  /// In en, this message translates to:
+  /// **'First find'**
+  String get achFirstDiscovery;
+
+  /// No description provided for @achFirstDiscoveryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover your first place'**
+  String get achFirstDiscoveryDesc;
+
+  /// No description provided for @achTenDiscoveries.
+  ///
+  /// In en, this message translates to:
+  /// **'Local historian'**
+  String get achTenDiscoveries;
+
+  /// No description provided for @achTenDiscoveriesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover 10 places'**
+  String get achTenDiscoveriesDesc;
+
+  /// No description provided for @achFiftyDiscoveries.
+  ///
+  /// In en, this message translates to:
+  /// **'Chronicler'**
+  String get achFiftyDiscoveries;
+
+  /// No description provided for @achFiftyDiscoveriesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover 50 places'**
+  String get achFiftyDiscoveriesDesc;
+
+  /// No description provided for @achFirstHunt.
+  ///
+  /// In en, this message translates to:
+  /// **'Pathfinder'**
+  String get achFirstHunt;
+
+  /// No description provided for @achFirstHuntDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete a search'**
+  String get achFirstHuntDesc;
+
+  /// No description provided for @achFiveHunts.
+  ///
+  /// In en, this message translates to:
+  /// **'Treasure hunter'**
+  String get achFiveHunts;
+
+  /// No description provided for @achFiveHuntsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete 5 searches'**
+  String get achFiveHuntsDesc;
+
+  /// No description provided for @achStraightShooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Straight to the point'**
+  String get achStraightShooter;
+
+  /// No description provided for @achStraightShooterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a place with detour ratio ≤ 1.3'**
+  String get achStraightShooterDesc;
+
+  /// No description provided for @achTenKDay.
+  ///
+  /// In en, this message translates to:
+  /// **'10,000 steps'**
+  String get achTenKDay;
+
+  /// No description provided for @achTenKDayDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk 10,000 steps in one day'**
+  String get achTenKDayDesc;
+
+  /// No description provided for @achHundredKTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Centurion'**
+  String get achHundredKTotal;
+
+  /// No description provided for @achHundredKTotalDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'100,000 steps in total'**
+  String get achHundredKTotalDesc;
+
+  /// No description provided for @achMarathon.
+  ///
+  /// In en, this message translates to:
+  /// **'Marathon'**
+  String get achMarathon;
+
+  /// No description provided for @achMarathonDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk 42.2 km in total'**
+  String get achMarathonDesc;
+
+  /// No description provided for @achExplorer.
+  ///
+  /// In en, this message translates to:
+  /// **'Explorer'**
+  String get achExplorer;
+
+  /// No description provided for @achExplorerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore 1 km² of the map'**
+  String get achExplorerDesc;
+
+  /// No description provided for @achScanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Code breaker'**
+  String get achScanner;
+
+  /// No description provided for @achScannerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan 10 QR codes'**
+  String get achScannerDesc;
+
+  /// No description provided for @achAllSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Polymath'**
+  String get achAllSources;
+
+  /// No description provided for @achAllSourcesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover a place from every source'**
+  String get achAllSourcesDesc;
+
+  /// No description provided for @achWeekStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Week of history'**
+  String get achWeekStreak;
+
+  /// No description provided for @achWeekStreakDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Be active 7 days in a row'**
+  String get achWeekStreakDesc;
+
+  /// No description provided for @achTimeTraveler.
+  ///
+  /// In en, this message translates to:
+  /// **'Time traveler'**
+  String get achTimeTraveler;
+
+  /// No description provided for @achTimeTravelerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover something from before 1917'**
+  String get achTimeTravelerDesc;
+
+  /// No description provided for @achCurator.
+  ///
+  /// In en, this message translates to:
+  /// **'Curator'**
+  String get achCurator;
+
+  /// No description provided for @achCuratorDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Save 10 favorites'**
+  String get achCuratorDesc;
+
+  /// No description provided for @achCartographer.
+  ///
+  /// In en, this message translates to:
+  /// **'Cartographer'**
+  String get achCartographer;
+
+  /// No description provided for @achCartographerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add 3 places of your own'**
+  String get achCartographerDesc;
+
+  /// No description provided for @sectionSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Data sources'**
+  String get sectionSources;
+
+  /// No description provided for @sectionTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking'**
+  String get sectionTracking;
+
+  /// No description provided for @searchRadius.
+  ///
+  /// In en, this message translates to:
+  /// **'Search radius'**
+  String get searchRadius;
+
+  /// No description provided for @backgroundTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Background tracking'**
+  String get backgroundTracking;
+
+  /// No description provided for @backgroundTrackingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep counting steps and route with the screen off (shows a notification)'**
+  String get backgroundTrackingSubtitle;
+
+  /// No description provided for @autoTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tracking automatically'**
+  String get autoTracking;
+
+  /// No description provided for @autoTrackingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When the map opens'**
+  String get autoTrackingSubtitle;
+
+  /// No description provided for @dailyGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily step goal'**
+  String get dailyGoal;
+
+  /// No description provided for @stepLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Step length'**
+  String get stepLength;
+
+  /// No description provided for @unitCm.
+  ///
+  /// In en, this message translates to:
+  /// **'cm'**
+  String get unitCm;
+
+  /// No description provided for @geofenceRadius.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival radius'**
+  String get geofenceRadius;
+
+  /// No description provided for @geofenceRadiusSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How close counts as \"found\"'**
+  String get geofenceRadiusSubtitle;
+
+  /// No description provided for @sourcePastvuDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Retro photos from a community of local historians'**
+  String get sourcePastvuDesc;
+
+  /// No description provided for @sourceWikipediaDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Articles about places nearby'**
+  String get sourceWikipediaDesc;
+
+  /// No description provided for @sourceWikidataDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered cultural heritage sites'**
+  String get sourceWikidataDesc;
+
+  /// No description provided for @sourceOsmDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Monuments, memorials, ruins from OpenStreetMap'**
+  String get sourceOsmDesc;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About QStory'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover history around you'**
+  String get aboutTagline;
+
+  /// No description provided for @aboutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'QStory finds historical places, retro photos and heritage sites around you using open data from history communities and encyclopedias. Pick a place, walk to it, and track how far you went to find it.'**
+  String get aboutDescription;
+
+  /// No description provided for @aboutDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where the data comes from'**
+  String get aboutDataTitle;
+
+  /// No description provided for @aboutPrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get aboutPrivacyTitle;
+
+  /// No description provided for @aboutPrivacyText.
+  ///
+  /// In en, this message translates to:
+  /// **'No accounts, no servers of our own. Your location, steps, routes and statistics never leave the device. The app only sends map coordinates to the public open-data APIs listed above to find places nearby.'**
+  String get aboutPrivacyText;
+
+  /// No description provided for @aboutLicenseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'License'**
+  String get aboutLicenseTitle;
+
+  /// No description provided for @aboutSourceCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Source code'**
+  String get aboutSourceCode;
+
+  /// No description provided for @aboutReportIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Report an issue'**
+  String get aboutReportIssue;
+
+  /// No description provided for @aboutTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Team'**
+  String get aboutTeam;
+
+  /// No description provided for @openSourceLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-source licenses'**
+  String get openSourceLicenses;
+
+  /// No description provided for @explorerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explorer'**
+  String get explorerTitle;
+
+  /// No description provided for @statsOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open statistics'**
+  String get statsOpen;
+
+  /// No description provided for @openEmailFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'No email app found. Write to {email}'**
+  String openEmailFailed(Object email);
+
+  /// No description provided for @emailOpened.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening your email app…'**
+  String get emailOpened;
+
+  /// No description provided for @locationNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is needed for the map and tracking'**
+  String get locationNeeded;
+
+  /// No description provided for @visited.
+  ///
+  /// In en, this message translates to:
+  /// **'Visited'**
+  String get visited;
+
+  /// No description provided for @details.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get details;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1105,8 +2070,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'ru'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1121,8 +2085,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsRu();
   }
 
-  throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+  throw FlutterError('AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
       'an issue with the localizations generation tool. Please file an issue '
       'on GitHub with a reproducible sample app and the gen-l10n configuration '
       'that was used.');

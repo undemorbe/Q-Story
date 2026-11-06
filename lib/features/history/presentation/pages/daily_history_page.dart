@@ -106,18 +106,15 @@ class _DailyHistoryPageState extends State<DailyHistoryPage> {
         SizedBox(
           width: double.infinity,
           child: OutlinedButton.icon(
-            onPressed:
-                canRefresh ? () => _store.loadDailyFact(force: true) : null,
+            onPressed: canRefresh ? () => _store.loadDailyFact(force: true) : null,
             icon: _store.isLoading
                 ? SizedBox(
                     width: 14,
                     height: 14,
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: context.gold),
+                    child: CircularProgressIndicator(strokeWidth: 2, color: context.gold),
                   )
                 : const Icon(Icons.refresh, size: 18),
-            label: Text(
-                _store.isLoading ? l10n.loadingLabel : l10n.refreshAction),
+            label: Text(_store.isLoading ? l10n.loadingLabel : l10n.refreshAction),
           ),
         ),
       ],
@@ -132,8 +129,18 @@ class _DateHeader extends StatelessWidget {
   const _DateHeader({required this.date});
 
   static const _months = [
-    'Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня',
-    'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'
+    'Января',
+    'Февраля',
+    'Марта',
+    'Апреля',
+    'Мая',
+    'Июня',
+    'Июля',
+    'Августа',
+    'Сентября',
+    'Октября',
+    'Ноября',
+    'Декабря'
   ];
 
   @override
@@ -191,8 +198,7 @@ class _FactCard extends StatelessWidget {
         children: [
           if (fact.imageUrl != null)
             ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(2)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(2)),
               child: AspectRatio(
                 aspectRatio: 16 / 10,
                 child: CachedNetworkImage(
@@ -201,14 +207,12 @@ class _FactCard extends StatelessWidget {
                   placeholder: (_, __) => Container(
                     color: context.surfaceVar,
                     child: Center(
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: gold),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: gold),
                     ),
                   ),
                   errorWidget: (_, __, ___) => Container(
                     color: context.surfaceVar,
-                    child: Icon(Icons.image_not_supported_outlined,
-                        color: context.outlineClr, size: 32),
+                    child: Icon(Icons.image_not_supported_outlined, color: context.outlineClr, size: 32),
                   ),
                 ),
               ),
@@ -221,8 +225,7 @@ class _FactCard extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: context.goldContainer,
                         border: Border.all(color: gold, width: 1),
@@ -261,8 +264,7 @@ class _FactCard extends StatelessWidget {
                     height: 1.55,
                   ),
                 ),
-                if (fact.pageExtract != null &&
-                    fact.pageExtract!.trim().isNotEmpty) ...[
+                if (fact.pageExtract != null && fact.pageExtract!.trim().isNotEmpty) ...[
                   const SizedBox(height: 14),
                   Container(height: 1, color: context.outlineVar),
                   const SizedBox(height: 14),
@@ -283,8 +285,7 @@ class _FactCard extends StatelessWidget {
                     child: TextButton.icon(
                       onPressed: () => onOpenLink(fact.wikipediaUrl!),
                       icon: const Icon(Icons.open_in_new, size: 14),
-                      label:
-                          Text(AppLocalizations.of(context)!.openInWikipedia),
+                      label: Text(AppLocalizations.of(context)!.openInWikipedia),
                     ),
                   ),
                 ],
@@ -308,8 +309,7 @@ class _EmptyCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       child: Column(
         children: [
-          Text('◆',
-              style: TextStyle(color: context.outlineClr, fontSize: 28)),
+          Text('◆', style: TextStyle(color: context.outlineClr, fontSize: 28)),
           const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.noFactsForToday,
@@ -362,9 +362,7 @@ class _SourceFooter extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Text(
-        factsCount > 0
-            ? l10n.wikipediaSourceWithCount(factsCount)
-            : l10n.wikipediaSource,
+        factsCount > 0 ? l10n.wikipediaSourceWithCount(factsCount) : l10n.wikipediaSource,
         style: GoogleFonts.cinzel(
           color: context.onBg.withValues(alpha: 0.5),
           fontSize: 10,

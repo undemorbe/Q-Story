@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/constants/app_info.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
+import '../../../activity/presentation/stores/tracking_store.dart';
+import '../../../places/domain/entities/place_source.dart';
+import '../../../places/presentation/stores/places_store.dart';
+import '../../../places/presentation/widgets/place_labels.dart';
 import '../stores/settings_store.dart';
 import 'notification_settings_page.dart';
 
@@ -42,94 +48,143 @@ class _SettingsPageState extends State<SettingsPage> {
                 subtitle: Text(_getLanguageName(l10n, _store.locale)),
                 onTap: () => _showLanguageDialog(context, l10n),
               ),
+              _buildSectionHeader(context, l10n.sectionSources),
+              for (final src in PlaceSource.remote)
+                SwitchListTile.adaptive(
+                  secondary: Icon(src.icon, color: src.color),
+                  title: Text(src.label(l10n)),
+                  subtitle: Text(src.description(l10n)),
+                  value: _store.enabledSources.contains(src),
+                  onChanged: (v) {
+                    _store.toggleSource(src, v);
+                    final places = getIt<PlacesStore>();
+                    if (places.lastLat != null) places.loadAround(places.lastLat!, places.lastLon!, force: true);
+                  },
+                ),
+              _sliderTile(
+                context,
+                icon: Icons.radar,
+                title: l10n.searchRadius,
+                valueLabel: l10n.distance(_store.searchRadiusM.toDouble()),
+                value: _store.searchRadiusM.toDouble(),
+                min: 300,
+                max: 5000,
+                divisions: 47,
+                onChanged: (v) => _store.setSearchRadiusM((v / 100).round() * 100),
+              ),
+              _buildSectionHeader(context, l10n.sectionTracking),
+              SwitchListTile.adaptive(
+                secondary: const Icon(Icons.directions_walk),
+                title: Text(l10n.autoTracking),
+                subtitle: Text(l10n.autoTrackingSubtitle),
+                value: _store.autoTracking,
+                onChanged: _store.setAutoTracking,
+              ),
+              SwitchListTile.adaptive(
+                secondary: const Icon(Icons.nightlight_outlined),
+                title: Text(l10n.backgroundTracking),
+                subtitle: Text(l10n.backgroundTrackingSubtitle),
+                value: _store.backgroundTracking,
+                onChanged: (v) async {
+                  await _store.setBackgroundTracking(v);
+                  await getIt<TrackingStore>().restart();
+                },
+              ),
+              _sliderTile(
+                context,
+                icon: Icons.flag_outlined,
+                title: l10n.dailyGoal,
+                valueLabel: '${_store.dailyStepGoal}',
+                value: _store.dailyStepGoal.toDouble(),
+                min: 1000,
+                max: 30000,
+                divisions: 58,
+                onChanged: (v) => _store.setDailyStepGoal((v / 500).round() * 500),
+              ),
+              _sliderTile(
+                context,
+                icon: Icons.straighten,
+                title: l10n.stepLength,
+                valueLabel: '${_store.stepLengthCm} ${l10n.unitCm}',
+                value: _store.stepLengthCm.toDouble(),
+                min: 40,
+                max: 110,
+                divisions: 70,
+                onChanged: (v) => _store.setStepLengthCm(v.round()),
+              ),
+              _sliderTile(
+                context,
+                icon: Icons.my_location,
+                title: l10n.geofenceRadius,
+                subtitle: l10n.geofenceRadiusSubtitle,
+                valueLabel: '${_store.geofenceRadiusM} ${l10n.unitM}',
+                value: _store.geofenceRadiusM.toDouble(),
+                min: 15,
+                max: 150,
+                divisions: 27,
+                onChanged: (v) => _store.setGeofenceRadiusM((v / 5).round() * 5),
+              ),
               _buildSectionHeader(context, l10n.notifications),
               ListTile(
                 leading: const Icon(Icons.notifications_outlined),
                 title: Text(l10n.notifications),
                 subtitle: Text(l10n.notificationsSubtitle),
-                trailing:
-                    Icon(Icons.chevron_right, color: context.outlineClr),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationSettingsPage(),
-                    ),
-                  );
-                },
-              ),
-              SwitchListTile.adaptive(
-                secondary: const Icon(Icons.notifications_active_outlined),
-                title: Text(l10n.pushNotifications),
-                subtitle: Text(l10n.pushNotificationsSubtitle),
-                value: _store.notificationsEnabled,
-                onChanged: (bool? value) async {
-                  if (value != null) {
-                    _store.toggleNotifications(value);
-                    if (value) {
-                      await NotificationService.scheduleDailyNotification();
-                    } else {
-                      await NotificationService.cancelDailyNotification();
-                    }
-                  }
-                },
+                trailing: Icon(Icons.chevron_right, color: context.outlineClr),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NotificationSettingsPage()),
+                ),
               ),
               ListTile(
                 leading: const Icon(Icons.notification_important_outlined),
                 title: Text(l10n.checkNotification),
                 subtitle: Text(l10n.checkNotificationSubtitle),
-                onTap: () async {
-                  await NotificationService.showTestNotification();
-                },
-              ),
-              _buildSectionHeader(context, l10n.preferences),
-              SwitchListTile.adaptive(
-                secondary: const Icon(Icons.data_usage_outlined),
-                title: Text(l10n.dataSaver),
-                subtitle: Text(l10n.dataSaverSubtitle),
-                value: _store.dataSaverEnabled,
-                onChanged: (bool? value) {
-                  if (value != null) _store.toggleDataSaver(value);
-                },
-              ),
-              _buildSectionHeader(context, l10n.data),
-              ListTile(
-                leading: const Icon(Icons.file_download_outlined),
-                title: Text(l10n.exportData),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.dataExported)),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.file_upload_outlined),
-                title: Text(l10n.importData),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.dataImported)),
-                  );
-                },
+                onTap: NotificationService.showTestNotification,
               ),
               _buildSectionHeader(context, l10n.about),
               ListTile(
                 leading: const Icon(Icons.info_outline),
-                title: Text(l10n.about),
-                subtitle: Text(l10n.version),
-                onTap: () {
-                  showAboutDialog(
-                    context: context,
-                    applicationName: 'QStory',
-                    applicationVersion: '1.0.0',
-                    applicationLegalese: '© 2024 QStory Inc.',
-                  );
-                },
+                title: Text(l10n.aboutTitle),
+                subtitle: Text('${AppInfo.name} ${AppInfo.version}'),
+                trailing: Icon(Icons.chevron_right, color: context.outlineClr),
+                onTap: () => context.push('/about'),
               ),
               const SizedBox(height: 24),
             ],
           );
         },
       ),
+    );
+  }
+
+  Widget _sliderTile(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    String? subtitle,
+    required String valueLabel,
+    required double value,
+    required double min,
+    required double max,
+    required int divisions,
+    required ValueChanged<double> onChanged,
+  }) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Row(children: [
+        Expanded(child: Text(title)),
+        Text(valueLabel, style: TextStyle(color: context.gold, fontWeight: FontWeight.w600)),
+      ]),
+      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        if (subtitle != null) Text(subtitle),
+        Slider(
+          value: value.clamp(min, max),
+          min: min,
+          max: max,
+          divisions: divisions,
+          onChanged: onChanged,
+        ),
+      ]),
     );
   }
 

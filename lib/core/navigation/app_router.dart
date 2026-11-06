@@ -1,122 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../features/map/presentation/pages/map_page.dart';
-import '../../features/history/presentation/pages/history_detail_page.dart';
-import '../../features/history/domain/entities/history_entity.dart';
-import '../../features/settings/presentation/pages/settings_page.dart';
-import '../../features/settings/presentation/pages/notification_settings_page.dart';
-import '../../features/qr_operations/presentation/pages/qr_scanner_view.dart';
-import '../../features/favorites/presentation/pages/favorites_page.dart';
-import '../../features/profile/presentation/pages/profile_page.dart';
-import '../../features/onboarding/presentation/pages/onboarding_page.dart';
-import '../di/service_locator.dart';
-import 'scaffold_with_navbar.dart';
 
-import '../../features/qr_operations/presentation/pages/qr_result_page.dart';
-import '../../features/qr_operations/data/models/qr_content_model.dart';
+import '../../features/about/presentation/pages/about_page.dart';
+import '../../features/favorites/presentation/pages/favorites_page.dart';
+import '../../features/onboarding/presentation/pages/onboarding_page.dart';
+import '../../features/places/domain/entities/place.dart';
+import '../../features/places/presentation/pages/map_page.dart';
+import '../../features/places/presentation/pages/place_detail_page.dart';
+import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/scanner/presentation/pages/scanner_page.dart';
+import '../../features/settings/presentation/pages/notification_settings_page.dart';
+import '../../features/settings/presentation/pages/settings_page.dart';
+import '../../features/stats/presentation/pages/stats_page.dart';
+import '../di/service_locator.dart';
+import '../storage/app_preferences.dart';
+import 'scaffold_with_navbar.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
-final appRouter = GoRouter(
-  navigatorKey: _rootNavigatorKey,
-  initialLocation: '/map',
-  redirect: (context, state) async {
-    final prefs = getIt<SharedPreferences>();
-    final hasSeenOnboarding = prefs.getBool('has_seen_onboarding') ?? false;
-    
-    // If onboarding not seen, redirect to onboarding
-    if (!hasSeenOnboarding && state.matchedLocation != '/onboarding') {
-      return '/onboarding';
-    }
-
-    // If onboarding seen and trying to access root, go to map
-    if (state.matchedLocation == '/') {
-       return hasSeenOnboarding ? '/map' : '/onboarding';
-    }
-    
-    return null;
-  },
-  routes: [
-    GoRoute(
-      path: '/onboarding',
-      builder: (context, state) => const OnboardingPage(),
-    ),
-    // Login and Register routes removed as per request to remove auth
-    // We can keep them commented out or remove entirely. 
-    // Removing them to follow instructions strictly.
-    GoRoute(
-      path: '/history/:id',
-      builder: (context, state) {
-        final entity = state.extra as HistoryEntity;
-        return HistoryDetailPage(entity: entity);
+GoRouter buildRouter() => GoRouter(
+      navigatorKey: _rootNavigatorKey,
+      initialLocation: '/map',
+      redirect: (context, state) {
+        final seen = getIt<AppPreferences>().hasSeenOnboarding;
+        if (!seen && state.matchedLocation != '/onboarding') return '/onboarding';
+        if (state.matchedLocation == '/') return '/map';
+        return null;
       },
-    ),
-    GoRoute(
-      path: '/history-detail',
-      builder: (context, state) {
-        final entity = state.extra as HistoryEntity?;
-        if (entity == null) {
-          return const Scaffold(
-            body: Center(child: Text('No data provided')),
-          );
-        }
-        return HistoryDetailPage(entity: entity);
-      },
-    ),
-    GoRoute(
-      path: '/settings',
-      builder: (context, state) => const SettingsPage(),
-    ),
-    GoRoute(
-      path: '/notification-settings',
-      builder: (context, state) => const NotificationSettingsPage(),
-    ),
-    GoRoute(
-      path: '/qr-result',
-      builder: (context, state) {
-        final content = state.extra as QrContentModel;
-        return QrResultPage(content: content);
-      },
-    ),
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return ScaffoldWithNavBar(navigationShell: navigationShell);
-      },
-      branches: [
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/map',
-              builder: (context, state) => const MapPage(),
-            ),
-          ],
+      routes: [
+        GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingPage()),
+        GoRoute(
+          path: '/place',
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (_, state) {
+            final place = state.extra;
+            if (place is! Place) {
+              return const Scaffold(body: Center(child: Icon(Icons.help_outline, size: 48)));
+            }
+            return PlaceDetailPage(place: place);
+          },
         ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/scanner',
-              builder: (context, state) => const QrScannerView(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/favorites',
-              builder: (context, state) => const FavoritesPage(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/profile',
-              builder: (context, state) => const ProfilePage(),
-            ),
+        GoRoute(path: '/settings', builder: (_, __) => const SettingsPage()),
+        GoRoute(path: '/notification-settings', builder: (_, __) => const NotificationSettingsPage()),
+        GoRoute(path: '/about', builder: (_, __) => const AboutPage()),
+        StatefulShellRoute.indexedStack(
+          builder: (_, __, shell) => ScaffoldWithNavBar(navigationShell: shell),
+          branches: [
+            StatefulShellBranch(routes: [GoRoute(path: '/map', builder: (_, __) => const MapPage())]),
+            StatefulShellBranch(routes: [GoRoute(path: '/scanner', builder: (_, __) => const ScannerPage())]),
+            StatefulShellBranch(routes: [GoRoute(path: '/stats', builder: (_, __) => const StatsPage())]),
+            StatefulShellBranch(routes: [GoRoute(path: '/favorites', builder: (_, __) => const FavoritesPage())]),
+            StatefulShellBranch(routes: [GoRoute(path: '/profile', builder: (_, __) => const ProfilePage())]),
           ],
         ),
       ],
-    ),
-  ],
-);
+    );

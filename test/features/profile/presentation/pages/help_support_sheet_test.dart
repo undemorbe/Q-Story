@@ -6,14 +6,18 @@ import 'package:qstory/core/l10n/app_localizations.dart';
 import 'package:qstory/core/services/email_service.dart';
 import 'package:qstory/features/profile/presentation/pages/help_support_sheet.dart';
 
-class MockEmailService extends Mock implements EmailService {}
+class MockEmailService extends Mock implements EmailService {
+  final sent = <String>[];
+
+  @override
+  Future<void> sendSupportMessage(String message) async => sent.add(message);
+}
 
 void main() {
   late MockEmailService mockEmailService;
 
   setUp(() {
     mockEmailService = MockEmailService();
-    when(mockEmailService.sendSupportMessage(any as String)).thenAnswer((_) => Future.value());
     getIt.registerSingleton<EmailService>(mockEmailService);
   });
 

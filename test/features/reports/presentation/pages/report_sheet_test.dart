@@ -58,7 +58,7 @@ void main() {
       await tester.pumpWidget(buildTestWidget());
       await tester.pumpAndSettle();
 
-      expect(find.byType(DropdownButtonFormField), findsOneWidget);
+      expect(find.byType(DropdownButtonFormField<ReportCategory>), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
     });
 
@@ -75,7 +75,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Select category
-      await tester.tap(find.byType(DropdownButtonFormField));
+      await tester.tap(find.byType(DropdownButtonFormField<ReportCategory>));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Test Category').first);
       await tester.pumpAndSettle();

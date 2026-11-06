@@ -45,8 +45,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   itemBuilder: (context, index) {
                     final item = items[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 32),
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -55,8 +54,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             height: 120,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: context.outlineClr, width: 1),
+                              border: Border.all(color: context.outlineClr, width: 1),
                               color: context.surfaceVar,
                               boxShadow: [
                                 BoxShadow(
@@ -66,8 +64,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                 ),
                               ],
                             ),
-                            child: Icon(item.icon,
-                                size: 52, color: gold),
+                            child: Icon(item.icon, size: 52, color: gold),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -116,9 +113,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           child: AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 200),
                             style: TextStyle(
-                              color: _currentPage == index
-                                  ? gold
-                                  : context.outlineClr,
+                              color: _currentPage == index ? gold : context.outlineClr,
                               fontSize: _currentPage == index ? 14 : 9,
                             ),
                             child: const Text('◆'),
@@ -139,9 +134,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           if (context.mounted) context.go('/map');
                         }
                       },
-                      child: Text(_currentPage < _pageCount - 1
-                          ? l10n.continueButton
-                          : l10n.beginButton),
+                      child: Text(_currentPage < _pageCount - 1 ? l10n.continueButton : l10n.beginButton),
                     ),
                   ],
                 ),

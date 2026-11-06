@@ -160,8 +160,7 @@ void main() {
         for (final f in failures) {
           final matched = switch (f) {
             NetworkFailure() => 'network',
-            ServerFailure(:final statusCode) =>
-              statusCode != null ? 'server-with-code' : 'server',
+            ServerFailure(:final statusCode) => statusCode != null ? 'server-with-code' : 'server',
             NotFoundFailure() => 'notfound',
             ValidationFailure() => 'validation',
             CacheFailure() => 'cache',

@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+
+import '../../../../core/network/http_client.dart';
 import '../../domain/entities/daily_fact_entity.dart';
 
 /// Fetches "On this day" historical events from Russian Wikipedia.
@@ -8,10 +10,7 @@ import '../../domain/entities/daily_fact_entity.dart';
 class DailyFactRemoteDataSource {
   final Dio _dio;
 
-  DailyFactRemoteDataSource({Dio? dio}) : _dio = dio ?? Dio() {
-    _dio.options.connectTimeout = const Duration(seconds: 12);
-    _dio.options.receiveTimeout = const Duration(seconds: 12);
-  }
+  DailyFactRemoteDataSource({Dio? dio}) : _dio = dio ?? createHttpClient();
 
   static const _baseUrl = 'https://ru.wikipedia.org/api/rest_v1/feed/onthisday';
 
@@ -27,12 +26,6 @@ class DailyFactRemoteDataSource {
 
     final response = await _dio.get<Map<String, dynamic>>(
       url,
-      options: Options(
-        headers: {
-          'User-Agent': 'QStory/0.1 (Flutter; contact: app@qstory.local)',
-          'Accept': 'application/json',
-        },
-      ),
     );
 
     final data = response.data;
@@ -66,8 +59,7 @@ class DailyFactRemoteDataSource {
         }
         final titles = p['titles'];
         if (titles is Map) {
-          pageTitle = (titles['normalized'] as String?) ??
-              (titles['display'] as String?);
+          pageTitle = (titles['normalized'] as String?) ?? (titles['display'] as String?);
         }
         pageTitle ??= p['title'] as String?;
         pageExtract = p['extract'] as String?;

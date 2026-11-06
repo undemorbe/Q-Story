@@ -12,14 +12,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'QStory';
 
   @override
-  String get generateQr => 'Создать QR';
-
-  @override
   String get scanQr => 'Сканировать QR';
 
   @override
-  String get cameraPermissionRequired =>
-      'Для сканирования QR-кодов нужен доступ к камере.';
+  String get cameraPermissionRequired => 'Для сканирования QR-кодов нужен доступ к камере.';
 
   @override
   String get openSettings => 'Открыть настройки';
@@ -43,9 +39,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get save => 'Сохранить';
 
   @override
-  String get scanResult => 'Результат сканирования';
-
-  @override
   String get settings => 'Настройки';
 
   @override
@@ -67,84 +60,30 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navProfile => 'Профиль';
 
   @override
-  String get loginTitle => 'С возвращением';
-
-  @override
-  String get loginSubtitle => 'Введите данные для входа';
-
-  @override
-  String get emailLabel => 'Email';
-
-  @override
-  String get passwordLabel => 'Пароль';
-
-  @override
-  String get rememberMe => 'Запомнить меня';
-
-  @override
-  String get forgotPassword => 'Забыли пароль?';
-
-  @override
-  String get loginButton => 'Войти';
-
-  @override
-  String get loginWithBiometrics => 'Войти по биометрии';
-
-  @override
-  String get noAccount => 'Нет аккаунта?';
-
-  @override
-  String get registerLink => 'Регистрация';
-
-  @override
-  String get registerTitle => 'Создать аккаунт';
-
-  @override
-  String get registerSubtitle => 'Начните своё путешествие';
-
-  @override
-  String get usernameLabel => 'Имя пользователя';
-
-  @override
-  String get alreadyHaveAccount => 'Уже есть аккаунт?';
-
-  @override
-  String get loginLink => 'Войти';
-
-  @override
-  String get onboarding1Title => 'Откройте историю';
+  String get onboarding1Title => 'Открывайте';
 
   @override
   String get onboarding1Desc =>
-      'Исследуйте исторические события и личности со всего мира.';
+      'Исторические места, ретрофото и объекты наследия вокруг вас — из открытых сообществ историков.';
 
   @override
-  String get onboarding2Title => 'Сканируйте QR';
+  String get onboarding2Title => 'Ищите';
 
   @override
-  String get onboarding2Desc =>
-      'Сканируйте QR-коды в музеях и исторических местах.';
+  String get onboarding2Desc => 'Выберите место и дойдите до него. QStory запишет маршрут и шаги до самого прибытия.';
 
   @override
-  String get onboarding3Title => 'Сохраняйте избранное';
+  String get onboarding3Title => 'Сохраняйте';
 
   @override
-  String get onboarding3Desc => 'Сохраняйте любимые исторические моменты.';
+  String get onboarding3Desc =>
+      'Сканируйте QR-таблички, собирайте открытия и следите за статистикой — всё хранится только на телефоне.';
 
   @override
   String get continueButton => 'Дальше';
 
   @override
   String get beginButton => 'Начать';
-
-  @override
-  String get chroniclesTitle => 'Хроники';
-
-  @override
-  String get searchHint => 'Поиск по хроникам...';
-
-  @override
-  String get noRecordsFound => 'Записи не найдены';
 
   @override
   String get favoritesTitle => 'Избранное';
@@ -154,12 +93,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileTitle => 'Профиль';
-
-  @override
-  String get scanned => 'Сканировано';
-
-  @override
-  String get visited => 'Посещено';
 
   @override
   String get favorites => 'Избранное';
@@ -213,8 +146,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pushNotifications => 'Push-уведомления';
 
   @override
-  String get pushNotificationsSubtitle =>
-      'Получать ежедневные исторические факты';
+  String get pushNotificationsSubtitle => 'Получать ежедневные исторические факты';
 
   @override
   String get checkNotification => 'Проверка уведомлений';
@@ -224,27 +156,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get preferences => 'Настройки';
-
-  @override
-  String get dataSaver => 'Экономия трафика';
-
-  @override
-  String get dataSaverSubtitle => 'Снизить качество изображений';
-
-  @override
-  String get data => 'Данные';
-
-  @override
-  String get exportData => 'Экспорт данных';
-
-  @override
-  String get importData => 'Импорт данных';
-
-  @override
-  String get dataExported => 'Данные успешно экспортированы';
-
-  @override
-  String get dataImported => 'Данные успешно импортированы';
 
   @override
   String get about => 'О приложении';
@@ -260,9 +171,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get english => 'Английский';
-
-  @override
-  String get enterData => 'Введите данные';
 
   @override
   String get notifSettingsTitle => 'Уведомления';
@@ -290,8 +198,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Каждый день в выбранное время вы будете получать уведомления с интересными историческими фактами.';
 
   @override
-  String get notificationsWorkInDnd =>
-      'Уведомления работают даже в режиме «Не беспокоить»';
+  String get notificationsWorkInDnd => 'Уведомления работают даже в режиме «Не беспокоить»';
 
   @override
   String get notificationsEnabledMsg => 'Уведомления включены';
@@ -308,46 +215,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get createMarkerTitle => 'Создать метку';
-
-  @override
-  String get markerSection => 'Метка на карте';
-
-  @override
-  String get buildingSection => 'Объект (QR)';
-
-  @override
   String get titleField => 'Название';
 
   @override
   String get typeField => 'Тип';
-
-  @override
-  String get markerCompressedField => 'Сжатое описание (для маркера)';
-
-  @override
-  String get buildingNameField => 'Название объекта';
-
-  @override
-  String get buildingCompressedField => 'Сжатое описание';
-
-  @override
-  String get descTopField => 'Верхнее описание';
-
-  @override
-  String get descMainField => 'Главное описание';
-
-  @override
-  String get descBottomField => 'Нижнее описание';
-
-  @override
-  String get personField => 'Связанная личность';
-
-  @override
-  String get dateStartField => 'Дата начала';
-
-  @override
-  String get dateEndField => 'Дата конца';
 
   @override
   String get imageUrlField => 'URL изображения';
@@ -356,33 +227,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get coordinatesLabel => 'Координаты';
 
   @override
-  String get resourcesLabel => 'ИСТОЧНИКИ';
-
-  @override
-  String resourceItem(int n) {
-    return 'Источник $n';
-  }
-
-  @override
-  String get addResource => 'Добавить источник';
-
-  @override
-  String get atLeastOneResource => 'Добавьте хотя бы один источник';
-
-  @override
   String get fieldRequired => 'Обязательное поле';
 
   @override
   String get selectDate => 'Выберите дату';
-
-  @override
-  String get submittingLabel => 'Отправка…';
-
-  @override
-  String get publishButton => 'Опубликовать';
-
-  @override
-  String get markerPublished => 'Метка опубликована';
 
   @override
   String get pickPointTitle => 'Выберите точку';
@@ -415,8 +263,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get openInWikipedia => 'Открыть в Wikipedia';
 
   @override
-  String get noFactsForToday =>
-      'На этот день нет фактов из истории России или СССР.';
+  String get noFactsForToday => 'На этот день нет фактов из истории России или СССР.';
 
   @override
   String get wikipediaSource => 'Источник: Wikipedia';
@@ -427,17 +274,13 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get refreshingMap => 'Обновление карты…';
-
-  @override
   String get locationDisabled => 'Геолокация выключена в настройках устройства';
 
   @override
   String get locationDenied => 'Доступ к геолокации не предоставлен';
 
   @override
-  String get locationDeniedForever =>
-      'Геолокация запрещена. Включите в настройках приложения';
+  String get locationDeniedForever => 'Геолокация запрещена. Включите в настройках приложения';
 
   @override
   String locationError(String error) {
@@ -448,22 +291,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get filtersTitle => 'Фильтры';
 
   @override
-  String get statusFilter => 'Статус';
-
-  @override
   String get filterAll => 'Все';
-
-  @override
-  String get filterCompleted => 'Пройдено';
-
-  @override
-  String get filterNotCompleted => 'Не пройдено';
-
-  @override
-  String get markAsCompleted => 'Отметить как пройдено';
-
-  @override
-  String get markedAsCompleted => 'Отмечено как пройдено!';
 
   @override
   String get report => 'Пожаловаться';
@@ -523,4 +351,688 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get reportCategoryOther => 'Другое';
+
+  @override
+  String get navStats => 'Статистика';
+
+  @override
+  String get trackingOn => 'Трекинг включён';
+
+  @override
+  String get trackingOff => 'Трекинг выключен';
+
+  @override
+  String get startTracking => 'Включить трекинг';
+
+  @override
+  String get stopTracking => 'Остановить трекинг';
+
+  @override
+  String get followMe => 'Следовать за мной';
+
+  @override
+  String stepsToday(Object count) {
+    return '$count шагов сегодня';
+  }
+
+  @override
+  String placesCount(Object count) {
+    return 'Мест: $count';
+  }
+
+  @override
+  String get loadingPlaces => 'Ищем историю вокруг…';
+
+  @override
+  String sourcesUnavailable(Object sources) {
+    return 'Недоступно: $sources';
+  }
+
+  @override
+  String get offlineCache => 'Нет сети — показаны сохранённые места';
+
+  @override
+  String get searchPlaces => 'Поиск мест';
+
+  @override
+  String get searchHere => 'Искать здесь';
+
+  @override
+  String get filterVisited => 'Посещённые';
+
+  @override
+  String get filterNotVisited => 'Не посещённые';
+
+  @override
+  String get visitFilterLabel => 'Статус';
+
+  @override
+  String get sourcesLabel => 'Источники';
+
+  @override
+  String get categoryLabel => 'Категория';
+
+  @override
+  String get resetFilters => 'Сбросить';
+
+  @override
+  String get addMyPlace => 'Добавить своё место';
+
+  @override
+  String nearPlace(Object title) {
+    return 'Вы рядом с «$title»';
+  }
+
+  @override
+  String get markVisited => 'Я здесь — отметить';
+
+  @override
+  String get markedVisited => 'Добавлено в ваши открытия';
+
+  @override
+  String get visitedBadge => 'Посещено';
+
+  @override
+  String huntSearching(Object title) {
+    return 'Ищем: $title';
+  }
+
+  @override
+  String huntLeft(Object distance) {
+    return 'Осталось $distance';
+  }
+
+  @override
+  String get huntGiveUp => 'Сдаться';
+
+  @override
+  String get huntFoundTitle => 'Найдено!';
+
+  @override
+  String huntFoundBody(Object title, Object steps, Object distance, Object time) {
+    return '«$title»: $steps шагов, $distance, $time';
+  }
+
+  @override
+  String get startHunt => 'Найти это место';
+
+  @override
+  String get huntInProgress => 'Поиск идёт';
+
+  @override
+  String get huntNeedsLocation => 'Включите геолокацию, чтобы начать поиск';
+
+  @override
+  String openSource(Object source) {
+    return 'Открыть на $source';
+  }
+
+  @override
+  String get linksLabel => 'Ссылки';
+
+  @override
+  String get authorLabel => 'Автор';
+
+  @override
+  String distanceFromYou(Object distance) {
+    return '$distance от вас';
+  }
+
+  @override
+  String get placeQrTitle => 'QR-код этого места';
+
+  @override
+  String get placeQrHint => 'Распечатайте и разместите на месте — другие исследователи смогут его отсканировать.';
+
+  @override
+  String attribution(Object source, Object license) {
+    return 'Данные: $source · $license';
+  }
+
+  @override
+  String get deletePlace => 'Удалить место';
+
+  @override
+  String get detailsLoadError => 'Не удалось загрузить полное описание';
+
+  @override
+  String get noDescription => 'Описания пока нет.';
+
+  @override
+  String get showOnMap => 'Показать на карте';
+
+  @override
+  String get sourceUser => 'Мои места';
+
+  @override
+  String get catMonument => 'Памятники';
+
+  @override
+  String get catMemorial => 'Мемориалы';
+
+  @override
+  String get catBuilding => 'Здания';
+
+  @override
+  String get catReligious => 'Храмы';
+
+  @override
+  String get catMuseum => 'Музеи';
+
+  @override
+  String get catArchaeology => 'Археология';
+
+  @override
+  String get catFortification => 'Укрепления';
+
+  @override
+  String get catPhoto => 'Ретрофото';
+
+  @override
+  String get catArticle => 'Статьи';
+
+  @override
+  String get catOther => 'Другое';
+
+  @override
+  String get manualInput => 'Ввести код';
+
+  @override
+  String get enterQrHint => 'Вставьте ссылку на Википедию, PastVu, OSM…';
+
+  @override
+  String get submit => 'Открыть';
+
+  @override
+  String get scanHistory => 'Недавние сканы';
+
+  @override
+  String get noScansYet => 'Пока ничего не отсканировано';
+
+  @override
+  String get qrUnknown => 'Этот код не ведёт к месту';
+
+  @override
+  String get qrExternal => 'В коде ссылка';
+
+  @override
+  String get openLink => 'Открыть ссылку';
+
+  @override
+  String get resolvingPlace => 'Ищем место…';
+
+  @override
+  String get placeNotFound => 'Место не найдено';
+
+  @override
+  String get scannerHint => 'Наведите на QR-код на табличке или ссылку на Википедию / PastVu / OSM';
+
+  @override
+  String get addPlaceTitle => 'Новое место';
+
+  @override
+  String get descriptionField => 'Описание';
+
+  @override
+  String get yearField => 'Год';
+
+  @override
+  String get useMyLocation => 'Моё местоположение';
+
+  @override
+  String get placeSaved => 'Место сохранено на устройстве';
+
+  @override
+  String get invalidYear => 'Введите корректный год';
+
+  @override
+  String get statsTitle => 'Статистика';
+
+  @override
+  String get statsLocalOnly => 'Все данные хранятся только на этом устройстве';
+
+  @override
+  String get statsEstimated => 'Нет датчика шагов — шаги оцениваются по расстоянию';
+
+  @override
+  String get statsToday => 'Сегодня';
+
+  @override
+  String statsGoal(Object percent, Object goal) {
+    return '$percent% дневной цели ($goal)';
+  }
+
+  @override
+  String get statsMovement => 'Движение';
+
+  @override
+  String get statsSteps => 'Шаги';
+
+  @override
+  String get statsDistance => 'Расстояние';
+
+  @override
+  String get statsActiveTime => 'Время в движении';
+
+  @override
+  String get statsCalories => 'Калории';
+
+  @override
+  String get statsAvgDaily => 'В среднем за день';
+
+  @override
+  String get statsBestDay => 'Рекордный день';
+
+  @override
+  String get statsGoalDays => 'Цель выполнена';
+
+  @override
+  String get statsMaxSpeed => 'Макс. скорость';
+
+  @override
+  String get statsLongestDay => 'Самая длинная прогулка';
+
+  @override
+  String get statsStreak => 'Текущая серия';
+
+  @override
+  String get statsLongestStreak => 'Лучшая серия';
+
+  @override
+  String get statsActiveDays => 'Активных дней';
+
+  @override
+  String statsDays(Object count) {
+    return '$count дн.';
+  }
+
+  @override
+  String get stats30Days => 'Шаги за 30 дней';
+
+  @override
+  String get statsByHour => 'Когда вы гуляете (по часам)';
+
+  @override
+  String get statsByWeekday => 'По дням недели';
+
+  @override
+  String statsMostActive(Object day, Object hour) {
+    return 'Пик активности: $day, около $hour:00';
+  }
+
+  @override
+  String get statsDiscoveries => 'Открытия';
+
+  @override
+  String get statsVisitsTotal => 'Открыто мест';
+
+  @override
+  String get statsVisitsWeek => 'За неделю';
+
+  @override
+  String get statsBySource => 'По источникам';
+
+  @override
+  String get statsByCategory => 'По категориям';
+
+  @override
+  String get statsByMethod => 'Как подтверждено';
+
+  @override
+  String get methodQr => 'QR-код';
+
+  @override
+  String get methodGeofence => 'Пришёл (GPS)';
+
+  @override
+  String get methodManual => 'Отмечено вручную';
+
+  @override
+  String get statsFirstDiscovery => 'Первое открытие';
+
+  @override
+  String get statsLastDiscovery => 'Последнее открытие';
+
+  @override
+  String get statsOldestYear => 'Самая древняя эпоха';
+
+  @override
+  String get statsHunts => 'Поиски мест';
+
+  @override
+  String get statsHuntsTotal => 'Начато';
+
+  @override
+  String get statsHuntsFound => 'Найдено';
+
+  @override
+  String get statsHuntsAbandoned => 'Брошено';
+
+  @override
+  String get statsSuccessRate => 'Успешность';
+
+  @override
+  String get statsAvgStepsHunt => 'Шагов на поиск';
+
+  @override
+  String get statsAvgDistanceHunt => 'Путь на поиск';
+
+  @override
+  String get statsAvgTimeHunt => 'Время на поиск';
+
+  @override
+  String get statsTotalHuntSteps => 'Шагов в поисках';
+
+  @override
+  String get statsDetour => 'Коэф. петляния';
+
+  @override
+  String get statsDetourHint => 'Пройдено ÷ расстояние по прямой. 1.0 — идеальный путь';
+
+  @override
+  String get statsFewestSteps => 'Меньше всего шагов';
+
+  @override
+  String get statsMostSteps => 'Больше всего шагов';
+
+  @override
+  String get statsFastest => 'Быстрее всего';
+
+  @override
+  String get statsRecentHunts => 'Последние поиски';
+
+  @override
+  String get huntStatusFound => 'найдено';
+
+  @override
+  String get huntStatusAbandoned => 'брошено';
+
+  @override
+  String get huntStatusActive => 'в процессе';
+
+  @override
+  String get statsEngagement => 'Любознательность';
+
+  @override
+  String get statsScans => 'Сканирований QR';
+
+  @override
+  String get statsUniqueScans => 'Уникальных кодов';
+
+  @override
+  String get statsViews => 'Открыто карточек';
+
+  @override
+  String get statsUniqueViews => 'Уникальных мест прочитано';
+
+  @override
+  String get statsFavorites => 'В избранном';
+
+  @override
+  String get statsUserPlaces => 'Добавлено мест';
+
+  @override
+  String get statsPlacesLoaded => 'Мест загружено из источников';
+
+  @override
+  String get statsExploration => 'Исследование';
+
+  @override
+  String get statsExploredArea => 'Исследовано территории';
+
+  @override
+  String get statsExploredCells => 'Посещено клеток карты';
+
+  @override
+  String get statsStepsPerDiscovery => 'Шагов на одно открытие';
+
+  @override
+  String get statsMetersPerDiscovery => 'Путь на одно открытие';
+
+  @override
+  String statsAchievements(Object unlocked, Object total) {
+    return 'Достижения $unlocked/$total';
+  }
+
+  @override
+  String get statsReset => 'Сбросить статистику';
+
+  @override
+  String get statsResetConfirm =>
+      'Все шаги, маршруты, поиски и открытия будут удалены с устройства. Избранное и ваши места останутся.';
+
+  @override
+  String get statsResetDone => 'Статистика очищена';
+
+  @override
+  String get statsEmpty => 'Отправляйтесь на прогулку — здесь появится статистика';
+
+  @override
+  String get noData => '—';
+
+  @override
+  String get unitM => 'м';
+
+  @override
+  String get unitKm => 'км';
+
+  @override
+  String get unitH => 'ч';
+
+  @override
+  String get unitMin => 'мин';
+
+  @override
+  String get unitS => 'с';
+
+  @override
+  String get unitKmh => 'км/ч';
+
+  @override
+  String get unitKcal => 'ккал';
+
+  @override
+  String get unitKm2 => 'км²';
+
+  @override
+  String get achFirstDiscovery => 'Первая находка';
+
+  @override
+  String get achFirstDiscoveryDesc => 'Откройте первое место';
+
+  @override
+  String get achTenDiscoveries => 'Краевед';
+
+  @override
+  String get achTenDiscoveriesDesc => 'Откройте 10 мест';
+
+  @override
+  String get achFiftyDiscoveries => 'Летописец';
+
+  @override
+  String get achFiftyDiscoveriesDesc => 'Откройте 50 мест';
+
+  @override
+  String get achFirstHunt => 'Следопыт';
+
+  @override
+  String get achFirstHuntDesc => 'Завершите поиск места';
+
+  @override
+  String get achFiveHunts => 'Искатель сокровищ';
+
+  @override
+  String get achFiveHuntsDesc => 'Завершите 5 поисков';
+
+  @override
+  String get achStraightShooter => 'Прямо к цели';
+
+  @override
+  String get achStraightShooterDesc => 'Найдите место с коэффициентом петляния ≤ 1.3';
+
+  @override
+  String get achTenKDay => '10 000 шагов';
+
+  @override
+  String get achTenKDayDesc => 'Пройдите 10 000 шагов за день';
+
+  @override
+  String get achHundredKTotal => 'Сотник';
+
+  @override
+  String get achHundredKTotalDesc => '100 000 шагов всего';
+
+  @override
+  String get achMarathon => 'Марафонец';
+
+  @override
+  String get achMarathonDesc => 'Пройдите 42,2 км всего';
+
+  @override
+  String get achExplorer => 'Первооткрыватель';
+
+  @override
+  String get achExplorerDesc => 'Исследуйте 1 км² карты';
+
+  @override
+  String get achScanner => 'Дешифровщик';
+
+  @override
+  String get achScannerDesc => 'Отсканируйте 10 QR-кодов';
+
+  @override
+  String get achAllSources => 'Энциклопедист';
+
+  @override
+  String get achAllSourcesDesc => 'Откройте место из каждого источника';
+
+  @override
+  String get achWeekStreak => 'Неделя истории';
+
+  @override
+  String get achWeekStreakDesc => 'Будьте активны 7 дней подряд';
+
+  @override
+  String get achTimeTraveler => 'Путешественник во времени';
+
+  @override
+  String get achTimeTravelerDesc => 'Откройте что-то старше 1917 года';
+
+  @override
+  String get achCurator => 'Хранитель';
+
+  @override
+  String get achCuratorDesc => 'Сохраните 10 мест в избранное';
+
+  @override
+  String get achCartographer => 'Картограф';
+
+  @override
+  String get achCartographerDesc => 'Добавьте 3 своих места';
+
+  @override
+  String get sectionSources => 'Источники данных';
+
+  @override
+  String get sectionTracking => 'Трекинг';
+
+  @override
+  String get searchRadius => 'Радиус поиска';
+
+  @override
+  String get backgroundTracking => 'Фоновый трекинг';
+
+  @override
+  String get backgroundTrackingSubtitle => 'Считать шаги и маршрут при выключенном экране (будет уведомление)';
+
+  @override
+  String get autoTracking => 'Включать трекинг автоматически';
+
+  @override
+  String get autoTrackingSubtitle => 'При открытии карты';
+
+  @override
+  String get dailyGoal => 'Дневная цель шагов';
+
+  @override
+  String get stepLength => 'Длина шага';
+
+  @override
+  String get unitCm => 'см';
+
+  @override
+  String get geofenceRadius => 'Радиус прибытия';
+
+  @override
+  String get geofenceRadiusSubtitle => 'Насколько близко считается «нашёл»';
+
+  @override
+  String get sourcePastvuDesc => 'Ретрофото от сообщества краеведов';
+
+  @override
+  String get sourceWikipediaDesc => 'Статьи о местах рядом';
+
+  @override
+  String get sourceWikidataDesc => 'Объекты культурного наследия из реестра';
+
+  @override
+  String get sourceOsmDesc => 'Памятники, мемориалы, руины из OpenStreetMap';
+
+  @override
+  String get aboutTitle => 'О приложении';
+
+  @override
+  String get aboutTagline => 'Открывайте историю вокруг себя';
+
+  @override
+  String get aboutDescription =>
+      'QStory находит исторические места, ретрофотографии и объекты наследия вокруг вас по открытым данным сообществ историков и энциклопедий. Выберите место, дойдите до него — и узнайте, сколько шагов заняли поиски.';
+
+  @override
+  String get aboutDataTitle => 'Откуда данные';
+
+  @override
+  String get aboutPrivacyTitle => 'Приватность';
+
+  @override
+  String get aboutPrivacyText =>
+      'Без аккаунтов и собственного сервера. Ваше местоположение, шаги, маршруты и статистика не покидают устройство. Приложение отправляет только координаты области карты в перечисленные открытые API, чтобы найти места поблизости.';
+
+  @override
+  String get aboutLicenseTitle => 'Лицензия';
+
+  @override
+  String get aboutSourceCode => 'Исходный код';
+
+  @override
+  String get aboutReportIssue => 'Сообщить о проблеме';
+
+  @override
+  String get aboutTeam => 'Команда';
+
+  @override
+  String get openSourceLicenses => 'Лицензии open-source';
+
+  @override
+  String get explorerTitle => 'Исследователь';
+
+  @override
+  String get statsOpen => 'Открыть статистику';
+
+  @override
+  String openEmailFailed(Object email) {
+    return 'Почтовое приложение не найдено. Напишите на $email';
+  }
+
+  @override
+  String get emailOpened => 'Открываем почтовое приложение…';
+
+  @override
+  String get locationNeeded => 'Геолокация нужна для карты и трекинга';
+
+  @override
+  String get visited => 'Посещено';
+
+  @override
+  String get details => 'Подробнее';
 }

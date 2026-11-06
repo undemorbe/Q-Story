@@ -258,95 +258,117 @@ abstract class _ThemeScheme {
 // ─── Dark ─────────────────────────────────────────────────────────────────────
 
 class _DarkScheme implements _ThemeScheme {
-  @override Color get bg => AppColors.background;
-  @override Color get surface => AppColors.surface;
-  @override Color get surfaceVariant => AppColors.surfaceVariant;
-  @override Color get gold => AppColors.primaryGold;
-  @override Color get primaryContainer => AppColors.primaryContainer;
-  @override Color get onBg => AppColors.onBackground;
-  @override Color get onSurface => AppColors.onSurface;
-  @override Color get outline => AppColors.outline;
-  @override Color get outlineVariant => AppColors.outlineVariant;
-  @override Color get error => AppColors.error;
-  @override Color get dim => const Color(0xFF8A7A60);
+  @override
+  Color get bg => AppColors.background;
+  @override
+  Color get surface => AppColors.surface;
+  @override
+  Color get surfaceVariant => AppColors.surfaceVariant;
+  @override
+  Color get gold => AppColors.primaryGold;
+  @override
+  Color get primaryContainer => AppColors.primaryContainer;
+  @override
+  Color get onBg => AppColors.onBackground;
+  @override
+  Color get onSurface => AppColors.onSurface;
+  @override
+  Color get outline => AppColors.outline;
+  @override
+  Color get outlineVariant => AppColors.outlineVariant;
+  @override
+  Color get error => AppColors.error;
+  @override
+  Color get dim => const Color(0xFF8A7A60);
 
   @override
   ColorScheme get colorScheme => const ColorScheme(
-    brightness: Brightness.dark,
-    primary: AppColors.primaryGold,
-    onPrimary: AppColors.background,
-    primaryContainer: AppColors.primaryContainer,
-    onPrimaryContainer: AppColors.primaryGold,
-    secondary: AppColors.secondaryRed,
-    onSecondary: AppColors.onBackground,
-    secondaryContainer: AppColors.secondaryContainer,
-    onSecondaryContainer: AppColors.onBackground,
-    tertiary: AppColors.primaryGold,
-    onTertiary: AppColors.background,
-    tertiaryContainer: AppColors.primaryContainer,
-    onTertiaryContainer: AppColors.primaryGold,
-    error: AppColors.error,
-    onError: AppColors.onBackground,
-    errorContainer: Color(0xFF5C0A0A),
-    onErrorContainer: Color(0xFFFFDAD6),
-    surface: AppColors.surface,
-    onSurface: AppColors.onSurface,
-    onSurfaceVariant: AppColors.onSurface,
-    outline: AppColors.outline,
-    outlineVariant: AppColors.outlineVariant,
-    shadow: Colors.black,
-    scrim: Colors.black,
-    inverseSurface: AppColors.onBackground,
-    onInverseSurface: AppColors.background,
-    inversePrimary: AppColors.primaryGoldDark,
-    surfaceTint: Colors.transparent,
-  );
+        brightness: Brightness.dark,
+        primary: AppColors.primaryGold,
+        onPrimary: AppColors.background,
+        primaryContainer: AppColors.primaryContainer,
+        onPrimaryContainer: AppColors.primaryGold,
+        secondary: AppColors.secondaryRed,
+        onSecondary: AppColors.onBackground,
+        secondaryContainer: AppColors.secondaryContainer,
+        onSecondaryContainer: AppColors.onBackground,
+        tertiary: AppColors.primaryGold,
+        onTertiary: AppColors.background,
+        tertiaryContainer: AppColors.primaryContainer,
+        onTertiaryContainer: AppColors.primaryGold,
+        error: AppColors.error,
+        onError: AppColors.onBackground,
+        errorContainer: Color(0xFF5C0A0A),
+        onErrorContainer: Color(0xFFFFDAD6),
+        surface: AppColors.surface,
+        onSurface: AppColors.onSurface,
+        onSurfaceVariant: AppColors.onSurface,
+        outline: AppColors.outline,
+        outlineVariant: AppColors.outlineVariant,
+        shadow: Colors.black,
+        scrim: Colors.black,
+        inverseSurface: AppColors.onBackground,
+        onInverseSurface: AppColors.background,
+        inversePrimary: AppColors.primaryGoldDark,
+        surfaceTint: Colors.transparent,
+      );
 }
 
 // ─── Light (aged parchment) ───────────────────────────────────────────────────
 
 class _LightScheme implements _ThemeScheme {
-  @override Color get bg => AppColors.lightBackground;
-  @override Color get surface => AppColors.lightSurface;
-  @override Color get surfaceVariant => AppColors.lightSurfaceVariant;
-  @override Color get gold => AppColors.lightGold;
-  @override Color get primaryContainer => AppColors.lightGoldContainer;
-  @override Color get onBg => AppColors.lightOnBackground;
-  @override Color get onSurface => AppColors.lightOnSurface;
-  @override Color get outline => AppColors.lightOutline;
-  @override Color get outlineVariant => AppColors.lightOutlineVariant;
-  @override Color get error => AppColors.lightError;
-  @override Color get dim => AppColors.lightOutlineVariant;
+  @override
+  Color get bg => AppColors.lightBackground;
+  @override
+  Color get surface => AppColors.lightSurface;
+  @override
+  Color get surfaceVariant => AppColors.lightSurfaceVariant;
+  @override
+  Color get gold => AppColors.lightGold;
+  @override
+  Color get primaryContainer => AppColors.lightGoldContainer;
+  @override
+  Color get onBg => AppColors.lightOnBackground;
+  @override
+  Color get onSurface => AppColors.lightOnSurface;
+  @override
+  Color get outline => AppColors.lightOutline;
+  @override
+  Color get outlineVariant => AppColors.lightOutlineVariant;
+  @override
+  Color get error => AppColors.lightError;
+  @override
+  Color get dim => AppColors.lightOutlineVariant;
 
   @override
   ColorScheme get colorScheme => ColorScheme(
-    brightness: Brightness.light,
-    primary: AppColors.lightGold,
-    onPrimary: AppColors.lightBackground,
-    primaryContainer: AppColors.lightGoldContainer,
-    onPrimaryContainer: AppColors.lightOnBackground,
-    secondary: AppColors.lightSecondaryRed,
-    onSecondary: AppColors.lightBackground,
-    secondaryContainer: AppColors.lightSecondaryContainer,
-    onSecondaryContainer: AppColors.lightOnBackground,
-    tertiary: AppColors.lightGold,
-    onTertiary: AppColors.lightBackground,
-    tertiaryContainer: AppColors.lightGoldContainer,
-    onTertiaryContainer: AppColors.lightOnBackground,
-    error: AppColors.lightError,
-    onError: AppColors.lightBackground,
-    errorContainer: const Color(0xFFFFDAD6),
-    onErrorContainer: const Color(0xFF410002),
-    surface: AppColors.lightSurface,
-    onSurface: AppColors.lightOnSurface,
-    onSurfaceVariant: AppColors.lightOnSurface,
-    outline: AppColors.lightOutline,
-    outlineVariant: AppColors.lightOutlineVariant,
-    shadow: Colors.black,
-    scrim: Colors.black54,
-    inverseSurface: AppColors.lightOnBackground,
-    onInverseSurface: AppColors.lightBackground,
-    inversePrimary: AppColors.lightGoldMid,
-    surfaceTint: Colors.transparent,
-  );
+        brightness: Brightness.light,
+        primary: AppColors.lightGold,
+        onPrimary: AppColors.lightBackground,
+        primaryContainer: AppColors.lightGoldContainer,
+        onPrimaryContainer: AppColors.lightOnBackground,
+        secondary: AppColors.lightSecondaryRed,
+        onSecondary: AppColors.lightBackground,
+        secondaryContainer: AppColors.lightSecondaryContainer,
+        onSecondaryContainer: AppColors.lightOnBackground,
+        tertiary: AppColors.lightGold,
+        onTertiary: AppColors.lightBackground,
+        tertiaryContainer: AppColors.lightGoldContainer,
+        onTertiaryContainer: AppColors.lightOnBackground,
+        error: AppColors.lightError,
+        onError: AppColors.lightBackground,
+        errorContainer: const Color(0xFFFFDAD6),
+        onErrorContainer: const Color(0xFF410002),
+        surface: AppColors.lightSurface,
+        onSurface: AppColors.lightOnSurface,
+        onSurfaceVariant: AppColors.lightOnSurface,
+        outline: AppColors.lightOutline,
+        outlineVariant: AppColors.lightOutlineVariant,
+        shadow: Colors.black,
+        scrim: Colors.black54,
+        inverseSurface: AppColors.lightOnBackground,
+        onInverseSurface: AppColors.lightBackground,
+        inversePrimary: AppColors.lightGoldMid,
+        surfaceTint: Colors.transparent,
+      );
 }

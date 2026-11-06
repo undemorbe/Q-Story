@@ -1,93 +1,27 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
+import '../constants/app_info.dart';
+import 'mail_launcher.dart';
 
+/// Sends support messages through the user's email client.
 class EmailService {
-  late final String _smtpUser;
-  late final String _smtpPassword;
-  late final String _supportEmail;
-  late final String _supportSubject;
+  EmailService(this._mail, {this.supportEmail = AppInfo.supportEmail});
 
-  EmailService() {
-    _smtpUser = _readEnv('SMTP_USER');
-    _smtpPassword = _readEnv('SMTP_PASSWORD');
-    _supportEmail = _readEnv('SUPPORT_EMAIL');
-    _supportSubject = _readEnv('SUPPORT_SUBJECT', fallback: 'Support Message');
-  }
+  final MailLauncher _mail;
+  final String supportEmail;
 
-  String _readEnv(String key, {String fallback = ''}) {
-    try {
-      return dotenv.get(key, fallback: fallback);
-    } catch (_) {
-      return fallback;
-    }
-  }
+  static const int maxLength = 500;
 
-  /// Validates and sends a support message via email
-  ///
-  /// Throws [ArgumentError] if:
-  /// - Message is empty or contains only whitespace
-  /// - Message exceeds 500 characters
-  ///
-  /// Throws general exception with descriptive message if SMTP sending fails
+  /// Throws [ArgumentError] for an empty or too long message and
+  /// [MailUnavailableException] when no email app is installed.
   Future<void> sendSupportMessage(String message) async {
-    // Trim whitespace
-    final trimmedMessage = message.trim();
+    final trimmed = message.trim();
+    if (trimmed.isEmpty) throw ArgumentError('Message cannot be empty');
+    if (trimmed.length > maxLength) throw ArgumentError('Message cannot exceed $maxLength characters');
 
-    // Validate: empty or whitespace-only
-    if (trimmedMessage.isEmpty) {
-      throw ArgumentError('Message cannot be empty');
-    }
-
-    // Validate: max 500 characters
-    if (trimmedMessage.length > 500) {
-      throw ArgumentError('Message cannot exceed 500 characters');
-    }
-
-    // Build email body with timestamp
-    final timestamp = DateTime.now().toIso8601String();
-    final emailBody = '''
-User Support Message
-====================
-Received: $timestamp
-
-Message:
-$trimmedMessage
-''';
-
-    try {
-      // Create SMTP server connection
-      final smtpServer = gmailSaslXoauth2(_smtpUser, _smtpPassword);
-
-      // Build email
-      final email = Message()
-        ..from = Address(_smtpUser)
-        ..recipients.add(_supportEmail)
-        ..subject = _supportSubject
-        ..text = emailBody;
-
-      // Send email
-      await send(email, smtpServer);
-    } on MailerException catch (e) {
-      // Handle mailer-specific exceptions
-      if (e.toString().contains('connection')) {
-        throw Exception('Network error. Check internet connection.');
-      } else if (e.toString().contains('auth') || e.toString().contains('authentication')) {
-        throw Exception('Email service misconfigured');
-      } else {
-        throw Exception('Failed to send message');
-      }
-    } on SocketException catch (_) {
-      // Handle socket/network errors
-      throw Exception('Network error. Check internet connection.');
-    } on TimeoutException catch (_) {
-      // Handle timeout errors
-      throw Exception('Request timeout');
-    } catch (e) {
-      // Generic error handler
-      throw Exception('Failed to send message');
-    }
+    final ok = await _mail.compose(
+      to: supportEmail,
+      subject: '${AppInfo.name} support',
+      body: '$trimmed\n\n—\n${AppInfo.name} ${AppInfo.version}',
+    );
+    if (!ok) throw MailUnavailableException(supportEmail);
   }
 }

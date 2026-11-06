@@ -1,12 +1,24 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:qstory/core/errors/failures.dart';
 import 'package:qstory/core/util/result.dart';
 import 'package:qstory/features/history/domain/entities/daily_fact_entity.dart';
 import 'package:qstory/features/history/domain/repositories/daily_fact_repository.dart';
 import 'package:qstory/features/history/presentation/stores/daily_fact_store.dart';
 
-class MockDailyFactRepository extends Mock implements DailyFactRepository {}
+typedef FactsHandler = Future<Result<List<DailyFactEntity>>> Function(int month, int day);
+
+class MockDailyFactRepository implements DailyFactRepository {
+  FactsHandler? handler;
+  (int, int)? lastDate;
+  int calls = 0;
+
+  @override
+  Future<Result<List<DailyFactEntity>>> getFactsForDate(int month, int day) {
+    calls++;
+    lastDate = (month, day);
+    return handler!(month, day);
+  }
+}
 
 void main() {
   late DailyFactStore store;
@@ -64,19 +76,18 @@ void main() {
       });
 
       test('loads facts successfully', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.ok(testFacts));
+        mockRepository.handler = ((_, __) async => Result.ok(testFacts));
 
         await store.loadDailyFact();
 
         expect(store.facts, testFacts);
         expect(store.currentFact, isNotNull);
         expect(store.isLoading, false);
+        expect(mockRepository.lastDate, (testMonth, testDay));
       });
 
       test('sets random current fact from loaded facts', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.ok(testFacts));
+        mockRepository.handler = ((_, __) async => Result.ok(testFacts));
 
         await store.loadDailyFact();
 
@@ -84,8 +95,7 @@ void main() {
       });
 
       test('handles empty facts list', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.ok([]));
+        mockRepository.handler = ((_, __) async => Result.ok([]));
 
         await store.loadDailyFact();
 
@@ -94,8 +104,7 @@ void main() {
       });
 
       test('sets error on network failure', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.err(NetworkFailure()));
+        mockRepository.handler = ((_, __) async => Result.err(NetworkFailure()));
 
         await store.loadDailyFact();
 
@@ -104,8 +113,7 @@ void main() {
       });
 
       test('sets error on not found failure', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.err(NotFoundFailure()));
+        mockRepository.handler = ((_, __) async => Result.err(NotFoundFailure()));
 
         await store.loadDailyFact();
 
@@ -115,8 +123,7 @@ void main() {
 
       test('does not reload if same day and facts exist', () async {
         var callCount = 0;
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async {
+        mockRepository.handler = ((_, __) async {
           callCount++;
           return Result.ok(testFacts);
         });
@@ -133,8 +140,7 @@ void main() {
 
       test('force=true bypasses cache', () async {
         var callCount = 0;
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async {
+        mockRepository.handler = ((_, __) async {
           callCount++;
           return Result.ok(testFacts);
         });
@@ -148,8 +154,7 @@ void main() {
 
       test('clears error on successful load', () async {
         var callCount = 0;
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async {
+        mockRepository.handler = ((_, __) async {
           callCount++;
           if (callCount == 1) {
             return Result.err(NetworkFailure());
@@ -166,7 +171,7 @@ void main() {
 
       test('sets isLoading during fetch', () async {
         var isLoadingDuringFetch = false;
-        when(mockRepository.getFactsForDate(testMonth, testDay)).thenAnswer((_) async {
+        mockRepository.handler = ((_, __) async {
           isLoadingDuringFetch = store.isLoading;
           return Result.ok(testFacts);
         });
@@ -208,8 +213,7 @@ void main() {
       });
 
       test('selects different fact from loaded set', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.ok(testFacts));
+        mockRepository.handler = ((_, __) async => Result.ok(testFacts));
 
         await store.loadDailyFact();
         final firstFact = store.currentFact;
@@ -228,8 +232,7 @@ void main() {
 
       test('handles single fact by keeping it', () async {
         final singleFact = [testFacts.first];
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.ok(singleFact));
+        mockRepository.handler = ((_, __) async => Result.ok(singleFact));
 
         await store.loadDailyFact();
         final fact = store.currentFact;
@@ -241,8 +244,7 @@ void main() {
 
       test('refetches if facts list is empty', () async {
         var callCount = 0;
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async {
+        mockRepository.handler = ((_, __) async {
           callCount++;
           if (callCount == 1) {
             return Result.ok([]);
@@ -259,8 +261,7 @@ void main() {
       });
 
       test('always returns a fact when available', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.ok(testFacts));
+        mockRepository.handler = ((_, __) async => Result.ok(testFacts));
 
         await store.loadDailyFact();
 
@@ -274,8 +275,7 @@ void main() {
 
     group('error messages', () {
       test('humanizes network failure', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.err(NetworkFailure()));
+        mockRepository.handler = ((_, __) async => Result.err(NetworkFailure()));
 
         await store.loadDailyFact();
 
@@ -283,8 +283,7 @@ void main() {
       });
 
       test('humanizes not found failure', () async {
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.err(NotFoundFailure()));
+        mockRepository.handler = ((_, __) async => Result.err(NotFoundFailure()));
 
         await store.loadDailyFact();
 
@@ -293,8 +292,7 @@ void main() {
 
       test('uses custom server failure message', () async {
         const customMsg = 'Custom server error';
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async => Result.err(ServerFailure(customMsg)));
+        mockRepository.handler = ((_, __) async => Result.err(ServerFailure(customMsg)));
 
         await store.loadDailyFact();
 
@@ -319,8 +317,7 @@ void main() {
 
       test('caches facts by date - does not reload on same day', () async {
         var callCount = 0;
-        when(mockRepository.getFactsForDate(testMonth, testDay))
-            .thenAnswer((_) async {
+        mockRepository.handler = ((_, __) async {
           callCount++;
           return Result.ok(facts);
         });

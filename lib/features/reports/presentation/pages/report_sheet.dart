@@ -85,8 +85,8 @@ class _ReportSheetState extends State<ReportSheet> {
                 Text(
                   'ID: ${widget.markerId}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey[700],
-                  ),
+                        color: Colors.grey[700],
+                      ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -120,9 +120,11 @@ class _ReportSheetState extends State<ReportSheet> {
                       ),
                     ))
                 .toList(),
-            onChanged: _isLoading ? null : (value) {
-              setState(() => _selectedCategory = value);
-            },
+            onChanged: _isLoading
+                ? null
+                : (value) {
+                    setState(() => _selectedCategory = value);
+                  },
           ),
           const SizedBox(height: 16),
 
@@ -186,9 +188,7 @@ class _ReportSheetState extends State<ReportSheet> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (_isLoading ||
-                          _selectedCategory == null ||
-                          _textController.text.trim().isEmpty)
+                  onPressed: (_isLoading || _selectedCategory == null || _textController.text.trim().isEmpty)
                       ? null
                       : _sendReport,
                   child: _isLoading

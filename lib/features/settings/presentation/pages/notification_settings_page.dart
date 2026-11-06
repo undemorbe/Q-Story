@@ -7,8 +7,7 @@ class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key});
 
   @override
-  State<NotificationSettingsPage> createState() =>
-      _NotificationSettingsPageState();
+  State<NotificationSettingsPage> createState() => _NotificationSettingsPageState();
 }
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
@@ -135,24 +134,18 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         title: Text(l10n.notificationTime),
                         subtitle: Text(
                           _formatTime(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(color: gold),
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: gold),
                         ),
-                        trailing: Icon(Icons.chevron_right,
-                            color: context.outlineClr),
+                        trailing: Icon(Icons.chevron_right, color: context.outlineClr),
                         onTap: _selectTime,
                       ),
                       const SizedBox(height: 4),
                       ListTile(
                         contentPadding: EdgeInsets.zero,
-                        leading:
-                            Icon(Icons.notifications_active, color: gold),
+                        leading: Icon(Icons.notifications_active, color: gold),
                         title: Text(l10n.testNotification),
                         subtitle: Text(l10n.testNotificationDesc),
-                        trailing: Icon(Icons.send,
-                            size: 16, color: context.outlineClr),
+                        trailing: Icon(Icons.send, size: 16, color: context.outlineClr),
                         onTap: _testNotification,
                       ),
                     ],
@@ -209,10 +202,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     Expanded(
                       child: Text(
                         l10n.dailyNotificationsActivated(_formatTime()),
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: gold),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: gold),
                       ),
                     ),
                   ],

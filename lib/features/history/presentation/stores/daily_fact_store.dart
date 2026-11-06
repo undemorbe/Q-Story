@@ -78,8 +78,7 @@ abstract class _DailyFactStore with Store {
     required DailyFactEntity? exclude,
   }) {
     if (exclude == null) return list[_random.nextInt(list.length)];
-    final candidates =
-        list.where((f) => identical(f, exclude) == false).toList();
+    final candidates = list.where((f) => identical(f, exclude) == false).toList();
     if (candidates.isEmpty) return list.first;
     return candidates[_random.nextInt(candidates.length)];
   }

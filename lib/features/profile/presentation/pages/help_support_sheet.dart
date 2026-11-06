@@ -114,8 +114,8 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
           Text(
             l10n.sendSupportMessage,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
+                  color: Colors.grey[600],
+                ),
           ),
           const SizedBox(height: 16),
 
@@ -167,20 +167,18 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: (_isLoading || _messageController.text.trim().isEmpty)
-                      ? null
-                      : _sendMessage,
+                  onPressed: (_isLoading || _messageController.text.trim().isEmpty) ? null : _sendMessage,
                   child: _isLoading
                       ? SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.blue[700]!,
-                      ),
-                    ),
-                  )
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.blue[700]!,
+                            ),
+                          ),
+                        )
                       : Text(l10n.send),
                 ),
               ),

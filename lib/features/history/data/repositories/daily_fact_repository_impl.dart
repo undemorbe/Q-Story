@@ -1,7 +1,4 @@
-import 'package:dio/dio.dart';
-
-import '../../../../core/errors/failures.dart';
-import '../../../../core/util/dio_failure.dart';
+import '../../../../core/network/http_client.dart';
 import '../../../../core/util/result.dart';
 import '../../domain/entities/daily_fact_entity.dart';
 import '../../domain/repositories/daily_fact_repository.dart';
@@ -13,15 +10,12 @@ class DailyFactRepositoryImpl implements DailyFactRepository {
   DailyFactRepositoryImpl({required this.remote});
 
   @override
-  Future<Result<List<DailyFactEntity>>> getFactsForDate(
-      int month, int day) async {
+  Future<Result<List<DailyFactEntity>>> getFactsForDate(int month, int day) async {
     try {
       final list = await remote.fetchEventsForDate(month, day);
       return Ok(list);
-    } on DioException catch (e) {
-      return Err(dioToFailure(e));
     } catch (e) {
-      return Err(UnknownFailure(e.toString(), e));
+      return Err(toFailure(e));
     }
   }
 }

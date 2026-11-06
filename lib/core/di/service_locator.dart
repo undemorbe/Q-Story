@@ -1,104 +1,90 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../network/api_client.dart';
-import '../services/location_service.dart';
-import '../services/email_service.dart';
-import '../services/report_service.dart';
-import '../../features/qr_operations/data/repositories/qr_repository_impl.dart';
-import '../../features/qr_operations/domain/repositories/qr_repository.dart';
-import '../../features/qr_operations/domain/usecases/process_qr_usecase.dart';
-import '../../features/qr_operations/presentation/stores/qr_store.dart';
-import '../../features/qr_operations/data/datasources/scan_statistics_local_data_source.dart';
-import '../../features/settings/data/datasources/settings_local_data_source.dart';
-import '../../features/settings/data/repositories/settings_repository_impl.dart';
-import '../../features/settings/domain/repositories/settings_repository.dart';
-import '../../features/settings/presentation/stores/settings_store.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:local_auth/local_auth.dart';
-import '../../features/auth/data/datasources/auth_local_data_source.dart';
-import '../../features/auth/data/repositories/auth_repository_impl.dart';
-import '../../features/auth/domain/repositories/auth_repository.dart';
-import '../../features/auth/presentation/stores/auth_store.dart';
+
+import '../../features/activity/data/repositories/activity_repository_impl.dart';
+import '../../features/activity/domain/repositories/activity_repository.dart';
+import '../../features/activity/presentation/stores/journal_store.dart';
+import '../../features/activity/presentation/stores/tracking_store.dart';
 import '../../features/favorites/presentation/stores/favorites_store.dart';
-import '../../features/history/data/datasources/history_local_data_source.dart';
 import '../../features/history/data/datasources/daily_fact_remote_data_source.dart';
-import '../../features/history/data/repositories/history_repository_impl.dart';
 import '../../features/history/data/repositories/daily_fact_repository_impl.dart';
-import '../../features/history/domain/repositories/history_repository.dart';
 import '../../features/history/domain/repositories/daily_fact_repository.dart';
-import '../../features/history/presentation/stores/history_store.dart';
 import '../../features/history/presentation/stores/daily_fact_store.dart';
-import '../../features/map/data/datasources/completed_markers_local_data_source.dart';
-import '../../features/history/data/datasources/favorites_local_data_source.dart';
-import '../../features/map/data/repositories/map_repository_impl.dart';
-import '../../features/map/domain/repositories/map_repository.dart';
-import '../../features/map/presentation/stores/map_store.dart';
+import '../../features/places/data/repositories/places_repository_impl.dart';
+import '../../features/places/data/sources/overpass_client.dart';
+import '../../features/places/data/sources/pastvu_client.dart';
+import '../../features/places/data/sources/wikidata_client.dart';
+import '../../features/places/data/sources/wikipedia_client.dart';
+import '../../features/places/domain/repositories/places_repository.dart';
+import '../../features/places/presentation/stores/places_store.dart';
+import '../../features/scanner/domain/scan_resolver.dart';
+import '../../features/settings/presentation/stores/settings_store.dart';
+import '../../features/stats/presentation/stores/stats_store.dart';
+import '../network/http_client.dart';
+import '../services/email_service.dart';
+import '../services/mail_launcher.dart';
+import '../services/motion_sensors.dart';
+import '../services/report_service.dart';
+import '../storage/app_database.dart';
+import '../storage/app_preferences.dart';
 
 final getIt = GetIt.instance;
 
-Future<void> setupServiceLocator() async {
-  // External
-  final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerSingleton<SharedPreferences>(sharedPreferences);
-  getIt.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
-  getIt.registerLazySingleton<LocalAuthentication>(() => LocalAuthentication());
+/// Wires the whole object graph. Everything is local except the HTTP
+/// clients for public open-data APIs; there is no app backend.
+Future<void> setupServiceLocator({
+  AppDatabase? database,
+  SharedPreferences? preferences,
+  MotionSensors? sensors,
+  Dio? dio,
+}) async {
+  // ─── Infrastructure ────────────────────────────────────────────────
+  final prefs = preferences ?? await SharedPreferences.getInstance();
+  final db = database ?? await AppDatabase.open();
+  final http = dio ?? createHttpClient();
 
-  // Core
-  getIt.registerSingleton<EmailService>(EmailService());
-  getIt.registerSingleton<ReportService>(ReportService());
-  getIt.registerLazySingleton<ApiClient>(() => ApiClient());
-  getIt.registerLazySingleton<LocationService>(() => LocationService());
+  getIt
+    ..registerSingleton<SharedPreferences>(prefs)
+    ..registerSingleton<AppPreferences>(AppPreferences(prefs))
+    ..registerSingleton<AppDatabase>(db)
+    ..registerSingleton<Dio>(http)
+    ..registerSingleton<MotionSensors>(sensors ?? DeviceMotionSensors())
+    ..registerSingleton<ValueNotifier<int>>(ValueNotifier<int>(0), instanceName: 'currentTab')
+    ..registerLazySingleton<MailLauncher>(UrlMailLauncher.new)
+    ..registerLazySingleton<EmailService>(() => EmailService(getIt()))
+    ..registerLazySingleton<ReportService>(() => ReportService(getIt()));
 
-  // Data Sources
-  getIt.registerLazySingleton<CompletedMarkersLocalDataSource>(
-    () => CompletedMarkersLocalDataSource(),
-  );
-  getIt.registerLazySingleton<FavoritesLocalDataSource>(
-    () => FavoritesLocalDataSource(),
-  );
-  getIt.registerLazySingleton<SettingsLocalDataSource>(
-    () => SettingsLocalDataSourceImpl(getIt()),
-  );
-  getIt.registerLazySingleton<AuthLocalDataSource>(
-    () => AuthLocalDataSourceImpl(secureStorage: getIt(), localAuth: getIt()),
-  );
-  getIt.registerLazySingleton<ScanStatisticsLocalDataSource>(
-    () => ScanStatisticsLocalDataSource(getIt()),
-  );
-  getIt.registerLazySingleton<HistoryLocalDataSource>(
-    () => HistoryLocalDataSourceImpl(sharedPreferences: getIt()),
-  );
-  getIt.registerLazySingleton<DailyFactRemoteDataSource>(
-    () => DailyFactRemoteDataSource(),
-  );
+  // ─── Repositories ──────────────────────────────────────────────────
+  getIt
+    ..registerLazySingleton<PlacesRepository>(() => PlacesRepositoryImpl(
+          database: db,
+          clients: [
+            PastVuClient(http),
+            WikipediaClient(http),
+            WikidataClient(http),
+            OverpassClient(http),
+          ],
+        ))
+    ..registerLazySingleton<ActivityRepository>(() => ActivityRepositoryImpl(db))
+    ..registerLazySingleton<DailyFactRemoteDataSource>(() => DailyFactRemoteDataSource(dio: http))
+    ..registerLazySingleton<DailyFactRepository>(() => DailyFactRepositoryImpl(remote: getIt()))
+    ..registerLazySingleton<ScanResolver>(() => ScanResolver(getIt()));
 
-  // Repositories
-  getIt.registerLazySingleton<QrRepository>(() => QrRepositoryImpl(getIt<ApiClient>()));
-  getIt.registerLazySingleton<SettingsRepository>(
-    () => SettingsRepositoryImpl(getIt()),
-  );
-  getIt.registerLazySingleton<HistoryRepository>(
-    () => HistoryRepositoryImpl(localDataSource: getIt()),
-  );
-  getIt.registerLazySingleton<DailyFactRepository>(
-    () => DailyFactRepositoryImpl(remote: getIt()),
-  );
-  getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(localDataSource: getIt()),
-  );
-  getIt.registerLazySingleton<MapRepository>(() => MapRepositoryImpl(getIt<ApiClient>(), getIt<CompletedMarkersLocalDataSource>()));
+  // ─── Stores ────────────────────────────────────────────────────────
+  getIt
+    ..registerSingleton<SettingsStore>(SettingsStore(getIt()))
+    ..registerSingleton<JournalStore>(JournalStore(getIt()))
+    ..registerSingleton<FavoritesStore>(FavoritesStore(db, getIt()))
+    ..registerSingleton<TrackingStore>(TrackingStore(getIt(), getIt(), getIt(), getIt()))
+    ..registerLazySingleton<PlacesStore>(() => PlacesStore(getIt(), getIt(), getIt()))
+    ..registerLazySingleton<StatsStore>(() => StatsStore(getIt(), getIt(), getIt(), getIt(), getIt(), getIt()))
+    ..registerLazySingleton<DailyFactStore>(() => DailyFactStore(getIt()));
 
-  // UseCases
-  getIt.registerLazySingleton<ProcessQrUseCase>(
-    () => ProcessQrUseCase(getIt()),
-  );
-
-  // Stores
-  getIt.registerLazySingleton<QrStore>(() => QrStore(getIt(), getIt(), getIt(), getIt()));
-  getIt.registerLazySingleton<SettingsStore>(() => SettingsStore(getIt()));
-  getIt.registerLazySingleton<AuthStore>(() => AuthStore(getIt()));
-  getIt.registerLazySingleton<FavoritesStore>(() => FavoritesStore(getIt()));
-  getIt.registerLazySingleton<HistoryStore>(() => HistoryStore(getIt()));
-  getIt.registerLazySingleton<DailyFactStore>(() => DailyFactStore(getIt()));
-  getIt.registerLazySingleton<MapStore>(() => MapStore(getIt()));
+  await Future.wait([
+    getIt<JournalStore>().init(),
+    getIt<FavoritesStore>().load(),
+    getIt<TrackingStore>().init(),
+  ]);
 }

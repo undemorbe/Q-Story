@@ -7,9 +7,8 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationService {
-  static final FlutterLocalNotificationsPlugin _notifications = 
-      FlutterLocalNotificationsPlugin();
-  
+  static final FlutterLocalNotificationsPlugin _notifications = FlutterLocalNotificationsPlugin();
+
   static const String _notificationEnabledKey = 'notifications_enabled';
   static const String _notificationTimeKey = 'notification_time';
   static const String _notificationScheduledKey = 'notification_scheduled';
@@ -53,11 +52,10 @@ class NotificationService {
   static Future<void> initialize() async {
     // Initialize timezone data
     tz.initializeTimeZones();
-    
+
     // Initialize plugin
-    const AndroidInitializationSettings androidSettings = 
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    
+    const AndroidInitializationSettings androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+
     const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -81,17 +79,16 @@ class NotificationService {
 
   static Future<void> requestPermissions() async {
     // Android permissions
-    final androidPlugin = _notifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    final androidPlugin =
+        _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     if (androidPlugin != null) {
       await androidPlugin.requestNotificationsPermission();
       // On Android 13+, exact alarms require special handling
       await androidPlugin.requestExactAlarmsPermission();
     }
-    
+
     // iOS permissions
-    final iosPlugin = _notifications
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+    final iosPlugin = _notifications.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
     if (iosPlugin != null) {
       await iosPlugin.requestPermissions(
         alert: true,
@@ -118,7 +115,7 @@ class NotificationService {
   static Future<void> setNotificationEnabled(bool enabled) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationEnabledKey, enabled);
-    
+
     if (enabled) {
       await scheduleDailyNotification();
     } else {
@@ -138,9 +135,9 @@ class NotificationService {
 
   static Future<void> setNotificationTime(TimeOfDay time) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_notificationTimeKey, 
-      '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}');
-    
+    await prefs.setString(
+        _notificationTimeKey, '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}');
+
     // Reschedule if notifications are enabled
     if (await getNotificationEnabled()) {
       await scheduleDailyNotification();
@@ -154,7 +151,7 @@ class NotificationService {
     final notificationTime = await getNotificationTime();
     final random = Random();
     final content = _historicalContent[random.nextInt(_historicalContent.length)];
-    
+
     // Create notification details
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'daily_history_channel',
@@ -191,17 +188,17 @@ class NotificationService {
       notificationTime.hour,
       notificationTime.minute,
     );
-    
+
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
-    
+
     // Convert to TZDateTime
     final timeZoneInfo = await FlutterTimezone.getLocalTimezone();
     final String timeZoneIdentifier = timeZoneInfo.identifier;
     final location = tz.getLocation(timeZoneIdentifier);
     final tzScheduledDate = tz.TZDateTime.from(scheduledDate, location);
-    
+
     await _notifications.zonedSchedule(
       id: 1, // Notification ID
       title: content['title']!,
@@ -220,9 +217,9 @@ class NotificationService {
   static Future<void> showTestNotification() async {
     final random = Random();
     final content = _historicalContent[random.nextInt(_historicalContent.length)];
-    
+
     debugPrint('Showing test notification: ${content['title']}');
-    
+
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'test_channel',
       'Test Notifications',
