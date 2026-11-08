@@ -1,0 +1,1 @@
+First release: historical places from PastVu, Wikipedia, Wikidata and OpenStreetMap, place hunts with compass and steps, a nearby list, on-device statistics with achievements, QR codes and optional daily reminders.

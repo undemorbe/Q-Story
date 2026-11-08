@@ -10,7 +10,8 @@ abstract final class Geo {
   static double distanceM(double lat1, double lon1, double lat2, double lon2) {
     final dLat = _rad(lat2 - lat1);
     final dLon = _rad(lon2 - lon1);
-    final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+    final a =
+        math.sin(dLat / 2) * math.sin(dLat / 2) +
         math.cos(_rad(lat1)) * math.cos(_rad(lat2)) * math.sin(dLon / 2) * math.sin(dLon / 2);
     return 2 * earthRadiusM * math.asin(math.min(1.0, math.sqrt(a)));
   }
@@ -18,7 +19,8 @@ abstract final class Geo {
   /// Initial bearing (0..360, clockwise from north) from point 1 to point 2.
   static double bearingDeg(double lat1, double lon1, double lat2, double lon2) {
     final y = math.sin(_rad(lon2 - lon1)) * math.cos(_rad(lat2));
-    final x = math.cos(_rad(lat1)) * math.sin(_rad(lat2)) -
+    final x =
+        math.cos(_rad(lat1)) * math.sin(_rad(lat2)) -
         math.sin(_rad(lat1)) * math.cos(_rad(lat2)) * math.cos(_rad(lon2 - lon1));
     final brng = math.atan2(y, x) * 180.0 / math.pi;
     return (brng + 360.0) % 360.0;

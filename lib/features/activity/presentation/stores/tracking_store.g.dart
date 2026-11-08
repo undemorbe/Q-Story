@@ -9,6 +9,13 @@ part of 'tracking_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$TrackingStore on _TrackingStore, Store {
+  Computed<bool>? _$stepsEstimatedNowComputed;
+
+  @override
+  bool get stepsEstimatedNow => (_$stepsEstimatedNowComputed ??= Computed<bool>(
+    () => super.stepsEstimatedNow,
+    name: '_TrackingStore.stepsEstimatedNow',
+  )).value;
   Computed<LatLng?>? _$latLngComputed;
 
   @override
@@ -17,15 +24,17 @@ mixin _$TrackingStore on _TrackingStore, Store {
   Computed<double?>? _$distanceToTargetMComputed;
 
   @override
-  double? get distanceToTargetM => (_$distanceToTargetMComputed ??=
-          Computed<double?>(() => super.distanceToTargetM, name: '_TrackingStore.distanceToTargetM'))
-      .value;
+  double? get distanceToTargetM => (_$distanceToTargetMComputed ??= Computed<double?>(
+    () => super.distanceToTargetM,
+    name: '_TrackingStore.distanceToTargetM',
+  )).value;
   Computed<double?>? _$walkingSpeedMpsComputed;
 
   @override
-  double? get walkingSpeedMps => (_$walkingSpeedMpsComputed ??=
-          Computed<double?>(() => super.walkingSpeedMps, name: '_TrackingStore.walkingSpeedMps'))
-      .value;
+  double? get walkingSpeedMps => (_$walkingSpeedMpsComputed ??= Computed<double?>(
+    () => super.walkingSpeedMps,
+    name: '_TrackingStore.walkingSpeedMps',
+  )).value;
   Computed<HuntEta?>? _$huntEtaComputed;
 
   @override
@@ -34,9 +43,10 @@ mixin _$TrackingStore on _TrackingStore, Store {
   Computed<double?>? _$bearingToTargetDegComputed;
 
   @override
-  double? get bearingToTargetDeg => (_$bearingToTargetDegComputed ??=
-          Computed<double?>(() => super.bearingToTargetDeg, name: '_TrackingStore.bearingToTargetDeg'))
-      .value;
+  double? get bearingToTargetDeg => (_$bearingToTargetDegComputed ??= Computed<double?>(
+    () => super.bearingToTargetDeg,
+    name: '_TrackingStore.bearingToTargetDeg',
+  )).value;
 
   late final _$isTrackingAtom = Atom(name: '_TrackingStore.isTracking', context: context);
 
@@ -349,6 +359,7 @@ todaySteps: ${todaySteps},
 todayDistanceM: ${todayDistanceM},
 activeHunt: ${activeHunt},
 lastFoundHunt: ${lastFoundHunt},
+stepsEstimatedNow: ${stepsEstimatedNow},
 latLng: ${latLng},
 distanceToTargetM: ${distanceToTargetM},
 walkingSpeedMps: ${walkingSpeedMps},

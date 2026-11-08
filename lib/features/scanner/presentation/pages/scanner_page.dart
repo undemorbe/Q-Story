@@ -109,7 +109,11 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
         if (_recent.length > 20) _recent.removeLast();
         if (mounted) unawaited(context.push('/place', extra: p));
       case ScanLink(uri: final u):
-        _snack(l.qrExternal, actionLabel: l.openLink, action: () => launchUrl(u, mode: LaunchMode.externalApplication));
+        _snack(
+          l.qrExternal,
+          actionLabel: l.openLink,
+          action: () => launchUrl(u, mode: LaunchMode.externalApplication),
+        );
       case ScanUnknown():
         _snack(l.qrUnknown);
       case ScanFailed(failure: final f):
@@ -118,10 +122,12 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
   }
 
   void _snack(String msg, {String? actionLabel, VoidCallback? action}) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg),
-      action: action == null ? null : SnackBarAction(label: actionLabel!, onPressed: action),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        action: action == null ? null : SnackBarAction(label: actionLabel!, onPressed: action),
+      ),
+    );
   }
 
   Future<void> _manualInput() async {
@@ -152,28 +158,35 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
     showModalBottomSheet(
       context: context,
       builder: (ctx) => SafeArea(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Padding(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
               padding: const EdgeInsets.all(16),
-              child: Text(l.scanHistory, style: Theme.of(context).textTheme.titleLarge)),
-          if (_recent.isEmpty)
-            Padding(padding: const EdgeInsets.all(24), child: Text(l.noScansYet))
-          else
-            Flexible(
-              child: ListView(shrinkWrap: true, children: [
-                for (final p in _recent)
-                  ListTile(
-                    leading: Icon(p.category.icon, color: p.source.color),
-                    title: Text(p.title),
-                    subtitle: Text(p.source.label(l)),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      context.push('/place', extra: p);
-                    },
-                  ),
-              ]),
+              child: Text(l.scanHistory, style: Theme.of(context).textTheme.titleLarge),
             ),
-        ]),
+            if (_recent.isEmpty)
+              Padding(padding: const EdgeInsets.all(24), child: Text(l.noScansYet))
+            else
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (final p in _recent)
+                      ListTile(
+                        leading: Icon(p.category.icon, color: p.source.color),
+                        title: Text(p.title),
+                        subtitle: Text(p.source.label(l)),
+                        onTap: () {
+                          Navigator.pop(ctx);
+                          context.push('/place', extra: p);
+                        },
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -193,14 +206,20 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
             errorBuilder: (context, error) => Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(Icons.no_photography_outlined, color: Colors.white70, size: 48),
-                  const SizedBox(height: 12),
-                  Text(l.cameraPermissionRequired,
-                      textAlign: TextAlign.center, style: const TextStyle(color: Colors.white)),
-                  const SizedBox(height: 12),
-                  OutlinedButton(onPressed: _manualInput, child: Text(l.manualInput)),
-                ]),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.no_photography_outlined, color: Colors.white70, size: 48),
+                    const SizedBox(height: 12),
+                    Text(
+                      l.cameraPermissionRequired,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(height: 12),
+                    OutlinedButton(onPressed: _manualInput, child: Text(l.manualInput)),
+                  ],
+                ),
               ),
             ),
           ),
@@ -209,8 +228,10 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
             child: Container(
               width: 250,
               height: 250,
-              decoration:
-                  BoxDecoration(border: Border.all(color: gold, width: 2), borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(
+                border: Border.all(color: gold, width: 2),
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
           ),
           SafeArea(
@@ -218,25 +239,27 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
               alignment: Alignment.topCenter,
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Row(children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(6)),
-                      child: Text(l.scannerHint, style: const TextStyle(color: Colors.white, fontSize: 13)),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => _camera.toggleTorch(),
-                    icon: ValueListenableBuilder(
-                      valueListenable: _camera,
-                      builder: (_, state, __) => Icon(
-                        state.torchState == TorchState.on ? Icons.flash_on : Icons.flash_off,
-                        color: Colors.white,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(6)),
+                        child: Text(l.scannerHint, style: const TextStyle(color: Colors.white, fontSize: 13)),
                       ),
                     ),
-                  ),
-                ]),
+                    IconButton(
+                      onPressed: () => _camera.toggleTorch(),
+                      icon: ValueListenableBuilder(
+                        valueListenable: _camera,
+                        builder: (_, state, _) => Icon(
+                          state.torchState == TorchState.on ? Icons.flash_on : Icons.flash_off,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -244,28 +267,39 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
             Container(
               color: Colors.black45,
               child: Center(
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  CircularProgressIndicator(color: gold),
-                  const SizedBox(height: 12),
-                  Text(l.resolvingPlace, style: const TextStyle(color: Colors.white)),
-                ]),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(color: gold),
+                    const SizedBox(height: 12),
+                    Text(l.resolvingPlace, style: const TextStyle(color: Colors.white)),
+                  ],
+                ),
               ),
             ),
           Positioned(
             left: 20,
             right: 20,
             bottom: 24,
-            child: Row(children: [
-              Expanded(
-                child: FilledButton.icon(
-                    onPressed: _manualInput, icon: const Icon(Icons.keyboard), label: Text(l.manualInput)),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: FilledButton.tonalIcon(
-                    onPressed: _showRecent, icon: const Icon(Icons.history), label: Text(l.scanHistory)),
-              ),
-            ]),
+            child: Row(
+              children: [
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: _manualInput,
+                    icon: const Icon(Icons.keyboard),
+                    label: Text(l.manualInput),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: _showRecent,
+                    icon: const Icon(Icons.history),
+                    label: Text(l.scanHistory),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

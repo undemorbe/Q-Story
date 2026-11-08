@@ -18,9 +18,11 @@ class SystemShareService implements ShareService {
 
   @override
   Future<void> shareFile(Uint8List bytes, {required String fileName, required String mimeType, String? subject}) =>
-      SharePlus.instance.share(ShareParams(
-        files: [XFile.fromData(bytes, mimeType: mimeType, name: fileName)],
-        fileNameOverrides: [fileName],
-        subject: subject,
-      ));
+      SharePlus.instance.share(
+        ShareParams(
+          files: [XFile.fromData(bytes, mimeType: mimeType, name: fileName)],
+          fileNameOverrides: [fileName],
+          subject: subject,
+        ),
+      );
 }

@@ -18,10 +18,14 @@ void main() {
     });
 
     test('Wikipedia URLs (title, mobile, curid)', () {
-      expect(ref('https://ru.wikipedia.org/wiki/%D0%AD%D1%80%D0%BC%D0%B8%D1%82%D0%B0%D0%B6'),
-          const QrPlaceRef(PlaceSource.wikipedia, 'ru:Эрмитаж'));
-      expect(ref('https://en.m.wikipedia.org/wiki/Winter_Palace'),
-          const QrPlaceRef(PlaceSource.wikipedia, 'en:Winter Palace'));
+      expect(
+        ref('https://ru.wikipedia.org/wiki/%D0%AD%D1%80%D0%BC%D0%B8%D1%82%D0%B0%D0%B6'),
+        const QrPlaceRef(PlaceSource.wikipedia, 'ru:Эрмитаж'),
+      );
+      expect(
+        ref('https://en.m.wikipedia.org/wiki/Winter_Palace'),
+        const QrPlaceRef(PlaceSource.wikipedia, 'en:Winter Palace'),
+      );
       expect(ref('https://ru.wikipedia.org/?curid=777'), const QrPlaceRef(PlaceSource.wikipedia, 'ru:777'));
     });
 
@@ -38,8 +42,9 @@ void main() {
     });
 
     test('inline JSON place', () {
-      final t =
-          QrPayloadParser.parse('{"title":"Дом Павлова","lat":59.9,"lon":30.3,"description":"Тут жил","year":1890}');
+      final t = QrPayloadParser.parse(
+        '{"title":"Дом Павлова","lat":59.9,"lon":30.3,"description":"Тут жил","year":1890}',
+      );
       final p = (t as QrInlinePlace).place;
       expect(p.title, 'Дом Павлова');
       expect(p.source, PlaceSource.user);

@@ -146,7 +146,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pushNotifications => 'Push Notifications';
 
   @override
-  String get pushNotificationsSubtitle => 'Receive daily historical facts';
+  String get pushNotificationsSubtitle => 'A daily reminder to go for a walk';
 
   @override
   String get checkNotification => 'Test Notification';
@@ -179,7 +179,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dailyNotificationsTitle => 'Daily Notifications';
 
   @override
-  String get dailyNotificationsDesc => 'Receive interesting historical facts';
+  String get dailyNotificationsDesc => 'A short daily nudge: a real \"on this day\" fact or a reminder to walk';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -195,10 +195,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutNotificationsText =>
-      'Each day at the selected time you will receive notifications with interesting historical facts and events.';
-
-  @override
-  String get notificationsWorkInDnd => 'Notifications work even in Do Not Disturb mode';
+      'Once a day at the chosen time QStory reminds you to go for a walk. When the internet is available, the reminder for the next days carries a real \"on this day\" event from Wikipedia (Russian only). Notifications are scheduled on the device; nothing is sent anywhere.';
 
   @override
   String get notificationsEnabledMsg => 'Notifications enabled';
@@ -424,7 +421,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get markVisited => 'I\'m here — mark as visited';
+  String get markVisited => 'I\'m here';
 
   @override
   String get markedVisited => 'Added to your discoveries';
@@ -996,7 +993,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutPrivacyText =>
-      'No accounts, no servers of our own. Your location, steps, routes and statistics never leave the device. The app only sends map coordinates to the public open-data APIs listed above to find places nearby.';
+      'No accounts, no servers of our own. Your routes, steps and statistics never leave the device. To find places nearby the app sends only the map area coordinates to the open-data APIs listed above; reminders and exports happen only when you turn them on.';
 
   @override
   String get aboutLicenseTitle => 'License';
@@ -1108,4 +1105,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String milestoneAchievement(Object name) {
     return 'New achievement: $name';
   }
+
+  @override
+  String reminderFactTitle(String year) {
+    return 'On this day in $year';
+  }
+
+  @override
+  String get reminder1Title => 'Time for a walk?';
+
+  @override
+  String get reminder1Body => 'There are historical places near you that you haven\'t found yet.';
+
+  @override
+  String get reminder2Title => 'History around the corner';
+
+  @override
+  String get reminder2Body => 'Open the map and pick a place to hunt for today.';
+
+  @override
+  String get reminder3Title => 'Steps with a story';
+
+  @override
+  String get reminder3Body => 'A short walk to an old building counts towards your daily goal.';
+
+  @override
+  String get reminder4Title => 'Explore a new street';
+
+  @override
+  String get reminder4Body => 'Every 250 × 250 m square you visit adds to the explored area.';
+
+  @override
+  String get reminder5Title => 'A place is waiting';
+
+  @override
+  String get reminder5Body => 'Find one historical place today and keep your streak going.';
+
+  @override
+  String get reminderChannel => 'Daily reminder';
+
+  @override
+  String get reminderChannelDesc => 'Once-a-day reminder to go for a walk';
+
+  @override
+  String get notificationsPermissionDenied =>
+      'Notifications are not allowed. Enable them for QStory in the system settings.';
+
+  @override
+  String get aboutPrivacyPolicy => 'Privacy policy';
 }

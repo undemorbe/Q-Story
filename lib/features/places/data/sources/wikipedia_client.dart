@@ -86,20 +86,22 @@ class WikipediaClient implements PlaceSourceClient {
       if (full.length > _maxDescriptionChars) {
         full = '${full.substring(0, _maxDescriptionChars)}…';
       }
-      out.add(Place(
-        source: PlaceSource.wikipedia,
-        sourceId: '$lang:${raw['pageid']}',
-        title: title,
-        lat: (c?['lat'] as num?)?.toDouble() ?? 0,
-        lon: (c?['lon'] as num?)?.toDouble() ?? 0,
-        summary: detailed
-            ? (shortDesc.isNotEmpty ? shortDesc : _firstSentence(extract))
-            : (extract.isNotEmpty ? extract : shortDesc),
-        description: detailed ? full : null,
-        imageUrl: (raw['thumbnail'] as Map?)?['source'] as String?,
-        url: raw['fullurl'] as String? ?? 'https://$lang.wikipedia.org/?curid=${raw['pageid']}',
-        category: guessCategory('$title $shortDesc', fallback: PlaceCategory.article),
-      ));
+      out.add(
+        Place(
+          source: PlaceSource.wikipedia,
+          sourceId: '$lang:${raw['pageid']}',
+          title: title,
+          lat: (c?['lat'] as num?)?.toDouble() ?? 0,
+          lon: (c?['lon'] as num?)?.toDouble() ?? 0,
+          summary: detailed
+              ? (shortDesc.isNotEmpty ? shortDesc : _firstSentence(extract))
+              : (extract.isNotEmpty ? extract : shortDesc),
+          description: detailed ? full : null,
+          imageUrl: (raw['thumbnail'] as Map?)?['source'] as String?,
+          url: raw['fullurl'] as String? ?? 'https://$lang.wikipedia.org/?curid=${raw['pageid']}',
+          category: guessCategory('$title $shortDesc', fallback: PlaceCategory.article),
+        ),
+      );
     }
     return out;
   }

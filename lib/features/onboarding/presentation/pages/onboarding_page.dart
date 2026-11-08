@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
+import '../../../../core/theme/app_fonts.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -57,41 +57,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               border: Border.all(color: context.outlineClr, width: 1),
                               color: context.surfaceVar,
                               boxShadow: [
-                                BoxShadow(
-                                  color: gold.withValues(alpha: 0.2),
-                                  blurRadius: 28,
-                                  spreadRadius: 4,
-                                ),
+                                BoxShadow(color: gold.withValues(alpha: 0.2), blurRadius: 28, spreadRadius: 4),
                               ],
                             ),
                             child: Icon(item.icon, size: 52, color: gold),
                           ),
                           const SizedBox(height: 16),
-                          Text(
-                            '◆',
-                            style: TextStyle(
-                              color: gold.withValues(alpha: 0.4),
-                              fontSize: 12,
-                            ),
-                          ),
+                          Text('◆', style: TextStyle(color: gold.withValues(alpha: 0.4), fontSize: 12)),
                           const SizedBox(height: 28),
                           Text(
                             item.title,
-                            style: GoogleFonts.cinzelDecorative(
-                              color: context.onBg,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppFonts.display(color: context.onBg, fontSize: 22, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 20),
                           Text(
                             item.desc,
-                            style: GoogleFonts.crimsonText(
-                              color: context.onBg,
-                              fontSize: 18,
-                              height: 1.6,
-                            ),
+                            style: AppFonts.body(color: context.onBg, fontSize: 18, height: 1.6),
                             textAlign: TextAlign.center,
                           ),
                         ],

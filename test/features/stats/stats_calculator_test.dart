@@ -9,35 +9,39 @@ void main() {
   final now = DateTime(2026, 11, 6, 18); // Friday
 
   DayActivity day(int daysAgo, int steps, {double dist = 0, int hour = 12}) {
-    final d = DayActivity(day: DayActivity.keyOf(now.subtract(Duration(days: daysAgo))), steps: steps, distanceM: dist);
+    final d = DayActivity(
+      day: DayActivity.keyOf(now.subtract(Duration(days: daysAgo))),
+      steps: steps,
+      distanceM: dist,
+    );
     d.hourSteps[hour] = steps;
     return d;
   }
 
   Visit visit(String id, PlaceSource s, int daysAgo, {VisitMethod m = VisitMethod.manual}) => Visit(
-        placeId: '${s.name}:$id',
-        title: id,
-        source: s,
-        category: PlaceCategory.monument,
-        lat: 0,
-        lon: 0,
-        at: now.subtract(Duration(days: daysAgo)),
-        method: m,
-      );
+    placeId: '${s.name}:$id',
+    title: id,
+    source: s,
+    category: PlaceCategory.monument,
+    lat: 0,
+    lon: 0,
+    at: now.subtract(Duration(days: daysAgo)),
+    method: m,
+  );
 
   Hunt hunt(String id, HuntStatus st, int steps, double dist, int minutes, {double? start}) => Hunt(
-        id: id,
-        placeId: 'osm:$id',
-        placeTitle: id,
-        targetLat: 0,
-        targetLon: 0,
-        startedAt: now.subtract(Duration(minutes: minutes)),
-        endedAt: st == HuntStatus.active ? null : now,
-        status: st,
-        steps: steps,
-        distanceM: dist,
-        startDistanceM: start,
-      );
+    id: id,
+    placeId: 'osm:$id',
+    placeTitle: id,
+    targetLat: 0,
+    targetLon: 0,
+    startedAt: now.subtract(Duration(minutes: minutes)),
+    endedAt: st == HuntStatus.active ? null : now,
+    status: st,
+    steps: steps,
+    distanceM: dist,
+    startDistanceM: start,
+  );
 
   test('empty input produces zeros, no crash', () {
     final s = StatsCalculator.compute(const StatsInput(), now);
@@ -106,12 +110,14 @@ void main() {
 
   test('hunts: success rate, averages, records, detour', () {
     final s = StatsCalculator.compute(
-      StatsInput(hunts: [
-        hunt('h1', HuntStatus.found, 1000, 800, 10, start: 700),
-        hunt('h2', HuntStatus.found, 3000, 2000, 30, start: 1000),
-        hunt('h3', HuntStatus.abandoned, 500, 300, 5),
-        hunt('h4', HuntStatus.active, 50, 40, 1),
-      ]),
+      StatsInput(
+        hunts: [
+          hunt('h1', HuntStatus.found, 1000, 800, 10, start: 700),
+          hunt('h2', HuntStatus.found, 3000, 2000, 30, start: 1000),
+          hunt('h3', HuntStatus.abandoned, 500, 300, 5),
+          hunt('h4', HuntStatus.active, 50, 40, 1),
+        ],
+      ),
       now,
     );
     final h = s.hunts;
@@ -134,14 +140,17 @@ void main() {
     ActivityEvent e(ActivityEventType t, {String? id, num? v}) =>
         ActivityEvent(type: t, at: now, placeId: id, value: v);
     final s = StatsCalculator.compute(
-      StatsInput(events: [
-        e(ActivityEventType.scan, id: 'a'),
-        e(ActivityEventType.scan, id: 'a'),
-        e(ActivityEventType.view, id: 'a'),
-        e(ActivityEventType.view, id: 'b'),
-        e(ActivityEventType.placesLoaded, v: 40),
-        e(ActivityEventType.placesLoaded, v: 2),
-      ], exploredCells: 32),
+      StatsInput(
+        events: [
+          e(ActivityEventType.scan, id: 'a'),
+          e(ActivityEventType.scan, id: 'a'),
+          e(ActivityEventType.view, id: 'a'),
+          e(ActivityEventType.view, id: 'b'),
+          e(ActivityEventType.placesLoaded, v: 40),
+          e(ActivityEventType.placesLoaded, v: 2),
+        ],
+        exploredCells: 32,
+      ),
       now,
     );
     expect(s.scans, 2);
@@ -154,13 +163,15 @@ void main() {
 
   test('week over week: rolling 7-day windows', () {
     final s = StatsCalculator.compute(
-      StatsInput(days: [
-        day(0, 1000, dist: 800),
-        day(6, 500, dist: 400), // still this week
-        day(7, 1000, dist: 700), // previous week
-        day(13, 200),
-        day(14, 9999), // older, ignored
-      ]),
+      StatsInput(
+        days: [
+          day(0, 1000, dist: 800),
+          day(6, 500, dist: 400), // still this week
+          day(7, 1000, dist: 700), // previous week
+          day(13, 200),
+          day(14, 9999), // older, ignored
+        ],
+      ),
       now,
     );
     expect(s.thisWeekSteps, 1500);

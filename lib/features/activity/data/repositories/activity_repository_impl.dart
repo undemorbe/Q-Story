@@ -38,8 +38,10 @@ class ActivityRepositoryImpl implements ActivityRepository {
 
   @override
   Future<Hunt?> activeHunt() async {
-    final rec =
-        await AppDatabase.hunts.findFirst(_db, finder: Finder(filter: Filter.equals('status', HuntStatus.active.name)));
+    final rec = await AppDatabase.hunts.findFirst(
+      _db,
+      finder: Finder(filter: Filter.equals('status', HuntStatus.active.name)),
+    );
     return rec == null ? null : Hunt.fromJson(rec.value);
   }
 

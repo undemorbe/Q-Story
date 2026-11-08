@@ -125,12 +125,7 @@ abstract class _PlacesStore with Store {
     lastLat = lat;
     lastLon = lon;
     final result = await _repo.nearby(
-      PlaceQuery(
-        lat: lat,
-        lon: lon,
-        radiusM: _settings.searchRadiusM,
-        language: _settings.languageCode,
-      ),
+      PlaceQuery(lat: lat, lon: lon, radiusM: _settings.searchRadiusM, language: _settings.languageCode),
       sources: _settings.enabledSources.toSet(),
     );
     places = ObservableList.of(result.places);

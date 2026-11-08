@@ -84,6 +84,20 @@ void main() {
     await emit(fix(59.0008, 30.0)); // ~89 m → ~111 steps
     expect(store.stepSensorAvailable, isFalse);
     expect(store.todaySteps, inInclusiveRange(108, 113));
+    expect(store.stepsEstimatedNow, isTrue);
+    await store.stop();
+    expect(store.stepsEstimatedNow, isFalse, reason: 'no claim about the sensor when not tracking');
+  });
+
+  test('does not claim a missing step sensor before tracking or once it reports', () async {
+    expect(store.stepsEstimatedNow, isFalse);
+    await store.start();
+    expect(store.stepsEstimatedNow, isFalse, reason: 'no steps yet');
+    sensors.steps.add(1000);
+    await Future<void>.delayed(Duration.zero);
+    sensors.steps.add(1010);
+    await Future<void>.delayed(Duration.zero);
+    expect(store.stepsEstimatedNow, isFalse);
   });
 
   test('hunt: counts steps & distance and completes on geofence arrival', () async {

@@ -25,12 +25,14 @@ void main() {
       database: await AppDatabase.inMemory(),
       preferences: await SharedPreferences.getInstance(),
       sensors: FakeSensors(),
-      dio: fakeDio((_) => {
-            'result': {'photos': []},
-            'query': {'pages': []},
-            'results': {'bindings': []},
-            'elements': [],
-          }),
+      dio: fakeDio(
+        (_) => {
+          'result': {'photos': []},
+          'query': {'pages': []},
+          'results': {'bindings': []},
+          'elements': [],
+        },
+      ),
       share: FakeShare(),
       mail: FakeMail(),
     );
@@ -42,8 +44,11 @@ void main() {
 
     await t.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text('Stats')));
     await t.pumpAndSettle(const Duration(seconds: 1));
-    await t.scrollUntilVisible(find.textContaining(RegExp('First.*Test monument')), 400,
-        scrollable: find.byType(Scrollable).first);
+    await t.scrollUntilVisible(
+      find.textContaining(RegExp('First.*Test monument')),
+      400,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.textContaining('Test monument'), findsWidgets);
 
     for (final tab in ['Favorites', 'Profile', 'Map']) {

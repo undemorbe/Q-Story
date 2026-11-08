@@ -146,7 +146,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pushNotifications => 'Push-уведомления';
 
   @override
-  String get pushNotificationsSubtitle => 'Получать ежедневные исторические факты';
+  String get pushNotificationsSubtitle => 'Ежедневное напоминание о прогулке';
 
   @override
   String get checkNotification => 'Проверка уведомлений';
@@ -179,7 +179,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dailyNotificationsTitle => 'Ежедневные уведомления';
 
   @override
-  String get dailyNotificationsDesc => 'Получать интересные исторические факты';
+  String get dailyNotificationsDesc => 'Короткое напоминание: настоящий факт «в этот день» или повод прогуляться';
 
   @override
   String get notificationTime => 'Время уведомления';
@@ -195,10 +195,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get aboutNotificationsText =>
-      'Каждый день в выбранное время вы будете получать уведомления с интересными историческими фактами.';
-
-  @override
-  String get notificationsWorkInDnd => 'Уведомления работают даже в режиме «Не беспокоить»';
+      'Раз в день в выбранное время QStory напомнит о прогулке. Если есть интернет, напоминания на ближайшие дни содержат настоящее событие «в этот день» из Википедии. Уведомления планируются на устройстве и никуда не отправляются.';
 
   @override
   String get notificationsEnabledMsg => 'Уведомления включены';
@@ -424,7 +421,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get markVisited => 'Я здесь — отметить';
+  String get markVisited => 'Я здесь';
 
   @override
   String get markedVisited => 'Добавлено в ваши открытия';
@@ -996,7 +993,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get aboutPrivacyText =>
-      'Без аккаунтов и собственного сервера. Ваше местоположение, шаги, маршруты и статистика не покидают устройство. Приложение отправляет только координаты области карты в перечисленные открытые API, чтобы найти места поблизости.';
+      'Без аккаунтов и собственного сервера. Маршруты, шаги и статистика не покидают устройство. Чтобы найти места рядом, приложение отправляет в перечисленные открытые API только координаты области карты; напоминания и экспорт — только если вы их включите.';
 
   @override
   String get aboutLicenseTitle => 'Лицензия';
@@ -1110,4 +1107,51 @@ class AppLocalizationsRu extends AppLocalizations {
   String milestoneAchievement(Object name) {
     return 'Новое достижение: $name';
   }
+
+  @override
+  String reminderFactTitle(String year) {
+    return 'В этот день в $year году';
+  }
+
+  @override
+  String get reminder1Title => 'Прогуляемся?';
+
+  @override
+  String get reminder1Body => 'Рядом есть исторические места, которые вы ещё не нашли.';
+
+  @override
+  String get reminder2Title => 'История за углом';
+
+  @override
+  String get reminder2Body => 'Откройте карту и выберите место для сегодняшней охоты.';
+
+  @override
+  String get reminder3Title => 'Шаги с историей';
+
+  @override
+  String get reminder3Body => 'Короткая прогулка к старому зданию — уже вклад в дневную цель.';
+
+  @override
+  String get reminder4Title => 'Новая улица';
+
+  @override
+  String get reminder4Body => 'Каждый квадрат 250 × 250 м, где вы побывали, увеличивает разведанную площадь.';
+
+  @override
+  String get reminder5Title => 'Место ждёт';
+
+  @override
+  String get reminder5Body => 'Найдите сегодня одно историческое место и не прерывайте серию.';
+
+  @override
+  String get reminderChannel => 'Ежедневное напоминание';
+
+  @override
+  String get reminderChannelDesc => 'Напоминание о прогулке раз в день';
+
+  @override
+  String get notificationsPermissionDenied => 'Уведомления запрещены. Разрешите их для QStory в настройках системы.';
+
+  @override
+  String get aboutPrivacyPolicy => 'Политика конфиденциальности';
 }

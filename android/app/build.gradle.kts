@@ -19,7 +19,8 @@ fun signingValue(key: String, env: String): String? =
 
 android {
     namespace = "io.github.undemorbe.qstory"
-    compileSdk = flutter.compileSdkVersion
+    // Plugins (permission_handler 13, flutter_local_notifications 23) compile against 37.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

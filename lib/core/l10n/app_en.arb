@@ -44,7 +44,7 @@
   "lightTheme": "Light",
   "darkTheme": "Dark",
   "pushNotifications": "Push Notifications",
-  "pushNotificationsSubtitle": "Receive daily historical facts",
+  "pushNotificationsSubtitle": "A daily reminder to go for a walk",
   "checkNotification": "Test Notification",
   "checkNotificationSubtitle": "Send test notification now",
   "preferences": "Preferences",
@@ -55,13 +55,12 @@
   "english": "English",
   "notifSettingsTitle": "Notifications",
   "dailyNotificationsTitle": "Daily Notifications",
-  "dailyNotificationsDesc": "Receive interesting historical facts",
+  "dailyNotificationsDesc": "A short daily nudge: a real \"on this day\" fact or a reminder to walk",
   "notificationTime": "Notification Time",
   "testNotification": "Test Notification",
   "testNotificationDesc": "Check how notifications work",
   "aboutNotificationsTitle": "About Notifications",
-  "aboutNotificationsText": "Each day at the selected time you will receive notifications with interesting historical facts and events.",
-  "notificationsWorkInDnd": "Notifications work even in Do Not Disturb mode",
+  "aboutNotificationsText": "Once a day at the chosen time QStory reminds you to go for a walk. When the internet is available, the reminder for the next days carries a real \"on this day\" event from Wikipedia (Russian only). Notifications are scheduled on the device; nothing is sent anywhere.",
   "notificationsEnabledMsg": "Notifications enabled",
   "notificationsDisabledMsg": "Notifications disabled",
   "testNotificationSent": "Test notification sent",
@@ -179,7 +178,7 @@
       "title": {}
     }
   },
-  "markVisited": "I'm here — mark as visited",
+  "markVisited": "I'm here",
   "markedVisited": "Added to your discoveries",
   "visitedBadge": "Visited",
   "huntSearching": "Searching: {title}",
@@ -419,7 +418,7 @@
   "aboutDescription": "QStory finds historical places, retro photos and heritage sites around you using open data from history communities and encyclopedias. Pick a place, walk to it, and track how far you went to find it.",
   "aboutDataTitle": "Where the data comes from",
   "aboutPrivacyTitle": "Privacy",
-  "aboutPrivacyText": "No accounts, no servers of our own. Your location, steps, routes and statistics never leave the device. The app only sends map coordinates to the public open-data APIs listed above to find places nearby.",
+  "aboutPrivacyText": "No accounts, no servers of our own. Your routes, steps and statistics never leave the device. To find places nearby the app sends only the map area coordinates to the open-data APIs listed above; reminders and exports happen only when you turn them on.",
   "aboutLicenseTitle": "License",
   "aboutSourceCode": "Source code",
   "aboutReportIssue": "Report an issue",
@@ -487,5 +486,27 @@
     "placeholders": {
       "name": {}
     }
-  }
+  },
+  "reminderFactTitle": "On this day in {year}",
+  "@reminderFactTitle": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "reminder1Title": "Time for a walk?",
+  "reminder1Body": "There are historical places near you that you haven't found yet.",
+  "reminder2Title": "History around the corner",
+  "reminder2Body": "Open the map and pick a place to hunt for today.",
+  "reminder3Title": "Steps with a story",
+  "reminder3Body": "A short walk to an old building counts towards your daily goal.",
+  "reminder4Title": "Explore a new street",
+  "reminder4Body": "Every 250 × 250 m square you visit adds to the explored area.",
+  "reminder5Title": "A place is waiting",
+  "reminder5Body": "Find one historical place today and keep your streak going.",
+  "reminderChannel": "Daily reminder",
+  "reminderChannelDesc": "Once-a-day reminder to go for a walk",
+  "notificationsPermissionDenied": "Notifications are not allowed. Enable them for QStory in the system settings.",
+  "aboutPrivacyPolicy": "Privacy policy"
 }

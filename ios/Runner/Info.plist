@@ -33,11 +33,11 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>With background tracking enabled, QStory keeps recording your walk and steps while the screen is off. Data stays on your device.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>QStory uses your location to show historical places nearby, guide you to them and count the distance you walked. Location never leaves your device.</string>
+	<string>QStory uses your location to show historical places nearby, guide you to them and count the distance you walked. Only the search area is sent to open map sources; your route stays on the device.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>QStory counts your steps to show how far you walked to discover each place. Step data stays on your device.</string>
 	<key>NSUserNotificationUsageDescription</key>
-	<string>QStory sends an optional daily historical fact.</string>
+	<string>QStory can send an optional daily reminder to go for a walk.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

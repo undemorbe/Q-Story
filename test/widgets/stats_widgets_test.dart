@@ -19,17 +19,23 @@ void main() {
   });
 
   testWidgets('StatsSection renders title and children', (t) async {
-    await t.pumpApp(const SingleChildScrollView(
-      child: StatsSection(title: 'Movement', icon: Icons.directions_walk, children: [Text('child')]),
-    ));
+    await t.pumpApp(
+      const SingleChildScrollView(
+        child: StatsSection(title: 'Movement', icon: Icons.directions_walk, children: [Text('child')]),
+      ),
+    );
     expect(find.textContaining(RegExp('movement', caseSensitive: false)), findsWidgets);
     expect(find.text('child'), findsOneWidget);
   });
 
   testWidgets('StatGrid lays out every tile', (t) async {
-    await t.pumpApp(SingleChildScrollView(
-      child: StatGrid(tiles: [for (var i = 0; i < 7; i++) StatTile(label: 'L$i', value: '$i')]),
-    ));
+    await t.pumpApp(
+      SingleChildScrollView(
+        child: StatGrid(
+          tiles: [for (var i = 0; i < 7; i++) StatTile(label: 'L$i', value: '$i')],
+        ),
+      ),
+    );
     for (var i = 0; i < 7; i++) {
       expect(find.text('L$i'), findsOneWidget);
     }
@@ -38,10 +44,14 @@ void main() {
   });
 
   testWidgets('BreakdownBars shows values with shares', (t) async {
-    await t.pumpApp(const BreakdownBars(items: [
-      BreakdownItem(label: 'Wikipedia', value: 3, icon: Icons.menu_book),
-      BreakdownItem(label: 'OSM', value: 1, icon: Icons.map),
-    ]));
+    await t.pumpApp(
+      const BreakdownBars(
+        items: [
+          BreakdownItem(label: 'Wikipedia', value: 3, icon: Icons.menu_book),
+          BreakdownItem(label: 'OSM', value: 1, icon: Icons.map),
+        ],
+      ),
+    );
     expect(find.text('Wikipedia'), findsOneWidget);
     expect(find.text('3 · 75%'), findsOneWidget);
     expect(find.text('1 · 25%'), findsOneWidget);

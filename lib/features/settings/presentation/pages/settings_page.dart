@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/app_info.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/app_localizations.dart';
-import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
 import '../../../activity/presentation/stores/tracking_store.dart';
@@ -14,6 +12,7 @@ import '../../../places/presentation/stores/places_store.dart';
 import '../../../places/presentation/widgets/place_labels.dart';
 import '../stores/settings_store.dart';
 import 'notification_settings_page.dart';
+import '../../../../core/theme/app_fonts.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -130,16 +129,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text(l10n.notifications),
                 subtitle: Text(l10n.notificationsSubtitle),
                 trailing: Icon(Icons.chevron_right, color: context.outlineClr),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NotificationSettingsPage()),
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.notification_important_outlined),
-                title: Text(l10n.checkNotification),
-                subtitle: Text(l10n.checkNotificationSubtitle),
-                onTap: NotificationService.showTestNotification,
+                onTap: () =>
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationSettingsPage())),
               ),
               _buildSectionHeader(context, l10n.about),
               ListTile(
@@ -171,20 +162,22 @@ class _SettingsPageState extends State<SettingsPage> {
   }) {
     return ListTile(
       leading: Icon(icon),
-      title: Row(children: [
-        Expanded(child: Text(title)),
-        Text(valueLabel, style: TextStyle(color: context.gold, fontWeight: FontWeight.w600)),
-      ]),
-      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        if (subtitle != null) Text(subtitle),
-        Slider(
-          value: value.clamp(min, max),
-          min: min,
-          max: max,
-          divisions: divisions,
-          onChanged: onChanged,
-        ),
-      ]),
+      title: Row(
+        children: [
+          Expanded(child: Text(title)),
+          Text(
+            valueLabel,
+            style: TextStyle(color: context.gold, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (subtitle != null) Text(subtitle),
+          Slider(value: value.clamp(min, max), min: min, max: max, divisions: divisions, onChanged: onChanged),
+        ],
+      ),
     );
   }
 
@@ -198,12 +191,7 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 6),
           Text(
             title.toUpperCase(),
-            style: GoogleFonts.cinzel(
-              color: context.gold,
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 2,
-            ),
+            style: AppFonts.display(color: context.gold, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 2),
           ),
         ],
       ),

@@ -48,8 +48,10 @@ void main() {
     test('yearLabel', () {
       expect(full.yearLabel, '1801 — 1811');
       expect(full.copyWith(yearEnd: 1801).yearLabel, '1801');
-      expect(const Place(source: PlaceSource.osm, sourceId: '1', title: '', lat: 0, lon: 0, yearEnd: 1900).yearLabel,
-          '1900');
+      expect(
+        const Place(source: PlaceSource.osm, sourceId: '1', title: '', lat: 0, lon: 0, yearEnd: 1900).yearLabel,
+        '1900',
+      );
       expect(const Place(source: PlaceSource.osm, sourceId: '1', title: '', lat: 0, lon: 0).yearLabel, isNull);
     });
 
@@ -109,11 +111,13 @@ void main() {
   });
 
   test('NearbyPlaces.countBySource', () {
-    final n = NearbyPlaces(places: [
-      full,
-      full.copyWith(title: 'b'),
-      const Place(source: PlaceSource.osm, sourceId: '1', title: 'c', lat: 1, lon: 1),
-    ]);
+    final n = NearbyPlaces(
+      places: [
+        full,
+        full.copyWith(title: 'b'),
+        const Place(source: PlaceSource.osm, sourceId: '1', title: 'c', lat: 1, lon: 1),
+      ],
+    );
     expect(n.countBySource, {PlaceSource.wikipedia: 2, PlaceSource.osm: 1});
   });
 }

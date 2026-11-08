@@ -8,7 +8,13 @@ void main() {
 
   test('Visit.fromPlace copies identity and JSON round-trips', () {
     const p = Place(
-        source: PlaceSource.wikidata, sourceId: 'Q1', title: 'Дума', lat: 1, lon: 2, category: PlaceCategory.building);
+      source: PlaceSource.wikidata,
+      sourceId: 'Q1',
+      title: 'Дума',
+      lat: 1,
+      lon: 2,
+      category: PlaceCategory.building,
+    );
     final v = Visit.fromPlace(p, VisitMethod.qr, t0);
     expect(v.placeId, 'wikidata:Q1');
     expect(v.category, PlaceCategory.building);
@@ -20,16 +26,16 @@ void main() {
 
   group('Hunt', () {
     Hunt hunt({double dist = 0, double? start, DateTime? end}) => Hunt(
-          id: 'h',
-          placeId: 'osm:1',
-          placeTitle: 'X',
-          targetLat: 1,
-          targetLon: 2,
-          startedAt: t0,
-          endedAt: end,
-          distanceM: dist,
-          startDistanceM: start,
-        );
+      id: 'h',
+      placeId: 'osm:1',
+      placeTitle: 'X',
+      targetLat: 1,
+      targetLon: 2,
+      startedAt: t0,
+      endedAt: end,
+      distanceM: dist,
+      startDistanceM: start,
+    );
 
     test('duration uses end time or now', () {
       expect(hunt(end: t0.add(const Duration(minutes: 7))).duration(DateTime(2030)), const Duration(minutes: 7));

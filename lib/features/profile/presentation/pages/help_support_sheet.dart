@@ -51,12 +51,9 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
       if (!mounted) return;
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.messageSent),
-          backgroundColor: Colors.green,
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.messageSent), backgroundColor: Colors.green));
 
       // Auto-close sheet after 2 seconds
       await Future.delayed(const Duration(seconds: 2));
@@ -84,12 +81,7 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
     final messageLength = _messageController.text.length;
 
     return Container(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-      ),
+      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,14 +90,8 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                l10n.helpAndSupport,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+              Text(l10n.helpAndSupport, style: Theme.of(context).textTheme.headlineSmall),
+              IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
             ],
           ),
           const SizedBox(height: 8),
@@ -113,9 +99,7 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
           // Description
           Text(
             l10n.sendSupportMessage,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
           ),
           const SizedBox(height: 16),
 
@@ -128,9 +112,7 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
             minLines: 3,
             decoration: InputDecoration(
               hintText: l10n.enterMessage,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               counterText: '$messageLength/500',
             ),
             onChanged: (_) {
@@ -146,18 +128,9 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    _errorMessage!,
-                    style: TextStyle(
-                      color: Colors.red[600],
-                      fontSize: 14,
-                    ),
-                  ),
+                  Text(_errorMessage!, style: TextStyle(color: Colors.red[600], fontSize: 14)),
                   const SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: _retryMessage,
-                    child: Text(l10n.retry),
-                  ),
+                  ElevatedButton(onPressed: _retryMessage, child: Text(l10n.retry)),
                 ],
               ),
             ),
@@ -174,9 +147,7 @@ class _HelpSupportSheetState extends State<HelpSupportSheet> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.blue[700]!,
-                            ),
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[700]!),
                           ),
                         )
                       : Text(l10n.send),

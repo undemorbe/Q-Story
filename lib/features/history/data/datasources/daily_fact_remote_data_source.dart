@@ -24,9 +24,7 @@ class DailyFactRemoteDataSource {
     final dd = day.toString().padLeft(2, '0');
     final url = '$_baseUrl/events/$mm/$dd';
 
-    final response = await _dio.get<Map<String, dynamic>>(
-      url,
-    );
+    final response = await _dio.get<Map<String, dynamic>>(url);
 
     final data = response.data;
     if (data == null) return [];
@@ -72,14 +70,16 @@ class DailyFactRemoteDataSource {
         }
       }
 
-      results.add(DailyFactEntity(
-        year: year,
-        text: text,
-        imageUrl: imageUrl,
-        pageTitle: pageTitle,
-        pageExtract: pageExtract,
-        wikipediaUrl: wikiUrl,
-      ));
+      results.add(
+        DailyFactEntity(
+          year: year,
+          text: text,
+          imageUrl: imageUrl,
+          pageTitle: pageTitle,
+          pageExtract: pageExtract,
+          wikipediaUrl: wikiUrl,
+        ),
+      );
     }
 
     return results;

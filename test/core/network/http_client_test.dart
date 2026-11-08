@@ -45,6 +45,7 @@ void main() {
         DioExceptionType.connectionTimeout,
         DioExceptionType.sendTimeout,
         DioExceptionType.receiveTimeout,
+        DioExceptionType.transformTimeout,
         DioExceptionType.connectionError,
       ]) {
         expect(toFailure(dioError(t)), isA<NetworkFailure>(), reason: t.name);

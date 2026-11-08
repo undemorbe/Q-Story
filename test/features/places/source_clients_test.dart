@@ -37,20 +37,22 @@ void main() {
 
   group('PastVuClient', () {
     test('nearby maps photos and clamps limit to 30', () async {
-      final dio = fakeDio((o) => {
-            'result': {
-              'photos': [
-                {
-                  'cid': 1133902,
-                  'file': '2/t/6/x.jpg',
-                  'title': 'Невский',
-                  'geo': [59.93, 30.33],
-                  'year': 1924
-                },
-                {'cid': 2, 'title': 'no geo'},
-              ]
-            }
-          });
+      final dio = fakeDio(
+        (o) => {
+          'result': {
+            'photos': [
+              {
+                'cid': 1133902,
+                'file': '2/t/6/x.jpg',
+                'title': 'Невский',
+                'geo': [59.93, 30.33],
+                'year': 1924,
+              },
+              {'cid': 2, 'title': 'no geo'},
+            ],
+          },
+        },
+      );
       final list = await PastVuClient(dio).nearby(const PlaceQuery(lat: 1, lon: 2, limitPerSource: 100));
       expect(list, hasLength(1));
       final p = list.single;
@@ -64,21 +66,23 @@ void main() {
     });
 
     test('fetch parses description, author and source link', () async {
-      final dio = fakeDio((o) => {
-            'result': {
-              'photo': {
-                'cid': 5,
-                'file': 'a.jpg',
-                'title': 'T',
-                'geo': [1.0, 2.0],
-                'year': 1900,
-                'year2': 1905,
-                'author': 'В.Булла',
-                'desc': '27 января<br>Вариант',
-                'source': '<a href="https://catalog.shm.ru/x">https://catalog.shm.ru/x</a>',
-              }
-            }
-          });
+      final dio = fakeDio(
+        (o) => {
+          'result': {
+            'photo': {
+              'cid': 5,
+              'file': 'a.jpg',
+              'title': 'T',
+              'geo': [1.0, 2.0],
+              'year': 1900,
+              'year2': 1905,
+              'author': 'В.Булла',
+              'desc': '27 января<br>Вариант',
+              'source': '<a href="https://catalog.shm.ru/x">https://catalog.shm.ru/x</a>',
+            },
+          },
+        },
+      );
       final p = (await PastVuClient(dio).fetch('5'))!;
       expect(p.author, 'В.Булла');
       expect(p.description, contains('27 января\nВариант'));
@@ -97,7 +101,7 @@ void main() {
       'pageid': 42,
       'title': 'Казанский собор',
       'coordinates': [
-        {'lat': 59.934, 'lon': 30.324}
+        {'lat': 59.934, 'lon': 30.324},
       ],
       'thumbnail': {'source': 'https://upload/img.jpg'},
       'extract': 'Один из крупнейших храмов. Построен в 1811 году.',
@@ -111,8 +115,8 @@ void main() {
         expect(o.queryParameters['ggscoord'], '59.9343|30.3351');
         return {
           'query': {
-            'pages': [page]
-          }
+            'pages': [page],
+          },
         };
       });
       final p = (await WikipediaClient(dio).nearby(q)).single;
@@ -127,8 +131,8 @@ void main() {
         expect(o.queryParameters['titles'], 'Казанский собор');
         return {
           'query': {
-            'pages': [page]
-          }
+            'pages': [page],
+          },
         };
       });
       final p = (await WikipediaClient(dio).fetch('ru:Казанский собор'))!;
@@ -137,13 +141,15 @@ void main() {
     });
 
     test('missing page returns null', () async {
-      final dio = fakeDio((o) => {
-            'query': {
-              'pages': [
-                {'title': 'X', 'missing': true}
-              ]
-            }
-          });
+      final dio = fakeDio(
+        (o) => {
+          'query': {
+            'pages': [
+              {'title': 'X', 'missing': true},
+            ],
+          },
+        },
+      );
       expect(await WikipediaClient(dio).fetch('ru:X'), isNull);
     });
   });
@@ -158,18 +164,20 @@ void main() {
 
     test('parses and de-duplicates bindings, keeps richest', () async {
       Map<String, Object> b({String? image}) => {
-            'item': {'value': 'http://www.wikidata.org/entity/Q1'},
-            'itemLabel': {'value': 'Здание городской думы'},
-            'coord': {'value': 'Point(30.329 59.934)'},
-            'heritage': {'value': '7810520000'},
-            'inception': {'value': '1804-01-01T00:00:00Z'},
-            if (image != null) 'image': {'value': image},
-          };
-      final dio = fakeDio((_) => {
-            'results': {
-              'bindings': [b(), b(image: 'http://commons.wikimedia.org/wiki/Special:FilePath/a.jpg')]
-            }
-          });
+        'item': {'value': 'http://www.wikidata.org/entity/Q1'},
+        'itemLabel': {'value': 'Здание городской думы'},
+        'coord': {'value': 'Point(30.329 59.934)'},
+        'heritage': {'value': '7810520000'},
+        'inception': {'value': '1804-01-01T00:00:00Z'},
+        if (image != null) 'image': {'value': image},
+      };
+      final dio = fakeDio(
+        (_) => {
+          'results': {
+            'bindings': [b(), b(image: 'http://commons.wikimedia.org/wiki/Special:FilePath/a.jpg')],
+          },
+        },
+      );
       final p = (await WikidataClient(dio).nearby(q)).single;
       expect(p.id, 'wikidata:Q1');
       expect(p.lat, 59.934);
@@ -221,22 +229,25 @@ void main() {
       expect(way.lat, 1.0);
       expect(way.category, PlaceCategory.fortification);
       expect(
-          c.parseElement({
-            'type': 'node',
-            'id': 2,
-            'lat': 1,
-            'lon': 1,
-            'tags': {'historic': 'yes'}
-          }),
-          isNull);
+        c.parseElement({
+          'type': 'node',
+          'id': 2,
+          'lat': 1,
+          'lon': 1,
+          'tags': {'historic': 'yes'},
+        }),
+        isNull,
+      );
     });
 
     test('falls back to the next mirror and remembers it', () async {
-      final dio = fakeDio((o) => o.uri.host == 'a.test'
-          ? 503
-          : {
-              'elements': [element]
-            });
+      final dio = fakeDio(
+        (o) => o.uri.host == 'a.test'
+            ? 503
+            : {
+                'elements': [element],
+              },
+      );
       final client = OverpassClient(dio, mirrors: ['https://a.test/api', 'https://b.test/api']);
       expect(await client.nearby(q), hasLength(1));
       final adapter = dio.httpClientAdapter as FakeAdapter;
@@ -253,9 +264,12 @@ void main() {
 
   test('every remote source has a client', () {
     final dio = fakeDio((_) => null);
-    final sources = [PastVuClient(dio), WikipediaClient(dio), WikidataClient(dio), OverpassClient(dio)]
-        .map((c) => c.source)
-        .toSet();
+    final sources = [
+      PastVuClient(dio),
+      WikipediaClient(dio),
+      WikidataClient(dio),
+      OverpassClient(dio),
+    ].map((c) => c.source).toSet();
     expect(sources, PlaceSource.remote.toSet());
   });
 }

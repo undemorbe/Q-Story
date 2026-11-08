@@ -20,15 +20,15 @@ sealed class Result<T> {
 
   /// Returns value or `null` on error.
   T? get valueOrNull => switch (this) {
-        Ok<T>(value: final v) => v,
-        Err<T>() => null,
-      };
+    Ok<T>(value: final v) => v,
+    Err<T>() => null,
+  };
 
   /// Returns failure or `null` on success.
   Failure? get failureOrNull => switch (this) {
-        Ok<T>() => null,
-        Err<T>(failure: final f) => f,
-      };
+    Ok<T>() => null,
+    Err<T>(failure: final f) => f,
+  };
 }
 
 class Ok<T> extends Result<T> {

@@ -16,7 +16,8 @@ class WikidataClient implements PlaceSourceClient {
   @override
   PlaceSource get source => PlaceSource.wikidata;
 
-  static String _select(String lang) => '''
+  static String _select(String lang) =>
+      '''
 SELECT ?item ?itemLabel ?itemDescription ?coord ?image ?inception ?heritage ?article WHERE {
   %PATTERN%
   OPTIONAL { ?item wdt:P1483 ?heritage . }
@@ -27,7 +28,8 @@ SELECT ?item ?itemLabel ?itemDescription ?coord ?image ?inception ?heritage ?art
 }''';
 
   String buildNearbyQuery(PlaceQuery q) {
-    final pattern = '''
+    final pattern =
+        '''
 SERVICE wikibase:around {
     ?item wdt:P625 ?coord .
     bd:serviceParam wikibase:center "Point(${q.lon} ${q.lat})"^^geo:wktLiteral .
@@ -101,7 +103,7 @@ SERVICE wikibase:around {
       url: 'https://www.wikidata.org/wiki/$qid',
       category: guessCategory('$label $desc', fallback: PlaceCategory.building),
       yearStart: parseYear(_v(b, 'inception')),
-      links: [if (article != null) article],
+      links: [?article],
     );
   }
 }

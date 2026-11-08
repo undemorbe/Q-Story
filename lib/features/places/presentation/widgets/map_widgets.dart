@@ -2,11 +2,11 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/theme_ext.dart';
 import '../../domain/entities/place.dart';
 import 'place_labels.dart';
+import '../../../../core/theme/app_fonts.dart';
 
 /// Pin for a place: colour by source, glyph by category, gold when visited.
 class PlacePin extends StatelessWidget {
@@ -48,7 +48,10 @@ class PlacePin extends StatelessWidget {
           ),
           Positioned(
             bottom: 0,
-            child: CustomPaint(size: const Size(12, 16), painter: _SpikePainter(color: color, bgColor: bg)),
+            child: CustomPaint(
+              size: const Size(12, 16),
+              painter: _SpikePainter(color: color, bgColor: bg),
+            ),
           ),
         ],
       ),
@@ -97,7 +100,10 @@ class ClusterBubble extends StatelessWidget {
         boxShadow: [BoxShadow(color: gold.withValues(alpha: 0.45), blurRadius: 14, spreadRadius: 2)],
       ),
       child: Center(
-        child: Text('$count', style: GoogleFonts.cinzel(color: gold, fontWeight: FontWeight.bold, fontSize: 15)),
+        child: Text(
+          '$count',
+          style: AppFonts.display(color: gold, fontWeight: FontWeight.bold, fontSize: 15),
+        ),
       ),
     );
   }
@@ -137,7 +143,10 @@ class _UserLocationDotState extends State<UserLocationDot> with SingleTickerProv
               Container(
                 width: 20 + 40 * t,
                 height: 20 + 40 * t,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: blue.withValues(alpha: 0.35 * (1 - t))),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: blue.withValues(alpha: 0.35 * (1 - t)),
+                ),
               ),
             if (widget.headingDeg != null)
               Transform.rotate(

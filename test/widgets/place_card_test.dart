@@ -7,8 +7,11 @@ import '../helpers/fakes.dart';
 import '../helpers/pump_app.dart';
 
 void main() {
-  Widget card(Place p, {bool visited = false, VoidCallback? onTap}) =>
-      SizedBox(width: 200, height: 260, child: PlaceCard(place: p, visited: visited, onTap: onTap ?? () {}));
+  Widget card(Place p, {bool visited = false, VoidCallback? onTap}) => SizedBox(
+    width: 200,
+    height: 260,
+    child: PlaceCard(place: p, visited: visited, onTap: onTap ?? () {}),
+  );
 
   testWidgets('shows title, category and year', (t) async {
     await t.pumpApp(card(place('1', title: 'Medny Vsadnik', year: 1782)));

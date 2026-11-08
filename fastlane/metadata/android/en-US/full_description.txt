@@ -1,0 +1,29 @@
+QStory shows historical places around you and turns a walk into a hunt: pick a place on the map, follow the compass and claim the find when you get there.
+
+OPEN SOURCES
+Places come from databases kept by historians, local researchers and volunteers:
+• PastVu — old photographs tied to a place and a year;
+• Wikipedia — articles about places nearby;
+• Wikidata — cultural heritage sites;
+• OpenStreetMap — monuments, memorials, ruins, forts.
+Every source can be turned off. The app has no server of its own.
+
+PLACE HUNTS
+• Compass, distance and an ETA based on your real walking speed.
+• Steps and distance walked for every find.
+• A place is counted automatically when you step into its radius.
+• A "Nearby" list and a "Walk there" button for your maps app.
+
+STATISTICS
+• Steps for the day, the week and all time, a daily goal and streaks.
+• This week vs last week, charts by day, hour and weekday.
+• Hunt records, explored area, 16 achievements.
+• Export all your data as JSON.
+
+QR CODES
+Scan QR codes on plaques and share places with friends.
+
+PRIVACY
+No account, no ads, no analytics. Routes, steps and statistics stay on the device. Only the map area coordinates are sent to the open sources to find places nearby.
+
+Background tracking and daily reminders are off by default and only you can turn them on.

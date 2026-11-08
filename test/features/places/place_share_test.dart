@@ -16,16 +16,13 @@ void main() {
       yearStart: 1900,
       yearEnd: 1905,
     );
-    expect(
-      PlaceShare.text(p).split('\n'),
-      [
-        'Невский проспект',
-        '1900 — 1905',
-        'Вид на Казанский собор',
-        'https://pastvu.com/p/5',
-        'QStory: qstory:pastvu:5'
-      ],
-    );
+    expect(PlaceShare.text(p).split('\n'), [
+      'Невский проспект',
+      '1900 — 1905',
+      'Вид на Казанский собор',
+      'https://pastvu.com/p/5',
+      'QStory: qstory:pastvu:5',
+    ]);
   });
 
   test('falls back to an OpenStreetMap link when there is no URL', () {
@@ -53,7 +50,9 @@ void main() {
   });
 
   test('osmLink uses 6 decimals and zoom 18', () {
-    expect(PlaceShare.osmLink(1.5, -2.25),
-        'https://www.openstreetmap.org/?mlat=1.500000&mlon=-2.250000#map=18/1.500000/-2.250000');
+    expect(
+      PlaceShare.osmLink(1.5, -2.25),
+      'https://www.openstreetmap.org/?mlat=1.500000&mlon=-2.250000#map=18/1.500000/-2.250000',
+    );
   });
 }

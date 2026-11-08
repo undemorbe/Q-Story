@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/di/service_locator.dart';
@@ -10,6 +9,7 @@ import '../../../../core/theme/gothic_widgets.dart';
 import '../../../../core/theme/theme_ext.dart';
 import '../../domain/entities/daily_fact_entity.dart';
 import '../stores/daily_fact_store.dart';
+import '../../../../core/theme/app_fonts.dart';
 
 class DailyHistoryPage extends StatefulWidget {
   const DailyHistoryPage({super.key});
@@ -71,9 +71,7 @@ class _DailyHistoryPageState extends State<DailyHistoryPage> {
     if (_store.isLoading && _store.currentFact == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 64),
-        child: Center(
-          child: CircularProgressIndicator(color: context.gold),
-        ),
+        child: Center(child: CircularProgressIndicator(color: context.gold)),
       );
     }
 
@@ -108,11 +106,7 @@ class _DailyHistoryPageState extends State<DailyHistoryPage> {
           child: OutlinedButton.icon(
             onPressed: canRefresh ? () => _store.loadDailyFact(force: true) : null,
             icon: _store.isLoading
-                ? SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: context.gold),
-                  )
+                ? SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: context.gold))
                 : const Icon(Icons.refresh, size: 18),
             label: Text(_store.isLoading ? l10n.loadingLabel : l10n.refreshAction),
           ),
@@ -140,7 +134,7 @@ class _DateHeader extends StatelessWidget {
     'Сентября',
     'Октября',
     'Ноября',
-    'Декабря'
+    'Декабря',
   ];
 
   @override
@@ -148,32 +142,17 @@ class _DateHeader extends StatelessWidget {
     final gold = context.gold;
     return Column(
       children: [
-        Text(
-          '— ✦ ◆ ✦ —',
-          style: TextStyle(
-            color: gold.withValues(alpha: 0.55),
-            fontSize: 16,
-            letterSpacing: 4,
-          ),
-        ),
+        Text('— ✦ ◆ ✦ —', style: TextStyle(color: gold.withValues(alpha: 0.55), fontSize: 16, letterSpacing: 4)),
         const SizedBox(height: 10),
         Text(
           '${date.day} ${_months[date.month - 1]}',
-          style: GoogleFonts.cinzelDecorative(
-            color: gold,
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppFonts.display(color: gold, fontSize: 26, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 4),
         Text(
           AppLocalizations.of(context)!.onThisDaySubtitle,
-          style: GoogleFonts.crimsonText(
-            color: context.onBg,
-            fontSize: 14,
-            fontStyle: FontStyle.italic,
-          ),
+          style: AppFonts.body(color: context.onBg, fontSize: 14, fontStyle: FontStyle.italic),
         ),
       ],
     );
@@ -204,13 +183,11 @@ class _FactCard extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: fact.imageUrl!,
                   fit: BoxFit.cover,
-                  placeholder: (_, __) => Container(
+                  placeholder: (_, _) => Container(
                     color: context.surfaceVar,
-                    child: Center(
-                      child: CircularProgressIndicator(strokeWidth: 2, color: gold),
-                    ),
+                    child: Center(child: CircularProgressIndicator(strokeWidth: 2, color: gold)),
                   ),
-                  errorWidget: (_, __, ___) => Container(
+                  errorWidget: (_, _, _) => Container(
                     color: context.surfaceVar,
                     child: Icon(Icons.image_not_supported_outlined, color: context.outlineClr, size: 32),
                   ),
@@ -233,7 +210,7 @@ class _FactCard extends StatelessWidget {
                       ),
                       child: Text(
                         fact.year.toString(),
-                        style: GoogleFonts.cinzel(
+                        style: AppFonts.display(
                           color: gold,
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
@@ -245,7 +222,7 @@ class _FactCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         fact.era.toUpperCase(),
-                        style: GoogleFonts.cinzel(
+                        style: AppFonts.display(
                           color: gold.withValues(alpha: 0.8),
                           fontSize: 10,
                           letterSpacing: 2,
@@ -256,21 +233,14 @@ class _FactCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 14),
-                Text(
-                  fact.text,
-                  style: GoogleFonts.crimsonText(
-                    color: context.onBg,
-                    fontSize: 17,
-                    height: 1.55,
-                  ),
-                ),
+                Text(fact.text, style: AppFonts.body(color: context.onBg, fontSize: 17, height: 1.55)),
                 if (fact.pageExtract != null && fact.pageExtract!.trim().isNotEmpty) ...[
                   const SizedBox(height: 14),
                   Container(height: 1, color: context.outlineVar),
                   const SizedBox(height: 14),
                   Text(
                     fact.pageExtract!,
-                    style: GoogleFonts.crimsonText(
+                    style: AppFonts.body(
                       color: context.onBg.withValues(alpha: 0.85),
                       fontSize: 14,
                       height: 1.5,
@@ -313,11 +283,7 @@ class _EmptyCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.noFactsForToday,
-            style: GoogleFonts.crimsonText(
-              color: context.onBg,
-              fontSize: 16,
-              height: 1.5,
-            ),
+            style: AppFonts.body(color: context.onBg, fontSize: 16, height: 1.5),
             textAlign: TextAlign.center,
           ),
         ],
@@ -340,11 +306,7 @@ class _ErrorCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             message,
-            style: GoogleFonts.crimsonText(
-              color: context.onBg,
-              fontSize: 15,
-              height: 1.5,
-            ),
+            style: AppFonts.body(color: context.onBg, fontSize: 15, height: 1.5),
             textAlign: TextAlign.center,
           ),
         ],
@@ -363,11 +325,7 @@ class _SourceFooter extends StatelessWidget {
     return Center(
       child: Text(
         factsCount > 0 ? l10n.wikipediaSourceWithCount(factsCount) : l10n.wikipediaSource,
-        style: GoogleFonts.cinzel(
-          color: context.onBg.withValues(alpha: 0.5),
-          fontSize: 10,
-          letterSpacing: 1.5,
-        ),
+        style: AppFonts.display(color: context.onBg.withValues(alpha: 0.5), fontSize: 10, letterSpacing: 1.5),
       ),
     );
   }

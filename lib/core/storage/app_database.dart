@@ -28,19 +28,13 @@ class AppDatabase {
   /// Opens the on-disk database in the app documents directory.
   static Future<AppDatabase> open() async {
     final dir = await getApplicationDocumentsDirectory();
-    final db = await databaseFactoryIo.openDatabase(
-      p.join(dir.path, 'qstory.db'),
-      version: _version,
-    );
+    final db = await databaseFactoryIo.openDatabase(p.join(dir.path, 'qstory.db'), version: _version);
     return AppDatabase._(db);
   }
 
   /// In-memory database for tests.
   static Future<AppDatabase> inMemory() async {
-    final db = await newDatabaseFactoryMemory().openDatabase(
-      'qstory_test.db',
-      version: _version,
-    );
+    final db = await newDatabaseFactoryMemory().openDatabase('qstory_test.db', version: _version);
     return AppDatabase._(db);
   }
 

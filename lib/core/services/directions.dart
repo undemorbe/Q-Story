@@ -4,27 +4,19 @@ import 'package:url_launcher/url_launcher.dart';
 /// Builds "walk me there" links for the platform's map apps, most specific
 /// first, ending with a web fallback that works everywhere.
 abstract final class Directions {
-  static List<Uri> uris({
-    required double lat,
-    required double lon,
-    String? label,
-    required TargetPlatform platform,
-  }) {
+  static List<Uri> uris({required double lat, required double lon, String? label, required TargetPlatform platform}) {
     final ll = '${_c(lat)},${_c(lon)}';
-    final web = Uri.https('www.openstreetmap.org', '/directions', {
-      'engine': 'fossgis_osrm_foot',
-      'route': ';$ll',
-    });
+    final web = Uri.https('www.openstreetmap.org', '/directions', {'engine': 'fossgis_osrm_foot', 'route': ';$ll'});
     return switch (platform) {
       TargetPlatform.android => [
-          // geo: hands off to whatever map app the user prefers.
-          Uri.parse('geo:$ll?q=$ll${label == null ? '' : '(${Uri.encodeComponent(label)})'}'),
-          web,
-        ],
+        // geo: hands off to whatever map app the user prefers.
+        Uri.parse('geo:$ll?q=$ll${label == null ? '' : '(${Uri.encodeComponent(label)})'}'),
+        web,
+      ],
       TargetPlatform.iOS || TargetPlatform.macOS => [
-          Uri.https('maps.apple.com', '/', {'daddr': ll, 'dirflg': 'w', if (label != null) 'q': label}),
-          web,
-        ],
+        Uri.https('maps.apple.com', '/', {'daddr': ll, 'dirflg': 'w', 'q': ?label}),
+        web,
+      ],
       _ => [web],
     };
   }

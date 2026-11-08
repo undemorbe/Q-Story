@@ -116,19 +116,18 @@ Place place(
   String? imageUrl,
   String? url,
   int? year,
-}) =>
-    Place(
-      source: source,
-      sourceId: id,
-      title: title ?? 'Place $id',
-      lat: lat,
-      lon: lon,
-      category: category,
-      summary: summary,
-      imageUrl: imageUrl,
-      url: url,
-      yearStart: year,
-    );
+}) => Place(
+  source: source,
+  sourceId: id,
+  title: title ?? 'Place $id',
+  lat: lat,
+  lon: lon,
+  category: category,
+  summary: summary,
+  imageUrl: imageUrl,
+  url: url,
+  yearStart: year,
+);
 
 /// In-memory database, prefs and the basic stores, wired like the app.
 class TestEnv {
@@ -141,10 +140,7 @@ class TestEnv {
   final JournalStore journal;
   final SettingsStore settings;
 
-  static Future<TestEnv> create({
-    Map<String, Object> prefs = const {},
-    DateTime Function()? clock,
-  }) async {
+  static Future<TestEnv> create({Map<String, Object> prefs = const {}, DateTime Function()? clock}) async {
     SharedPreferences.setMockInitialValues(prefs);
     final sp = await SharedPreferences.getInstance();
     final db = await AppDatabase.inMemory();

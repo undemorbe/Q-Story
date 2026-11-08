@@ -37,7 +37,8 @@ abstract class _DailyFactStore with Store {
   @action
   Future<void> loadDailyFact({bool force = false}) async {
     final now = DateTime.now();
-    final sameDay = _loadedFor != null &&
+    final sameDay =
+        _loadedFor != null &&
         _loadedFor!.year == now.year &&
         _loadedFor!.month == now.month &&
         _loadedFor!.day == now.day;
@@ -73,10 +74,7 @@ abstract class _DailyFactStore with Store {
     currentFact = _pickRandom(facts, exclude: currentFact);
   }
 
-  DailyFactEntity _pickRandom(
-    List<DailyFactEntity> list, {
-    required DailyFactEntity? exclude,
-  }) {
+  DailyFactEntity _pickRandom(List<DailyFactEntity> list, {required DailyFactEntity? exclude}) {
     if (exclude == null) return list[_random.nextInt(list.length)];
     final candidates = list.where((f) => identical(f, exclude) == false).toList();
     if (candidates.isEmpty) return list.first;
@@ -84,11 +82,11 @@ abstract class _DailyFactStore with Store {
   }
 
   String _humanize(Failure f) => switch (f) {
-        NetworkFailure() => 'Нет соединения с сервером Wikipedia',
-        NotFoundFailure() => 'На этот день фактов нет',
-        ServerFailure(message: final m) => m,
-        ValidationFailure(message: final m) => m,
-        CacheFailure(message: final m) => m,
-        UnknownFailure() => 'Не удалось загрузить факт дня',
-      };
+    NetworkFailure() => 'Нет соединения с сервером Wikipedia',
+    NotFoundFailure() => 'На этот день фактов нет',
+    ServerFailure(message: final m) => m,
+    ValidationFailure(message: final m) => m,
+    CacheFailure(message: final m) => m,
+    UnknownFailure() => 'Не удалось загрузить факт дня',
+  };
 }

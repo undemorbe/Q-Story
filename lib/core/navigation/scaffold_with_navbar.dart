@@ -32,22 +32,30 @@ class ScaffoldWithNavBar extends StatelessWidget {
             },
             destinations: [
               NavigationDestination(
-                  icon: const Icon(Icons.map_outlined), selectedIcon: const Icon(Icons.map), label: l.navMap),
+                icon: const Icon(Icons.map_outlined),
+                selectedIcon: const Icon(Icons.map),
+                label: l.navMap,
+              ),
               NavigationDestination(
                 icon: const Icon(Icons.qr_code_scanner_outlined),
                 selectedIcon: const Icon(Icons.qr_code_scanner),
                 label: l.navScanner,
               ),
               NavigationDestination(
-                  icon: const Icon(Icons.insights_outlined),
-                  selectedIcon: const Icon(Icons.insights),
-                  label: l.navStats),
+                icon: const Icon(Icons.insights_outlined),
+                selectedIcon: const Icon(Icons.insights),
+                label: l.navStats,
+              ),
               NavigationDestination(
-                  icon: const Icon(Icons.favorite_outline),
-                  selectedIcon: const Icon(Icons.favorite),
-                  label: l.navFavorites),
+                icon: const Icon(Icons.favorite_outline),
+                selectedIcon: const Icon(Icons.favorite),
+                label: l.navFavorites,
+              ),
               NavigationDestination(
-                  icon: const Icon(Icons.person_outline), selectedIcon: const Icon(Icons.person), label: l.navProfile),
+                icon: const Icon(Icons.person_outline),
+                selectedIcon: const Icon(Icons.person),
+                label: l.navProfile,
+              ),
             ],
           ),
         ],

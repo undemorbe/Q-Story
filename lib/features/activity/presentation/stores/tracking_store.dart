@@ -85,6 +85,11 @@ abstract class _TrackingStore with Store {
   @observable
   int sessionSteps = 0;
 
+  /// True while tracking when steps are being estimated from distance
+  /// because the step sensor has not reported (missing or denied).
+  @computed
+  bool get stepsEstimatedNow => isTracking && !stepSensorAvailable && sessionSteps > 0;
+
   /// Seconds of actual movement in this session (stops excluded).
   @observable
   int sessionActiveSeconds = 0;
@@ -162,12 +167,12 @@ abstract class _TrackingStore with Store {
     _stepStreamActive = await _sensors.ensureStepAccess();
     if (_stepStreamActive) {
       _stepSub = _sensors.stepCount().listen(
-            _onStepReading,
-            onError: (_) => runInAction(() {
-              _stepStreamActive = false;
-              stepSensorAvailable = false;
-            }),
-          );
+        _onStepReading,
+        onError: (_) => runInAction(() {
+          _stepStreamActive = false;
+          stepSensorAvailable = false;
+        }),
+      );
     }
 
     _flushTimer = Timer.periodic(flushInterval, (_) => flush());
@@ -321,10 +326,7 @@ abstract class _TrackingStore with Store {
   Future<Hunt?> finishHunt({required bool found}) async {
     final h = activeHunt;
     if (h == null) return null;
-    final done = h.copyWith(
-      status: found ? HuntStatus.found : HuntStatus.abandoned,
-      endedAt: _now(),
-    );
+    final done = h.copyWith(status: found ? HuntStatus.found : HuntStatus.abandoned, endedAt: _now());
     activeHunt = null;
     _targetPlace = null;
     if (found) lastFoundHunt = done;
@@ -346,10 +348,13 @@ abstract class _TrackingStore with Store {
     if (d > _settings.geofenceRadiusM) return;
     _completing = true;
     final place = _targetPlace ?? _placeFromHunt(h);
-    _journal.recordVisit(place, VisitMethod.geofence).then((isNew) async {
-      // If it was already visited, the visit listener did not fire.
-      if (!isNew && activeHunt?.id == h.id) await finishHunt(found: true);
-    }).whenComplete(() => _completing = false);
+    _journal
+        .recordVisit(place, VisitMethod.geofence)
+        .then((isNew) async {
+          // If it was already visited, the visit listener did not fire.
+          if (!isNew && activeHunt?.id == h.id) await finishHunt(found: true);
+        })
+        .whenComplete(() => _completing = false);
   }
 
   static Place _placeFromHunt(Hunt h) {

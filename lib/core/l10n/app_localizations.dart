@@ -365,7 +365,7 @@ abstract class AppLocalizations {
   /// No description provided for @pushNotificationsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Receive daily historical facts'**
+  /// **'A daily reminder to go for a walk'**
   String get pushNotificationsSubtitle;
 
   /// No description provided for @checkNotification.
@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @dailyNotificationsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Receive interesting historical facts'**
+  /// **'A short daily nudge: a real \"on this day\" fact or a reminder to walk'**
   String get dailyNotificationsDesc;
 
   /// No description provided for @notificationTime.
@@ -461,14 +461,8 @@ abstract class AppLocalizations {
   /// No description provided for @aboutNotificationsText.
   ///
   /// In en, this message translates to:
-  /// **'Each day at the selected time you will receive notifications with interesting historical facts and events.'**
+  /// **'Once a day at the chosen time QStory reminds you to go for a walk. When the internet is available, the reminder for the next days carries a real \"on this day\" event from Wikipedia (Russian only). Notifications are scheduled on the device; nothing is sent anywhere.'**
   String get aboutNotificationsText;
-
-  /// No description provided for @notificationsWorkInDnd.
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications work even in Do Not Disturb mode'**
-  String get notificationsWorkInDnd;
 
   /// No description provided for @notificationsEnabledMsg.
   ///
@@ -887,7 +881,7 @@ abstract class AppLocalizations {
   /// No description provided for @markVisited.
   ///
   /// In en, this message translates to:
-  /// **'I\'m here — mark as visited'**
+  /// **'I\'m here'**
   String get markVisited;
 
   /// No description provided for @markedVisited.
@@ -1985,7 +1979,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutPrivacyText.
   ///
   /// In en, this message translates to:
-  /// **'No accounts, no servers of our own. Your location, steps, routes and statistics never leave the device. The app only sends map coordinates to the public open-data APIs listed above to find places nearby.'**
+  /// **'No accounts, no servers of our own. Your routes, steps and statistics never leave the device. To find places nearby the app sends only the map area coordinates to the open-data APIs listed above; reminders and exports happen only when you turn them on.'**
   String get aboutPrivacyText;
 
   /// No description provided for @aboutLicenseTitle.
@@ -2167,6 +2161,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New achievement: {name}'**
   String milestoneAchievement(Object name);
+
+  /// No description provided for @reminderFactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'On this day in {year}'**
+  String reminderFactTitle(String year);
+
+  /// No description provided for @reminder1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Time for a walk?'**
+  String get reminder1Title;
+
+  /// No description provided for @reminder1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'There are historical places near you that you haven\'t found yet.'**
+  String get reminder1Body;
+
+  /// No description provided for @reminder2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'History around the corner'**
+  String get reminder2Title;
+
+  /// No description provided for @reminder2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the map and pick a place to hunt for today.'**
+  String get reminder2Body;
+
+  /// No description provided for @reminder3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps with a story'**
+  String get reminder3Title;
+
+  /// No description provided for @reminder3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'A short walk to an old building counts towards your daily goal.'**
+  String get reminder3Body;
+
+  /// No description provided for @reminder4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore a new street'**
+  String get reminder4Title;
+
+  /// No description provided for @reminder4Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 250 × 250 m square you visit adds to the explored area.'**
+  String get reminder4Body;
+
+  /// No description provided for @reminder5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'A place is waiting'**
+  String get reminder5Title;
+
+  /// No description provided for @reminder5Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Find one historical place today and keep your streak going.'**
+  String get reminder5Body;
+
+  /// No description provided for @reminderChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily reminder'**
+  String get reminderChannel;
+
+  /// No description provided for @reminderChannelDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Once-a-day reminder to go for a walk'**
+  String get reminderChannelDesc;
+
+  /// No description provided for @notificationsPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are not allowed. Enable them for QStory in the system settings.'**
+  String get notificationsPermissionDenied;
+
+  /// No description provided for @aboutPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get aboutPrivacyPolicy;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -2193,8 +2277,10 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsRu();
   }
 
-  throw FlutterError('AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+  throw FlutterError(
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

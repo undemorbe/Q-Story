@@ -40,15 +40,10 @@ void main() {
   Widget buildTestWidget() {
     return MaterialApp(
       locale: const Locale('en'),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-      ],
+      localizationsDelegates: const [AppLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('ru')],
       home: Scaffold(
-        body: const ReportSheet(
-          markerId: 'test-123',
-          markerTitle: 'Test Marker',
-        ),
+        body: const ReportSheet(markerId: 'test-123', markerTitle: 'Test Marker'),
       ),
     );
   }

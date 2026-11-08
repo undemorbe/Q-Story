@@ -132,21 +132,23 @@ abstract final class QrPayloadParser {
       // use "id" (or nothing) and get a stable "qr-" id.
       final ownId = map['source'] == PlaceSource.user.name ? map['sourceId']?.toString() : null;
       final id = (map['id'] ?? base64Url.encode(utf8.encode(title)).replaceAll('=', '')).toString();
-      return QrInlinePlace(Place(
-        source: PlaceSource.user,
-        sourceId: ownId ?? 'qr-$id',
-        title: title.trim(),
-        lat: (map['lat'] as num?)?.toDouble() ?? 0,
-        lon: (map['lon'] as num?)?.toDouble() ?? 0,
-        summary: (map['summary'] ?? map['description'] ?? '').toString(),
-        description: map['description']?.toString(),
-        imageUrl: (map['imageUrl'] ?? map['image'])?.toString(),
-        url: map['url']?.toString(),
-        category: PlaceCategory.parse(map['category']?.toString()),
-        yearStart: ((map['year'] ?? map['yearStart']) as num?)?.toInt(),
-        yearEnd: (map['yearEnd'] as num?)?.toInt(),
-        author: map['author']?.toString(),
-      ));
+      return QrInlinePlace(
+        Place(
+          source: PlaceSource.user,
+          sourceId: ownId ?? 'qr-$id',
+          title: title.trim(),
+          lat: (map['lat'] as num?)?.toDouble() ?? 0,
+          lon: (map['lon'] as num?)?.toDouble() ?? 0,
+          summary: (map['summary'] ?? map['description'] ?? '').toString(),
+          description: map['description']?.toString(),
+          imageUrl: (map['imageUrl'] ?? map['image'])?.toString(),
+          url: map['url']?.toString(),
+          category: PlaceCategory.parse(map['category']?.toString()),
+          yearStart: ((map['year'] ?? map['yearStart']) as num?)?.toInt(),
+          yearEnd: (map['yearEnd'] as num?)?.toInt(),
+          author: map['author']?.toString(),
+        ),
+      );
     } catch (_) {
       return null;
     }

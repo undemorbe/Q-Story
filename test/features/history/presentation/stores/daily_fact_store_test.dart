@@ -76,7 +76,7 @@ void main() {
       });
 
       test('loads facts successfully', () async {
-        mockRepository.handler = ((_, __) async => Result.ok(testFacts));
+        mockRepository.handler = ((_, _) async => Result.ok(testFacts));
 
         await store.loadDailyFact();
 
@@ -87,7 +87,7 @@ void main() {
       });
 
       test('sets random current fact from loaded facts', () async {
-        mockRepository.handler = ((_, __) async => Result.ok(testFacts));
+        mockRepository.handler = ((_, _) async => Result.ok(testFacts));
 
         await store.loadDailyFact();
 
@@ -95,7 +95,7 @@ void main() {
       });
 
       test('handles empty facts list', () async {
-        mockRepository.handler = ((_, __) async => Result.ok([]));
+        mockRepository.handler = ((_, _) async => Result.ok([]));
 
         await store.loadDailyFact();
 
@@ -104,7 +104,7 @@ void main() {
       });
 
       test('sets error on network failure', () async {
-        mockRepository.handler = ((_, __) async => Result.err(NetworkFailure()));
+        mockRepository.handler = ((_, _) async => Result.err(NetworkFailure()));
 
         await store.loadDailyFact();
 
@@ -113,7 +113,7 @@ void main() {
       });
 
       test('sets error on not found failure', () async {
-        mockRepository.handler = ((_, __) async => Result.err(NotFoundFailure()));
+        mockRepository.handler = ((_, _) async => Result.err(NotFoundFailure()));
 
         await store.loadDailyFact();
 
@@ -123,7 +123,7 @@ void main() {
 
       test('does not reload if same day and facts exist', () async {
         var callCount = 0;
-        mockRepository.handler = ((_, __) async {
+        mockRepository.handler = ((_, _) async {
           callCount++;
           return Result.ok(testFacts);
         });
@@ -140,7 +140,7 @@ void main() {
 
       test('force=true bypasses cache', () async {
         var callCount = 0;
-        mockRepository.handler = ((_, __) async {
+        mockRepository.handler = ((_, _) async {
           callCount++;
           return Result.ok(testFacts);
         });
@@ -154,7 +154,7 @@ void main() {
 
       test('clears error on successful load', () async {
         var callCount = 0;
-        mockRepository.handler = ((_, __) async {
+        mockRepository.handler = ((_, _) async {
           callCount++;
           if (callCount == 1) {
             return Result.err(NetworkFailure());
@@ -171,7 +171,7 @@ void main() {
 
       test('sets isLoading during fetch', () async {
         var isLoadingDuringFetch = false;
-        mockRepository.handler = ((_, __) async {
+        mockRepository.handler = ((_, _) async {
           isLoadingDuringFetch = store.isLoading;
           return Result.ok(testFacts);
         });
@@ -188,32 +188,14 @@ void main() {
 
       setUp(() {
         testFacts = [
-          const DailyFactEntity(
-            year: 1812,
-            text: 'Fact 1',
-            imageUrl: null,
-            pageExtract: null,
-            wikipediaUrl: null,
-          ),
-          const DailyFactEntity(
-            year: 1917,
-            text: 'Fact 2',
-            imageUrl: null,
-            pageExtract: null,
-            wikipediaUrl: null,
-          ),
-          const DailyFactEntity(
-            year: 1991,
-            text: 'Fact 3',
-            imageUrl: null,
-            pageExtract: null,
-            wikipediaUrl: null,
-          ),
+          const DailyFactEntity(year: 1812, text: 'Fact 1', imageUrl: null, pageExtract: null, wikipediaUrl: null),
+          const DailyFactEntity(year: 1917, text: 'Fact 2', imageUrl: null, pageExtract: null, wikipediaUrl: null),
+          const DailyFactEntity(year: 1991, text: 'Fact 3', imageUrl: null, pageExtract: null, wikipediaUrl: null),
         ];
       });
 
       test('selects different fact from loaded set', () async {
-        mockRepository.handler = ((_, __) async => Result.ok(testFacts));
+        mockRepository.handler = ((_, _) async => Result.ok(testFacts));
 
         await store.loadDailyFact();
         final firstFact = store.currentFact;
@@ -232,7 +214,7 @@ void main() {
 
       test('handles single fact by keeping it', () async {
         final singleFact = [testFacts.first];
-        mockRepository.handler = ((_, __) async => Result.ok(singleFact));
+        mockRepository.handler = ((_, _) async => Result.ok(singleFact));
 
         await store.loadDailyFact();
         final fact = store.currentFact;
@@ -244,7 +226,7 @@ void main() {
 
       test('refetches if facts list is empty', () async {
         var callCount = 0;
-        mockRepository.handler = ((_, __) async {
+        mockRepository.handler = ((_, _) async {
           callCount++;
           if (callCount == 1) {
             return Result.ok([]);
@@ -261,7 +243,7 @@ void main() {
       });
 
       test('always returns a fact when available', () async {
-        mockRepository.handler = ((_, __) async => Result.ok(testFacts));
+        mockRepository.handler = ((_, _) async => Result.ok(testFacts));
 
         await store.loadDailyFact();
 
@@ -275,7 +257,7 @@ void main() {
 
     group('error messages', () {
       test('humanizes network failure', () async {
-        mockRepository.handler = ((_, __) async => Result.err(NetworkFailure()));
+        mockRepository.handler = ((_, _) async => Result.err(NetworkFailure()));
 
         await store.loadDailyFact();
 
@@ -283,7 +265,7 @@ void main() {
       });
 
       test('humanizes not found failure', () async {
-        mockRepository.handler = ((_, __) async => Result.err(NotFoundFailure()));
+        mockRepository.handler = ((_, _) async => Result.err(NotFoundFailure()));
 
         await store.loadDailyFact();
 
@@ -292,7 +274,7 @@ void main() {
 
       test('uses custom server failure message', () async {
         const customMsg = 'Custom server error';
-        mockRepository.handler = ((_, __) async => Result.err(ServerFailure(customMsg)));
+        mockRepository.handler = ((_, _) async => Result.err(ServerFailure(customMsg)));
 
         await store.loadDailyFact();
 
@@ -305,19 +287,13 @@ void main() {
 
       setUp(() {
         facts = [
-          const DailyFactEntity(
-            year: 1812,
-            text: 'Fact',
-            imageUrl: null,
-            pageExtract: null,
-            wikipediaUrl: null,
-          ),
+          const DailyFactEntity(year: 1812, text: 'Fact', imageUrl: null, pageExtract: null, wikipediaUrl: null),
         ];
       });
 
       test('caches facts by date - does not reload on same day', () async {
         var callCount = 0;
-        mockRepository.handler = ((_, __) async {
+        mockRepository.handler = ((_, _) async {
           callCount++;
           return Result.ok(facts);
         });

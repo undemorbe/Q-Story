@@ -35,12 +35,7 @@ class GothicCard extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
 
-  const GothicCard({
-    super.key,
-    required this.child,
-    this.padding,
-    this.backgroundColor,
-  });
+  const GothicCard({super.key, required this.child, this.padding, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -58,41 +53,27 @@ class GothicCard extends StatelessWidget {
         children: [
           Padding(
             padding: padding ?? const EdgeInsets.all(16),
-            child: Center(
-              child: child,
-            ),
+            child: Center(child: child),
           ),
           Positioned(
             top: 4,
             left: 4,
-            child: Text(
-              '✦',
-              style: TextStyle(color: gold, fontSize: 7, height: 1),
-            ),
+            child: Text('✦', style: TextStyle(color: gold, fontSize: 7, height: 1)),
           ),
           Positioned(
             top: 4,
             right: 4,
-            child: Text(
-              '✦',
-              style: TextStyle(color: gold, fontSize: 7, height: 1),
-            ),
+            child: Text('✦', style: TextStyle(color: gold, fontSize: 7, height: 1)),
           ),
           Positioned(
             bottom: 4,
             left: 4,
-            child: Text(
-              '✦',
-              style: TextStyle(color: gold, fontSize: 7, height: 1),
-            ),
+            child: Text('✦', style: TextStyle(color: gold, fontSize: 7, height: 1)),
           ),
           Positioned(
             bottom: 4,
             right: 4,
-            child: Text(
-              '✦',
-              style: TextStyle(color: gold, fontSize: 7, height: 1),
-            ),
+            child: Text('✦', style: TextStyle(color: gold, fontSize: 7, height: 1)),
           ),
         ],
       ),
@@ -112,10 +93,7 @@ class GothicDivider extends StatelessWidget {
           Expanded(child: Container(height: 1, color: context.outlineClr)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              '◆',
-              style: TextStyle(color: context.gold, fontSize: 10),
-            ),
+            child: Text('◆', style: TextStyle(color: context.gold, fontSize: 10)),
           ),
           Expanded(child: Container(height: 1, color: context.outlineClr)),
         ],
@@ -128,11 +106,7 @@ class GothicOrnamentHeader extends StatelessWidget {
   final String text;
   final double fontSize;
 
-  const GothicOrnamentHeader({
-    super.key,
-    required this.text,
-    this.fontSize = 28,
-  });
+  const GothicOrnamentHeader({super.key, required this.text, this.fontSize = 28});
 
   @override
   Widget build(BuildContext context) {
@@ -141,11 +115,7 @@ class GothicOrnamentHeader extends StatelessWidget {
       children: [
         Text(
           '— ✦ ◆ ✦ —',
-          style: TextStyle(
-            color: gold.withValues(alpha: 0.6),
-            fontSize: 16,
-            letterSpacing: 4,
-          ),
+          style: TextStyle(color: gold.withValues(alpha: 0.6), fontSize: 16, letterSpacing: 4),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 14),

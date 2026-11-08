@@ -21,6 +21,8 @@ class AppPreferences {
   static const _kGeofence = 'geofence_radius_m';
   static const _kGoalNotified = 'goal_notified_day';
   static const _kSeenAchievements = 'seen_achievements';
+  static const _kNotifEnabled = 'notifications_enabled';
+  static const _kNotifTime = 'notification_time';
 
   String? get localeCode => _prefs.getString(_kLocale);
   Future<void> setLocaleCode(String code) => _prefs.setString(_kLocale, code);
@@ -71,4 +73,21 @@ class AppPreferences {
     await _prefs.remove(_kGoalNotified);
     await _prefs.remove(_kSeenAchievements);
   }
+
+  /// Daily reminder switch. Off by default: the OS permission is asked
+  /// only when the user turns it on.
+  bool get notificationsEnabled => _prefs.getBool(_kNotifEnabled) ?? false;
+  Future<void> setNotificationsEnabled(bool v) => _prefs.setBool(_kNotifEnabled, v);
+
+  /// Daily reminder time, stored as `HH:mm`; 18:00 by default.
+  TimeOfDay get notificationTime {
+    final m = RegExp(r'^(\d{1,2}):(\d{2})$').firstMatch(_prefs.getString(_kNotifTime) ?? '');
+    final h = int.tryParse(m?.group(1) ?? '');
+    final min = int.tryParse(m?.group(2) ?? '');
+    if (h == null || min == null || h > 23 || min > 59) return const TimeOfDay(hour: 18, minute: 0);
+    return TimeOfDay(hour: h, minute: min);
+  }
+
+  Future<void> setNotificationTime(TimeOfDay t) =>
+      _prefs.setString(_kNotifTime, '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}');
 }

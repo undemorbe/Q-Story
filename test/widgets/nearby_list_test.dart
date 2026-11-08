@@ -34,11 +34,9 @@ void main() {
 
   testWidgets('lists places with distance, visited mark and opens on tap', (t) async {
     Place? opened;
-    await t.pumpApp(NearbyList(
-      items: NearbyItem.build([far, near], 59.0, 30.0),
-      visitedIds: {near.id},
-      onOpen: (p) => opened = p,
-    ));
+    await t.pumpApp(
+      NearbyList(items: NearbyItem.build([far, near], 59.0, 30.0), visitedIds: {near.id}, onOpen: (p) => opened = p),
+    );
     expect(find.text('2 places nearby'), findsOneWidget);
     expect(find.text('Near'), findsOneWidget);
     expect(find.text('111 m'), findsOneWidget);
@@ -60,7 +58,10 @@ void main() {
   testWidgets('Russian plurals', (t) async {
     for (final (n, text) in [(1, '1 место рядом'), (3, '3 места рядом'), (5, '5 мест рядом')]) {
       final items = NearbyItem.build([for (var i = 0; i < n; i++) place('$i', lat: 59 + i / 1000)], 59, 30);
-      await t.pumpApp(NearbyList(items: items, visitedIds: const {}, onOpen: (_) {}), locale: const Locale('ru'));
+      await t.pumpApp(
+        NearbyList(items: items, visitedIds: const {}, onOpen: (_) {}),
+        locale: const Locale('ru'),
+      );
       expect(find.text(text), findsOneWidget, reason: '$n');
     }
   });

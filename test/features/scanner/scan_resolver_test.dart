@@ -14,7 +14,10 @@ void main() {
 
   setUp(() async {
     env = await TestEnv.create();
-    wiki = FakeClient(PlaceSource.wikipedia, detail: place('ru:42', source: PlaceSource.wikipedia, title: 'Статья'));
+    wiki = FakeClient(
+      PlaceSource.wikipedia,
+      detail: place('ru:42', source: PlaceSource.wikipedia, title: 'Статья'),
+    );
     resolver = ScanResolver(env.placesRepo([wiki]));
   });
   tearDown(() => env.dispose());

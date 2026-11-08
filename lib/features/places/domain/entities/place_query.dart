@@ -22,11 +22,7 @@ class PlaceQuery {
 /// Aggregated result of a fan-out query to several sources: whatever
 /// succeeded plus per-source failures so the UI can explain partial data.
 class NearbyPlaces {
-  const NearbyPlaces({
-    required this.places,
-    this.failures = const {},
-    this.fromCache = false,
-  });
+  const NearbyPlaces({required this.places, this.failures = const {}, this.fromCache = false});
 
   final List<Place> places;
   final Map<PlaceSource, Failure> failures;

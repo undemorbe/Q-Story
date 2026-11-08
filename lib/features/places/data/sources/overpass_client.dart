@@ -136,7 +136,8 @@ class OverpassClient implements PlaceSourceClient {
     if (wiki != null && wiki.contains(':')) {
       final i = wiki.indexOf(':');
       links.add(
-          'https://${wiki.substring(0, i)}.wikipedia.org/wiki/${Uri.encodeComponent(wiki.substring(i + 1).replaceAll(' ', '_'))}');
+        'https://${wiki.substring(0, i)}.wikipedia.org/wiki/${Uri.encodeComponent(wiki.substring(i + 1).replaceAll(' ', '_'))}',
+      );
     }
     if (tags['wikidata'] != null) links.add('https://www.wikidata.org/wiki/${tags['wikidata']}');
     if (tags['website'] != null) links.add(tags['website'] as String);

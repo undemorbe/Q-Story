@@ -9,6 +9,12 @@
 
 > English summary: QStory is a Flutter app that shows historical places near you using open community data (PastVu, Wikipedia, Wikidata, OpenStreetMap), tracks your walk and steps while you search for a place, and keeps every statistic on the device. No account, no backend, no analytics.
 
+<p align="center">
+  <img src="fastlane/metadata/android/ru-RU/images/phoneScreenshots/1_stats.png" width="200" alt="Статистика">
+  <img src="fastlane/metadata/android/ru-RU/images/phoneScreenshots/4_place.png" width="200" alt="Карточка места">
+  <img src="fastlane/metadata/android/ru-RU/images/phoneScreenshots/5_nearby.png" width="200" alt="Места рядом">
+</p>
+
 ---
 
 ## Возможности
@@ -24,7 +30,8 @@
 | 📷 **QR-коды** | Формат `qstory:<источник>:<id>` или ссылки на Википедию / Wikidata / OSM / PastVu. Каждое место можно отдать как QR. |
 | 📊 **Статистика** | Шаги за день / неделю / всё время, цель и серии, путь, активное время, макс. скорость, «шагов на находку», средний путь до места, коэффициент петляния, самая быстрая и самая длинная охота, разведанная площадь, активность по часам и дням недели, сравнение с прошлой неделей, источники и категории находок, 16 достижений. Уведомление о достижении цели дня и новых достижениях. Экспорт всех данных в JSON. |
 | ⭐ **Избранное, свои места** | Свои метки хранятся локально и участвуют в поиске наравне с внешними. |
-| 🌐 **RU / EN**, светлая / тёмная тема | |
+| 🔔 **Напоминания** | По желанию: раз в день в выбранное время, с настоящим событием «в этот день» из Википедии. Разрешение спрашивается только при включении. |
+| 🌐 **RU / EN**, светлая / тёмная тема | Шрифты Cormorant с кириллицей, встроены в приложение. |
 
 ## Источники данных
 
@@ -69,7 +76,7 @@ lib/
 
 ## Сборка
 
-Требуется Flutter **3.47+** (Dart 3.x), Android SDK и/или Xcode 16+.
+Требуется Flutter **3.47+** (Dart 3.12+), Android SDK и/или Xcode 16+.
 
 ```bash
 flutter pub get
@@ -85,7 +92,7 @@ flutter run
 
 ## Тесты
 
-~290 unit- и widget-тестов: доменная логика (статистика, ETA, QR, геометрия, экспорт), репозитории и стор'ы на in-memory БД, HTTP-клиенты источников на фейковом Dio, виджеты и «дымовой» тест запуска всего приложения.
+Около 340 unit- и widget-тестов: доменная логика (статистика, ETA, QR, геометрия, экспорт, напоминания), репозитории и стор'ы на in-memory БД, HTTP-клиенты источников на фейковом Dio, виджеты, «дымовой» тест запуска всего приложения и проверки готовности к публикации (версии, разрешения, лимиты текстов и размеры картинок для Google Play, шрифты).
 
 ```bash
 flutter test
@@ -107,7 +114,17 @@ dart format --set-exit-if-changed lib test
 flutter analyze
 ```
 
+Скриншоты для магазина рендерятся из приложения с демо-данными:
+
+```bash
+flutter test test/screenshots --dart-define=SCREENSHOTS=true
+```
+
 CI ([`ci.yml`](.github/workflows/ci.yml)) на каждый push и PR перегенерирует l10n и MobX-код, проверяет формат, запускает анализатор и тесты и собирает debug-APK.
+
+## Публикация
+
+Тексты, иконка, баннер и скриншоты для Google Play — в [`fastlane/metadata/android`](fastlane/metadata/android), ответы для форм Play Console — в [PUBLISHING.md](PUBLISHING.md).
 
 ## Презентация
 

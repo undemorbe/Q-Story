@@ -44,8 +44,9 @@ abstract class _JournalStore with Store {
     final isNew = await _repo.addVisit(visit);
     if (isNew) {
       visitedIds.add(place.id);
-      await _repo
-          .log(ActivityEvent(type: ActivityEventType.visit, at: visit.at, placeId: place.id, source: place.source));
+      await _repo.log(
+        ActivityEvent(type: ActivityEventType.visit, at: visit.at, placeId: place.id, source: place.source),
+      );
       for (final l in _visitListeners) {
         l(visit);
       }

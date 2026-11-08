@@ -7,11 +7,7 @@ class ReportSheet extends StatefulWidget {
   final String markerId;
   final String markerTitle;
 
-  const ReportSheet({
-    super.key,
-    required this.markerId,
-    required this.markerTitle,
-  });
+  const ReportSheet({super.key, required this.markerId, required this.markerTitle});
 
   @override
   State<ReportSheet> createState() => _ReportSheetState();
@@ -46,12 +42,7 @@ class _ReportSheetState extends State<ReportSheet> {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-      ),
+      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,14 +51,8 @@ class _ReportSheetState extends State<ReportSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                l10n.report,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+              Text(l10n.report, style: Theme.of(context).textTheme.headlineSmall),
+              IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
             ],
           ),
           const SizedBox(height: 8),
@@ -75,18 +60,13 @@ class _ReportSheetState extends State<ReportSheet> {
           // Read-only marker info section
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(4),
-            ),
+            decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'ID: ${widget.markerId}',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[700],
-                      ),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -105,20 +85,15 @@ class _ReportSheetState extends State<ReportSheet> {
             initialValue: _selectedCategory,
             decoration: InputDecoration(
               labelText: l10n.reportCategory,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             ),
             items: ReportCategory.values
-                .map((cat) => DropdownMenuItem(
-                      value: cat,
-                      child: Text(
-                        _reportService.getCategoryLabel(
-                          cat,
-                          Localizations.localeOf(context).languageCode,
-                        ),
-                      ),
-                    ))
+                .map(
+                  (cat) => DropdownMenuItem(
+                    value: cat,
+                    child: Text(_reportService.getCategoryLabel(cat, Localizations.localeOf(context).languageCode)),
+                  ),
+                )
                 .toList(),
             onChanged: _isLoading
                 ? null
@@ -137,9 +112,7 @@ class _ReportSheetState extends State<ReportSheet> {
             minLines: 3,
             decoration: InputDecoration(
               hintText: l10n.reportText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               counterText: '',
             ),
             onChanged: (text) {
@@ -151,10 +124,7 @@ class _ReportSheetState extends State<ReportSheet> {
             builder: (context, textLength, _) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text(
-                  '$textLength/500',
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
+                child: Text('$textLength/500', style: Theme.of(context).textTheme.labelSmall),
               );
             },
           ),
@@ -167,18 +137,9 @@ class _ReportSheetState extends State<ReportSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    _errorMessage!,
-                    style: TextStyle(
-                      color: Colors.red[600],
-                      fontSize: 14,
-                    ),
-                  ),
+                  Text(_errorMessage!, style: TextStyle(color: Colors.red[600], fontSize: 14)),
                   const SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: _retryReport,
-                    child: Text(l10n.retry),
-                  ),
+                  ElevatedButton(onPressed: _retryReport, child: Text(l10n.retry)),
                 ],
               ),
             ),
@@ -197,9 +158,7 @@ class _ReportSheetState extends State<ReportSheet> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.blue[700]!,
-                            ),
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[700]!),
                           ),
                         )
                       : Text(l10n.send),
@@ -215,10 +174,7 @@ class _ReportSheetState extends State<ReportSheet> {
   Future<void> _sendReport() async {
     final l10n = AppLocalizations.of(context)!;
     final category = _selectedCategory!;
-    final categoryLabel = _reportService.getCategoryLabel(
-      category,
-      Localizations.localeOf(context).languageCode,
-    );
+    final categoryLabel = _reportService.getCategoryLabel(category, Localizations.localeOf(context).languageCode);
     final text = _textController.text.trim();
 
     // Show confirmation dialog
@@ -236,14 +192,8 @@ class _ReportSheetState extends State<ReportSheet> {
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(l10n.send),
-          ),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.send)),
         ],
       ),
     );
@@ -266,12 +216,9 @@ class _ReportSheetState extends State<ReportSheet> {
       if (!mounted) return;
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.reportSent),
-          backgroundColor: Colors.green,
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.reportSent), backgroundColor: Colors.green));
 
       // Auto-close sheet after 2 seconds
       await Future.delayed(const Duration(seconds: 2));

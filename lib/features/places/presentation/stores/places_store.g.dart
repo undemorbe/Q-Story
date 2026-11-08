@@ -12,15 +12,17 @@ mixin _$PlacesStore on _PlacesStore, Store {
   Computed<List<PlaceCategory>>? _$availableCategoriesComputed;
 
   @override
-  List<PlaceCategory> get availableCategories => (_$availableCategoriesComputed ??=
-          Computed<List<PlaceCategory>>(() => super.availableCategories, name: '_PlacesStore.availableCategories'))
-      .value;
+  List<PlaceCategory> get availableCategories => (_$availableCategoriesComputed ??= Computed<List<PlaceCategory>>(
+    () => super.availableCategories,
+    name: '_PlacesStore.availableCategories',
+  )).value;
   Computed<Map<PlaceSource, int>>? _$countBySourceComputed;
 
   @override
-  Map<PlaceSource, int> get countBySource => (_$countBySourceComputed ??=
-          Computed<Map<PlaceSource, int>>(() => super.countBySource, name: '_PlacesStore.countBySource'))
-      .value;
+  Map<PlaceSource, int> get countBySource => (_$countBySourceComputed ??= Computed<Map<PlaceSource, int>>(
+    () => super.countBySource,
+    name: '_PlacesStore.countBySource',
+  )).value;
   Computed<List<Place>>? _$filteredComputed;
 
   @override
@@ -29,9 +31,10 @@ mixin _$PlacesStore on _PlacesStore, Store {
   Computed<int>? _$activeFilterCountComputed;
 
   @override
-  int get activeFilterCount => (_$activeFilterCountComputed ??=
-          Computed<int>(() => super.activeFilterCount, name: '_PlacesStore.activeFilterCount'))
-      .value;
+  int get activeFilterCount => (_$activeFilterCountComputed ??= Computed<int>(
+    () => super.activeFilterCount,
+    name: '_PlacesStore.activeFilterCount',
+  )).value;
 
   late final _$placesAtom = Atom(name: '_PlacesStore.places', context: context);
 

@@ -14,13 +14,15 @@ void main() {
   late PlacesStore store;
 
   final monument = place('node/1', title: 'Памятник Петру', lat: 59.9343, lon: 30.3351);
-  final church = place('ru:2',
-      source: PlaceSource.wikipedia,
-      title: 'Церковь',
-      category: PlaceCategory.religious,
-      summary: 'Храм XVIII века',
-      lat: 59.9353,
-      lon: 30.3351);
+  final church = place(
+    'ru:2',
+    source: PlaceSource.wikipedia,
+    title: 'Церковь',
+    category: PlaceCategory.religious,
+    summary: 'Храм XVIII века',
+    lat: 59.9353,
+    lon: 30.3351,
+  );
 
   setUp(() async {
     env = await TestEnv.create();

@@ -66,10 +66,7 @@ class DeviceMotionSensors implements MotionSensors {
   Future<GeoFix?> currentFix() async {
     try {
       final p = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-          timeLimit: Duration(seconds: 12),
-        ),
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high, timeLimit: Duration(seconds: 12)),
       );
       return _toFix(p);
     } catch (_) {
@@ -139,11 +136,11 @@ class DeviceMotionSensors implements MotionSensors {
   Future<void> openAppSettings() => Geolocator.openAppSettings();
 
   static GeoFix _toFix(Position p) => GeoFix(
-        lat: p.latitude,
-        lon: p.longitude,
-        time: p.timestamp,
-        accuracyM: p.accuracy,
-        speedMps: p.speed < 0 ? 0 : p.speed,
-        headingDeg: p.heading < 0 ? null : p.heading,
-      );
+    lat: p.latitude,
+    lon: p.longitude,
+    time: p.timestamp,
+    accuracyM: p.accuracy,
+    speedMps: p.speed < 0 ? 0 : p.speed,
+    headingDeg: p.heading < 0 ? null : p.heading,
+  );
 }

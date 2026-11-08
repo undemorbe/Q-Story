@@ -9,29 +9,26 @@ import '../errors/failures.dart';
 ///
 /// Every request carries an identifying User-Agent, as required by the
 /// Wikimedia and OSM usage policies.
-Dio createHttpClient({
-  Duration timeout = const Duration(seconds: 20),
-}) {
+Dio createHttpClient({Duration timeout = const Duration(seconds: 20)}) {
   final dio = Dio(
     BaseOptions(
       connectTimeout: timeout,
       receiveTimeout: timeout,
-      headers: {
-        'User-Agent': AppInfo.userAgent,
-        'Accept': 'application/json',
-      },
+      headers: {'User-Agent': AppInfo.userAgent, 'Accept': 'application/json'},
     ),
   );
   if (kDebugMode) {
     // Log only request lines and status codes, never bodies.
-    dio.interceptors.add(LogInterceptor(
-      request: true,
-      requestHeader: false,
-      requestBody: false,
-      responseHeader: false,
-      responseBody: false,
-      logPrint: (o) => debugPrint(o.toString()),
-    ));
+    dio.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestHeader: false,
+        requestBody: false,
+        responseHeader: false,
+        responseBody: false,
+        logPrint: (o) => debugPrint(o.toString()),
+      ),
+    );
   }
   return dio;
 }
@@ -44,6 +41,7 @@ Failure toFailure(Object error) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
+      case DioExceptionType.transformTimeout:
         return const NetworkFailure('Timeout');
       case DioExceptionType.connectionError:
         return const NetworkFailure();

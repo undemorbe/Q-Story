@@ -1,271 +1,158 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
 
+import '../../features/history/domain/entities/daily_fact_entity.dart';
+import '../../features/history/domain/repositories/daily_fact_repository.dart';
+import '../l10n/app_localizations.dart';
+import '../storage/app_preferences.dart';
+import '../util/result.dart';
+import 'daily_reminder.dart';
+
+/// Thin wrapper over the platform notification plugin, so the scheduling
+/// logic can be tested without it.
+abstract class LocalNotifier {
+  Future<void> init();
+
+  /// Asks the OS for permission to post notifications. True if granted.
+  Future<bool> requestPermission();
+  Future<void> schedule(ReminderPlan plan, {required String channelName, required String channelDescription});
+  Future<void> show(int id, String title, String body, {required String channelName});
+  Future<void> cancel(Iterable<int> ids);
+}
+
+/// Optional daily reminder: off until the user turns it on (which is when
+/// the OS permission is requested), scheduled with inexact alarms so no
+/// special "exact alarm" permission is needed.
 class NotificationService {
-  static final FlutterLocalNotificationsPlugin _notifications = FlutterLocalNotificationsPlugin();
+  NotificationService(this._prefs, this._facts, this._notifier, {DateTime Function()? clock})
+    : _clock = clock ?? DateTime.now;
 
-  static const String _notificationEnabledKey = 'notifications_enabled';
-  static const String _notificationTimeKey = 'notification_time';
-  static const String _notificationScheduledKey = 'notification_scheduled';
+  final AppPreferences _prefs;
+  final DailyFactRepository _facts;
+  final LocalNotifier _notifier;
+  final DateTime Function() _clock;
 
-  // Historical content for notifications with Russian theme
-  static final List<Map<String, String>> _historicalContent = [
-    {
-      'title': 'Ну что, прогуляемся?',
-      'body': 'Сегодня в 1854 году родился Оскар Уайльд. Давайте узнаем больше о его времени!',
-    },
-    {
-      'title': 'По пути истории...',
-      'body': 'В этот день в 1789 году началась Французская революция. Интересный факт о том времени!',
-    },
-    {
-      'title': 'Время путешествий!',
-      'body': 'Колумб открыл Америку в 1492 году. Что еще было интересного в эпоху великих географических открытий?',
-    },
-    {
-      'title': 'Исторический момент',
-      'body': 'Сегодня в 1969 году человек впервые ступил на Луну. Пора узнать больше о космической гонке!',
-    },
-    {
-      'title': 'Прогулка в прошлое',
-      'body': 'В этот день в 1917 году произошла Великая Октябрьская революция. Давайте изучим эпоху перемен!',
-    },
-    {
-      'title': 'История ждет!',
-      'body': 'Сегодня в 1945 году закончилась Вторая мировая война. Узнайте больше о послевоенном мире.',
-    },
-    {
-      'title': 'Время открытий',
-      'body': 'В этот день в 1879 году Эдисон изобрел лампочку. Пора узнать больше об эпохе индустриализации!',
-    },
-    {
-      'title': 'Путешествие во времени',
-      'body': 'Сегодня в 1776 году была подписана Декларация независимости США. Интересный факт о становлении нации!',
-    },
-  ];
+  /// How many upcoming days get a real "on this day" fact (one request each).
+  static const factDays = 2;
 
-  static Future<void> initialize() async {
-    // Initialize timezone data
-    tz.initializeTimeZones();
+  bool get enabled => _prefs.notificationsEnabled;
+  TimeOfDay get time => _prefs.notificationTime;
 
-    // Initialize plugin
-    const AndroidInitializationSettings androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  Future<void> init() => _notifier.init();
 
-    const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: androidSettings,
-      iOS: iosSettings,
-    );
-
-    await _notifications.initialize(
-      settings: initializationSettings,
-      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
-      onDidReceiveBackgroundNotificationResponse: onDidReceiveNotificationResponse,
-    );
-
-    // Request permissions
-    await requestPermissions();
+  /// Turns the reminder on or off. Enabling asks for permission first and
+  /// returns false (staying off) if it is refused.
+  Future<bool> setEnabled(bool value, AppLocalizations l) async {
+    if (value && !await _notifier.requestPermission()) return false;
+    await _prefs.setNotificationsEnabled(value);
+    await reschedule(l);
+    return true;
   }
 
-  static Future<void> requestPermissions() async {
-    // Android permissions
-    final androidPlugin =
-        _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-    if (androidPlugin != null) {
-      await androidPlugin.requestNotificationsPermission();
-      // On Android 13+, exact alarms require special handling
-      await androidPlugin.requestExactAlarmsPermission();
-    }
-
-    // iOS permissions
-    final iosPlugin = _notifications.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
-    if (iosPlugin != null) {
-      await iosPlugin.requestPermissions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-    }
+  Future<void> setTime(TimeOfDay t, AppLocalizations l) async {
+    await _prefs.setNotificationTime(t);
+    await reschedule(l);
   }
 
-  static Future<void> onDidReceiveNotificationResponse(
-    NotificationResponse notificationResponse,
-  ) async {
-    final String? payload = notificationResponse.payload;
-    if (payload != null) {
-      // Handle notification payload
-    }
-  }
-
-  static Future<bool> getNotificationEnabled() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_notificationEnabledKey) ?? true;
-  }
-
-  static Future<void> setNotificationEnabled(bool enabled) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_notificationEnabledKey, enabled);
-
-    if (enabled) {
-      await scheduleDailyNotification();
-    } else {
-      await cancelAllNotifications();
-    }
-  }
-
-  static Future<TimeOfDay> getNotificationTime() async {
-    final prefs = await SharedPreferences.getInstance();
-    final timeString = prefs.getString(_notificationTimeKey) ?? '09:00';
-    final parts = timeString.split(':');
-    return TimeOfDay(
-      hour: int.parse(parts[0]),
-      minute: int.parse(parts[1]),
-    );
-  }
-
-  static Future<void> setNotificationTime(TimeOfDay time) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        _notificationTimeKey, '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}');
-
-    // Reschedule if notifications are enabled
-    if (await getNotificationEnabled()) {
-      await scheduleDailyNotification();
-    }
-  }
-
-  static Future<void> scheduleDailyNotification() async {
-    final enabled = await getNotificationEnabled();
+  /// Cancels and re-plans the coming week. Call on start and whenever the
+  /// time, the switch or the language changes.
+  Future<void> reschedule(AppLocalizations l) async {
+    await _notifier.cancel([
+      DailyReminder.legacyId,
+      for (var i = 0; i < DailyReminder.days; i++) DailyReminder.baseId + i,
+    ]);
     if (!enabled) return;
-
-    final notificationTime = await getNotificationTime();
-    final random = Random();
-    final content = _historicalContent[random.nextInt(_historicalContent.length)];
-
-    // Create notification details
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'daily_history_channel',
-      'Daily History',
-      channelDescription: 'Daily historical facts and interesting events',
-      importance: Importance.high,
-      priority: Priority.high,
-      showWhen: true,
-      enableVibration: true,
-      enableLights: true,
-    );
-
-    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-      sound: 'default',
-      badgeNumber: 1,
-      subtitle: 'Исторический факт дня',
-      threadIdentifier: 'daily_history',
-    );
-
-    const NotificationDetails platformDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    // Schedule for the next occurrence of the specified time
-    final now = DateTime.now();
-    var scheduledDate = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      notificationTime.hour,
-      notificationTime.minute,
-    );
-
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    final now = _clock();
+    final t = time;
+    final times = DailyReminder.nextTimes(now, t.hour, t.minute);
+    final facts = <int, List<DailyFactEntity>>{};
+    // Facts come from Russian Wikipedia; other languages get generic texts.
+    if (l.localeName.startsWith('ru')) {
+      for (final at in times.take(factDays)) {
+        final r = await _facts.getFactsForDate(at.month, at.day);
+        if (r case Ok(:final value) when value.isNotEmpty) facts[DailyReminder.dateKey(at)] = value;
+      }
     }
-
-    // Convert to TZDateTime
-    final timeZoneInfo = await FlutterTimezone.getLocalTimezone();
-    final String timeZoneIdentifier = timeZoneInfo.identifier;
-    final location = tz.getLocation(timeZoneIdentifier);
-    final tzScheduledDate = tz.TZDateTime.from(scheduledDate, location);
-
-    await _notifications.zonedSchedule(
-      id: 1, // Notification ID
-      title: content['title']!,
-      body: content['body']!,
-      scheduledDate: tzScheduledDate,
-      notificationDetails: platformDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
-      payload: 'daily_history',
-    );
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_notificationScheduledKey, true);
+    for (final p in DailyReminder.plan(now: now, hour: t.hour, minute: t.minute, l: l, facts: facts)) {
+      await _notifier.schedule(p, channelName: l.reminderChannel, channelDescription: l.reminderChannelDesc);
+    }
   }
 
-  static Future<void> showTestNotification() async {
-    final random = Random();
-    final content = _historicalContent[random.nextInt(_historicalContent.length)];
+  Future<void> showTest(AppLocalizations l) async {
+    final (title, body) = DailyReminder.generic(l, _clock().day);
+    await _notifier.show(0, title, body, channelName: l.reminderChannel);
+  }
+}
 
-    debugPrint('Showing test notification: ${content['title']}');
+/// [LocalNotifier] backed by flutter_local_notifications.
+class PluginNotifier implements LocalNotifier {
+  PluginNotifier([FlutterLocalNotificationsPlugin? plugin]) : _p = plugin ?? FlutterLocalNotificationsPlugin();
 
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'test_channel',
-      'Test Notifications',
-      channelDescription: 'Test channel for notifications',
-      importance: Importance.max,
-      priority: Priority.max,
-      showWhen: true,
-      enableVibration: true,
-      enableLights: true,
-    );
+  final FlutterLocalNotificationsPlugin _p;
+  static const _channelId = 'daily_reminder';
+  tz.Location? _location;
 
-    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-      sound: 'default',
-    );
-
-    const NotificationDetails platformDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
+  @override
+  Future<void> init() async {
+    tzdata.initializeTimeZones();
     try {
-      await _notifications.show(
-        id: 0,
-        title: content['title']!,
-        body: content['body']!,
-        notificationDetails: platformDetails,
-        payload: 'test_notification',
-      );
-      debugPrint('Notification shown successfully');
+      _location = tz.getLocation((await FlutterTimezone.getLocalTimezone()).identifier);
     } catch (e) {
-      debugPrint('Error showing notification: $e');
+      debugPrint('Timezone lookup failed, using UTC: $e');
+      _location = tz.UTC;
     }
+    await _p.initialize(
+      settings: const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        // Permission is requested only when the user enables reminders.
+        iOS: DarwinInitializationSettings(
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
+        ),
+      ),
+    );
   }
 
-  static Future<void> cancelAllNotifications() async {
-    await _notifications.cancelAll();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_notificationScheduledKey, false);
+  @override
+  Future<bool> requestPermission() async {
+    final android = _p.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    if (android != null) return await android.requestNotificationsPermission() ?? false;
+    final ios = _p.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+    if (ios != null) return await ios.requestPermissions(alert: true, sound: true) ?? false;
+    return true;
   }
 
-  static Future<void> cancelDailyNotification() async {
-    await _notifications.cancel(id: 1);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_notificationScheduledKey, false);
+  NotificationDetails _details(String channelName, [String? description]) => NotificationDetails(
+    android: AndroidNotificationDetails(_channelId, channelName, channelDescription: description),
+    iOS: const DarwinNotificationDetails(threadIdentifier: _channelId),
+  );
+
+  @override
+  Future<void> schedule(ReminderPlan plan, {required String channelName, required String channelDescription}) {
+    final loc = _location ?? tz.UTC;
+    final at = tz.TZDateTime(loc, plan.at.year, plan.at.month, plan.at.day, plan.at.hour, plan.at.minute);
+    return _p.zonedSchedule(
+      id: plan.id,
+      title: plan.title,
+      body: plan.body,
+      scheduledDate: at,
+      notificationDetails: _details(channelName, channelDescription),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+    );
+  }
+
+  @override
+  Future<void> show(int id, String title, String body, {required String channelName}) =>
+      _p.show(id: id, title: title, body: body, notificationDetails: _details(channelName));
+
+  @override
+  Future<void> cancel(Iterable<int> ids) async {
+    for (final id in ids) {
+      await _p.cancel(id: id);
+    }
   }
 }

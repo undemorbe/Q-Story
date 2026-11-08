@@ -3,8 +3,12 @@ import 'package:qstory/core/services/motion_sensors.dart';
 import 'package:qstory/core/util/geo.dart';
 import 'package:qstory/features/activity/domain/services/movement_accumulator.dart';
 
-GeoFix fix(double lat, double lon, int sec, {double acc = 5}) =>
-    GeoFix(lat: lat, lon: lon, time: DateTime(2026, 1, 1, 12).add(Duration(seconds: sec)), accuracyM: acc);
+GeoFix fix(double lat, double lon, int sec, {double acc = 5}) => GeoFix(
+  lat: lat,
+  lon: lon,
+  time: DateTime(2026, 1, 1, 12).add(Duration(seconds: sec)),
+  accuracyM: acc,
+);
 
 void main() {
   group('Geo', () {

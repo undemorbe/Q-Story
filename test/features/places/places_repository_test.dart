@@ -10,9 +10,15 @@ import 'package:qstory/features/places/domain/entities/place_source.dart';
 
 import '../../helpers/fakes.dart';
 
-Place mk(PlaceSource s, String id, String title, double lat, double lon,
-        {PlaceCategory c = PlaceCategory.monument, String? image}) =>
-    Place(source: s, sourceId: id, title: title, lat: lat, lon: lon, category: c, imageUrl: image);
+Place mk(
+  PlaceSource s,
+  String id,
+  String title,
+  double lat,
+  double lon, {
+  PlaceCategory c = PlaceCategory.monument,
+  String? image,
+}) => Place(source: s, sourceId: id, title: title, lat: lat, lon: lon, category: c, imageUrl: image);
 
 void main() {
   late AppDatabase db;
@@ -32,8 +38,11 @@ void main() {
     final osm = FakeClient(PlaceSource.osm, places: [mk(PlaceSource.osm, 'node/1', 'Далеко', 59.01, 30.0)]);
     final wiki = FakeClient(PlaceSource.wikipedia, places: [mk(PlaceSource.wikipedia, 'ru:1', 'Близко', 59.001, 30.0)]);
     final broken = FakeClient(PlaceSource.pastvu, error: Exception('boom'));
-    final r = await repo([osm, wiki, broken])
-        .nearby(q, sources: {PlaceSource.osm, PlaceSource.wikipedia, PlaceSource.pastvu});
+    final r = await repo([
+      osm,
+      wiki,
+      broken,
+    ]).nearby(q, sources: {PlaceSource.osm, PlaceSource.wikipedia, PlaceSource.pastvu});
     expect(r.places.map((p) => p.title), ['Близко', 'Далеко']);
     expect(r.failures.keys, [PlaceSource.pastvu]);
     expect(r.failures[PlaceSource.pastvu], isA<UnknownFailure>());

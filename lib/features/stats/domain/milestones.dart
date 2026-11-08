@@ -58,7 +58,7 @@ abstract final class Milestones {
 
   /// Names of all unlocked achievements, to persist as the new baseline.
   static Set<String> unlockedIds(List<Achievement> current) => {
-        for (final a in current)
-          if (a.unlocked) a.id.name
-      };
+    for (final a in current)
+      if (a.unlocked) a.id.name,
+  };
 }

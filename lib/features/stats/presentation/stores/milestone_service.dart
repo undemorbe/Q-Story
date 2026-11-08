@@ -18,20 +18,14 @@ import 'stats_store.dart';
 /// journal or a hunt changes state, the snapshot is recomputed.
 class MilestoneService {
   MilestoneService({
-    required TrackingStore tracking,
-    required JournalStore journal,
-    required StatsStore stats,
-    required SettingsStore settings,
-    required AppPreferences prefs,
+    required this._tracking,
+    required this._journal,
+    required this._stats,
+    required this._settings,
+    required this._prefs,
     DateTime Function()? clock,
-    int refreshDelayMs = 800,
-  })  : _tracking = tracking,
-        _journal = journal,
-        _stats = stats,
-        _settings = settings,
-        _prefs = prefs,
-        _now = clock ?? DateTime.now,
-        _refreshDelayMs = refreshDelayMs;
+    this._refreshDelayMs = 800,
+  }) : _now = clock ?? DateTime.now;
 
   final TrackingStore _tracking;
   final JournalStore _journal;
@@ -55,9 +49,11 @@ class MilestoneService {
       ..add(reaction((_) => _tracking.todaySteps, (_) => checkGoal()))
       ..add(reaction((_) => _journal.revision, (_) => _stats.refresh(), delay: _refreshDelayMs))
       ..add(reaction((_) => _tracking.activeHunt?.status, (_) => _stats.refresh(), delay: _refreshDelayMs))
-      ..add(reaction((_) => _stats.snapshot, (StatsSnapshot? s) {
-        if (s != null) checkAchievements(s);
-      }));
+      ..add(
+        reaction((_) => _stats.snapshot, (StatsSnapshot? s) {
+          if (s != null) checkAchievements(s);
+        }),
+      );
   }
 
   void dispose() {

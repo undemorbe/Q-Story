@@ -20,9 +20,9 @@ class PlacesRepositoryImpl implements PlacesRepository {
     this.cacheTtl = const Duration(hours: 12),
     this.perSourceTimeout = const Duration(seconds: 35),
     DateTime Function()? clock,
-  })  : _db = database.db,
-        _clients = {for (final c in clients) c.source: c},
-        _now = clock ?? DateTime.now;
+  }) : _db = database.db,
+       _clients = {for (final c in clients) c.source: c},
+       _now = clock ?? DateTime.now;
 
   final Database _db;
   final Map<PlaceSource, PlaceSourceClient> _clients;
@@ -50,7 +50,8 @@ class PlacesRepositoryImpl implements PlacesRepository {
       if (client == null) return;
       final key = _nearbyKey(query, s);
       final cachedRec = await AppDatabase.nearbyCache.record(key).get(_db);
-      final fresh = cachedRec != null &&
+      final fresh =
+          cachedRec != null &&
           _now().difference(DateTime.fromMillisecondsSinceEpoch(cachedRec['at'] as int)) < cacheTtl;
       if (fresh) {
         collected.addAll(_decodeList(cachedRec['places']));
@@ -76,8 +77,14 @@ class PlacesRepositoryImpl implements PlacesRepository {
     await Future.wait(sources.map(runSource));
 
     final merged = dedupe(collected).where((p) => p.hasLocation).toList()
-      ..sort((a, b) => Geo.distanceM(query.lat, query.lon, a.lat, a.lon)
-          .compareTo(Geo.distanceM(query.lat, query.lon, b.lat, b.lon)));
+      ..sort(
+        (a, b) => Geo.distanceM(
+          query.lat,
+          query.lon,
+          a.lat,
+          a.lon,
+        ).compareTo(Geo.distanceM(query.lat, query.lon, b.lat, b.lon)),
+      );
     return NearbyPlaces(places: merged, failures: failures, fromCache: anyFromCache);
   }
 
@@ -98,11 +105,13 @@ class PlacesRepositoryImpl implements PlacesRepository {
         result.add(p);
         continue;
       }
-      final idx = result.indexWhere((q) =>
-          q.category != PlaceCategory.photo &&
-          q.source != p.source &&
-          _normalize(q.title) == _normalize(p.title) &&
-          Geo.distanceM(q.lat, q.lon, p.lat, p.lon) < _dupDistanceM);
+      final idx = result.indexWhere(
+        (q) =>
+            q.category != PlaceCategory.photo &&
+            q.source != p.source &&
+            _normalize(q.title) == _normalize(p.title) &&
+            Geo.distanceM(q.lat, q.lon, p.lat, p.lon) < _dupDistanceM,
+      );
       if (idx == -1) {
         result.add(p);
       } else if (p.richness > result[idx].richness) {

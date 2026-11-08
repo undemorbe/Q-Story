@@ -22,22 +22,20 @@ import 'helpers/fake_http.dart';
 import 'helpers/fakes.dart';
 
 Future<void> boot({bool onboarded = true}) async {
-  SharedPreferences.setMockInitialValues({
-    'has_seen_onboarding': onboarded,
-    'auto_tracking': false,
-    'locale': 'en',
-  });
+  SharedPreferences.setMockInitialValues({'has_seen_onboarding': onboarded, 'auto_tracking': false, 'locale': 'en'});
   await setupServiceLocator(
     database: await AppDatabase.inMemory(),
     preferences: await SharedPreferences.getInstance(),
     sensors: FakeSensors()..access = LocationAccess.denied,
     // Every open-data API answers "nothing here".
-    dio: fakeDio((o) => {
-          'result': {'photos': []},
-          'query': {'pages': []},
-          'results': {'bindings': []},
-          'elements': [],
-        }),
+    dio: fakeDio(
+      (o) => {
+        'result': {'photos': []},
+        'query': {'pages': []},
+        'results': {'bindings': []},
+        'elements': [],
+      },
+    ),
     share: FakeShare(),
     mail: FakeMail(),
   );
@@ -94,16 +92,20 @@ void main() {
 
   testWidgets('a recorded visit shows up on the statistics page', (t) async {
     await t.runAsync(boot);
-    await t
-        .runAsync(() => getIt<JournalStore>().recordVisit(place('node/1', title: 'Test monument'), VisitMethod.manual));
+    await t.runAsync(
+      () => getIt<JournalStore>().recordVisit(place('node/1', title: 'Test monument'), VisitMethod.manual),
+    );
     await t.pumpWidget(QStoryApp(router: buildRouter()));
     await t.pump(const Duration(milliseconds: 300));
     await t.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text('Stats')));
     await t.runAsync(() => getIt<StatsStore>().refresh());
     await t.pump(const Duration(milliseconds: 300));
     expect(getIt<StatsStore>().snapshot, isNotNull);
-    await t.scrollUntilVisible(find.textContaining(RegExp('First.*Test monument')), 400,
-        scrollable: find.byType(Scrollable).first);
+    await t.scrollUntilVisible(
+      find.textContaining(RegExp('First.*Test monument')),
+      400,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.textContaining('Test monument'), findsWidgets);
   });
 }

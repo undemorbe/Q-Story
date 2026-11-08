@@ -29,14 +29,22 @@ void main() {
 
   test('hunts: newest first, only one active', () async {
     final h1 = Hunt(
-        id: '1', placeId: 'p', placeTitle: 'p', targetLat: 0, targetLon: 0, startedAt: t0, status: HuntStatus.found);
+      id: '1',
+      placeId: 'p',
+      placeTitle: 'p',
+      targetLat: 0,
+      targetLon: 0,
+      startedAt: t0,
+      status: HuntStatus.found,
+    );
     final h2 = Hunt(
-        id: '2',
-        placeId: 'q',
-        placeTitle: 'q',
-        targetLat: 0,
-        targetLon: 0,
-        startedAt: t0.add(const Duration(hours: 1)));
+      id: '2',
+      placeId: 'q',
+      placeTitle: 'q',
+      targetLat: 0,
+      targetLon: 0,
+      startedAt: t0.add(const Duration(hours: 1)),
+    );
     await repo.saveHunt(h1);
     await repo.saveHunt(h2);
     expect((await repo.hunts()).map((h) => h.id), ['2', '1']);

@@ -34,7 +34,7 @@ PlaceCategory guessCategory(String text, {PlaceCategory fallback = PlaceCategory
     'cathedral',
     'chapel',
     'monastery',
-    'mosque'
+    'mosque',
   ])) {
     return PlaceCategory.religious;
   }
@@ -51,8 +51,19 @@ PlaceCategory guessCategory(String text, {PlaceCategory fallback = PlaceCategory
   if (any(['памятник', 'монумент', 'скульптур', 'бюст', 'monument', 'statue', 'bust'])) {
     return PlaceCategory.monument;
   }
-  if (any(
-      ['дом', 'здани', 'особняк', 'усадьб', 'дворец', 'палат', 'house', 'building', 'palace', 'manor', 'mansion'])) {
+  if (any([
+    'дом',
+    'здани',
+    'особняк',
+    'усадьб',
+    'дворец',
+    'палат',
+    'house',
+    'building',
+    'palace',
+    'manor',
+    'mansion',
+  ])) {
     return PlaceCategory.building;
   }
   return fallback;

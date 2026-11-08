@@ -105,8 +105,9 @@ class _AddPlacePageState extends State<AddPlacePage> {
               items: [
                 for (final c in _categories)
                   DropdownMenuItem(
-                      value: c,
-                      child: Row(children: [Icon(c.icon, size: 18), const SizedBox(width: 8), Text(c.label(l))])),
+                    value: c,
+                    child: Row(children: [Icon(c.icon, size: 18), const SizedBox(width: 8), Text(c.label(l))]),
+                  ),
               ],
               onChanged: (c) => setState(() => _category = c ?? _category),
             ),
@@ -118,42 +119,47 @@ class _AddPlacePageState extends State<AddPlacePage> {
               maxLines: 8,
             ),
             const SizedBox(height: 12),
-            Row(children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _year,
-                  decoration: InputDecoration(labelText: l.yearField),
-                  keyboardType: TextInputType.number,
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) return null;
-                    final y = int.tryParse(v.trim());
-                    return (y == null || y < -3000 || y > DateTime.now().year) ? l.invalidYear : null;
-                  },
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _year,
+                    decoration: InputDecoration(labelText: l.yearField),
+                    keyboardType: TextInputType.number,
+                    validator: (v) {
+                      if (v == null || v.trim().isEmpty) return null;
+                      final y = int.tryParse(v.trim());
+                      return (y == null || y < -3000 || y > DateTime.now().year) ? l.invalidYear : null;
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                flex: 2,
-                child: TextFormField(
-                  controller: _image,
-                  decoration: InputDecoration(labelText: l.imageUrlField),
-                  keyboardType: TextInputType.url,
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: TextFormField(
+                    controller: _image,
+                    decoration: InputDecoration(labelText: l.imageUrlField),
+                    keyboardType: TextInputType.url,
+                  ),
                 ),
-              ),
-            ]),
+              ],
+            ),
             const SizedBox(height: 16),
-            Row(children: [
-              Expanded(
-                child: Text(
-                  '${l.coordinatesLabel}: ${_point.latitude.toStringAsFixed(5)}, ${_point.longitude.toStringAsFixed(5)}',
-                  style: Theme.of(context).textTheme.bodySmall,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '${l.coordinatesLabel}: ${_point.latitude.toStringAsFixed(5)}, ${_point.longitude.toStringAsFixed(5)}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
-              ),
-              TextButton.icon(
+                TextButton.icon(
                   onPressed: _useMyLocation,
                   icon: const Icon(Icons.my_location, size: 18),
-                  label: Text(l.useMyLocation)),
-            ]),
+                  label: Text(l.useMyLocation),
+                ),
+              ],
+            ),
             Text(l.tapMapHint, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: context.dim)),
             const SizedBox(height: 8),
             ClipRRect(
@@ -172,19 +178,27 @@ class _AddPlacePageState extends State<AddPlacePage> {
                       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'io.github.undemorbe.qstory',
                     ),
-                    MarkerLayer(markers: [
-                      Marker(
-                        point: _point,
-                        width: PlacePin.width,
-                        height: PlacePin.height,
-                        alignment: Alignment.topCenter,
-                        child: PlacePin(
-                          place: Place(
-                              source: PlaceSource.user, sourceId: '_', title: '', lat: 0, lon: 0, category: _category),
-                          visited: false,
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: _point,
+                          width: PlacePin.width,
+                          height: PlacePin.height,
+                          alignment: Alignment.topCenter,
+                          child: PlacePin(
+                            place: Place(
+                              source: PlaceSource.user,
+                              sourceId: '_',
+                              title: '',
+                              lat: 0,
+                              lon: 0,
+                              category: _category,
+                            ),
+                            visited: false,
+                          ),
                         ),
-                      ),
-                    ]),
+                      ],
+                    ),
                   ],
                 ),
               ),

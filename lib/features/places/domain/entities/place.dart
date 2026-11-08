@@ -13,10 +13,8 @@ enum PlaceCategory {
   article,
   other;
 
-  static PlaceCategory parse(String? raw) => PlaceCategory.values.firstWhere(
-        (c) => c.name == raw,
-        orElse: () => PlaceCategory.other,
-      );
+  static PlaceCategory parse(String? raw) =>
+      PlaceCategory.values.firstWhere((c) => c.name == raw, orElse: () => PlaceCategory.other);
 }
 
 /// A historical place coming from any [PlaceSource].
@@ -92,57 +90,56 @@ class Place {
     int? yearEnd,
     String? author,
     List<String>? links,
-  }) =>
-      Place(
-        source: source,
-        sourceId: sourceId,
-        title: title ?? this.title,
-        lat: lat ?? this.lat,
-        lon: lon ?? this.lon,
-        summary: summary ?? this.summary,
-        description: description ?? this.description,
-        imageUrl: imageUrl ?? this.imageUrl,
-        url: url ?? this.url,
-        category: category ?? this.category,
-        yearStart: yearStart ?? this.yearStart,
-        yearEnd: yearEnd ?? this.yearEnd,
-        author: author ?? this.author,
-        links: links ?? this.links,
-      );
+  }) => Place(
+    source: source,
+    sourceId: sourceId,
+    title: title ?? this.title,
+    lat: lat ?? this.lat,
+    lon: lon ?? this.lon,
+    summary: summary ?? this.summary,
+    description: description ?? this.description,
+    imageUrl: imageUrl ?? this.imageUrl,
+    url: url ?? this.url,
+    category: category ?? this.category,
+    yearStart: yearStart ?? this.yearStart,
+    yearEnd: yearEnd ?? this.yearEnd,
+    author: author ?? this.author,
+    links: links ?? this.links,
+  );
 
   Map<String, Object?> toJson() => {
-        'source': source.name,
-        'sourceId': sourceId,
-        'title': title,
-        'lat': lat,
-        'lon': lon,
-        'summary': summary,
-        'description': description,
-        'imageUrl': imageUrl,
-        'url': url,
-        'category': category.name,
-        'yearStart': yearStart,
-        'yearEnd': yearEnd,
-        'author': author,
-        'links': links,
-      };
+    'source': source.name,
+    'sourceId': sourceId,
+    'title': title,
+    'lat': lat,
+    'lon': lon,
+    'summary': summary,
+    'description': description,
+    'imageUrl': imageUrl,
+    'url': url,
+    'category': category.name,
+    'yearStart': yearStart,
+    'yearEnd': yearEnd,
+    'author': author,
+    'links': links,
+  };
 
   factory Place.fromJson(Map<String, Object?> json) => Place(
-        source: PlaceSource.parse(json['source'] as String?),
-        sourceId: json['sourceId'].toString(),
-        title: (json['title'] as String?) ?? '',
-        lat: (json['lat'] as num?)?.toDouble() ?? 0,
-        lon: (json['lon'] as num?)?.toDouble() ?? 0,
-        summary: (json['summary'] as String?) ?? '',
-        description: json['description'] as String?,
-        imageUrl: json['imageUrl'] as String?,
-        url: json['url'] as String?,
-        category: PlaceCategory.parse(json['category'] as String?),
-        yearStart: (json['yearStart'] as num?)?.toInt(),
-        yearEnd: (json['yearEnd'] as num?)?.toInt(),
-        author: json['author'] as String?,
-        links: ((json['links'] as List?) ?? const []).map((e) => e.toString()).toList(),
-      );
+    source: PlaceSource.parse(json['source'] as String?),
+    sourceId: json['sourceId'].toString(),
+    title: (json['title'] as String?) ?? '',
+    lat: (json['lat'] as num?)?.toDouble() ?? 0,
+    lon: (json['lon'] as num?)?.toDouble() ?? 0,
+    summary: (json['summary'] as String?) ?? '',
+    description: json['description'] as String?,
+    imageUrl: json['imageUrl'] as String?,
+    url: json['url'] as String?,
+    category: PlaceCategory.parse(json['category'] as String?),
+    yearStart: (json['yearStart'] as num?)?.toInt(),
+    yearEnd: (json['yearEnd'] as num?)?.toInt(),
+    author: json['author'] as String?,
+    links: ((json['links'] as List?) ?? const []).map((e) => e.toString()).toList(),
+  );
 
   @override
   bool operator ==(Object other) => other is Place && other.id == id;

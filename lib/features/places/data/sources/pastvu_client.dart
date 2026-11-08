@@ -70,9 +70,7 @@ class PastVuClient implements PlaceSourceClient {
     final desc = m['desc'] is String ? stripHtml(m['desc'] as String) : null;
     final src = m['source'] is String ? stripHtml(m['source'] as String) : null;
     final author = m['author'] as String?;
-    final links = <String>[
-      if (src != null && src.startsWith('http')) src,
-    ];
+    final links = <String>[if (src != null && src.startsWith('http')) src];
     final parts = [
       if (desc != null && desc.isNotEmpty) desc,
       if (src != null && src.isNotEmpty && !src.startsWith('http')) 'Источник: $src',
