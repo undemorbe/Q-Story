@@ -85,17 +85,17 @@ class AboutPage extends StatelessWidget {
             ),
           ),
           header(l.aboutTeam),
-          const ListTile(
+          ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.phone_android),
-            title: Text('Борис Станьков'),
-            subtitle: Text('Mobile · Flutter'),
+            leading: const Icon(Icons.phone_android),
+            title: Text(l.aboutAuthorBoris),
+            subtitle: Text(l.aboutRoleMobile),
           ),
-          const ListTile(
+          ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.history_edu),
-            title: Text('Андрей Корнев'),
-            subtitle: Text('History research'),
+            leading: const Icon(Icons.history_edu),
+            title: Text(l.aboutAuthorAndrey),
+            subtitle: Text(l.aboutRoleHistory),
           ),
           header(l.aboutLicenseTitle),
           Text(

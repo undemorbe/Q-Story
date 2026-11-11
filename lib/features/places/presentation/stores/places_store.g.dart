@@ -189,8 +189,8 @@ mixin _$PlacesStore on _PlacesStore, Store {
   late final _$loadAroundAsyncAction = AsyncAction('_PlacesStore.loadAround', context: context);
 
   @override
-  Future<void> loadAround(double lat, double lon, {bool force = false}) {
-    return _$loadAroundAsyncAction.run(() => super.loadAround(lat, lon, force: force));
+  Future<void> loadAround(double lat, double lon, {bool force = false, bool refresh = false}) {
+    return _$loadAroundAsyncAction.run(() => super.loadAround(lat, lon, force: force, refresh: refresh));
   }
 
   late final _$addUserPlaceAsyncAction = AsyncAction('_PlacesStore.addUserPlace', context: context);

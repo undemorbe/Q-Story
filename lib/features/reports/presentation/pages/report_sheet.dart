@@ -231,7 +231,7 @@ class _ReportSheetState extends State<ReportSheet> {
         if (e is Exception) {
           _errorMessage = e.toString().replaceFirst('Exception: ', '');
         } else {
-          _errorMessage = 'An unexpected error occurred';
+          _errorMessage = l10n.unexpectedError;
         }
       });
     }

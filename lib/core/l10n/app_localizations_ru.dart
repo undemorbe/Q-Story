@@ -583,6 +583,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get invalidYear => 'Введите корректный год';
 
   @override
+  String get invalidUrl => 'Введите корректную ссылку http(s)';
+
+  @override
   String get statsTitle => 'Статистика';
 
   @override
@@ -1162,4 +1165,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String reminderNearbyTitle(String place) {
     return 'Рядом с вами: $place';
   }
+
+  @override
+  String get trackingNotificationText => 'Записываем прогулку и шаги';
+
+  @override
+  String get trackingNotificationChannel => 'Трекинг прогулки';
+
+  @override
+  String get unexpectedError => 'Произошла непредвиденная ошибка';
+
+  @override
+  String get aboutAuthorBoris => 'Борис Станьков';
+
+  @override
+  String get aboutAuthorAndrey => 'Андрей Корнев';
+
+  @override
+  String get aboutRoleMobile => 'Мобильная разработка · Flutter';
+
+  @override
+  String get aboutRoleHistory => 'Историческое исследование';
 }

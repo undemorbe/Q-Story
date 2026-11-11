@@ -6,8 +6,9 @@ import '../entities/place_source.dart';
 abstract interface class PlacesRepository {
   /// Fans out [query] to every source in [sources] in parallel, merges and
   /// de-duplicates results, sorts them by distance. Falls back to the local
-  /// cache when every source fails.
-  Future<NearbyPlaces> nearby(PlaceQuery query, {required Set<PlaceSource> sources});
+  /// cache when every source fails. [forceRefresh] skips the fresh-cache
+  /// shortcut and always asks the network (cache is still a fallback).
+  Future<NearbyPlaces> nearby(PlaceQuery query, {required Set<PlaceSource> sources, bool forceRefresh = false});
 
   /// Full details of a single place. Uses cache first when [preferCache].
   Future<Result<Place>> details(PlaceSource source, String sourceId, {String language, bool preferCache});

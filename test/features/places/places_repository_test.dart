@@ -72,6 +72,27 @@ void main() {
     expect(stale.failures, contains(PlaceSource.osm));
   });
 
+  test('forceRefresh bypasses fresh cache', () async {
+    final osm = FakeClient(PlaceSource.osm, places: [mk(PlaceSource.osm, 'node/1', 'A', 59, 30)]);
+    final r = repo([osm]);
+    await r.nearby(q, sources: {PlaceSource.osm});
+    final again = await r.nearby(q, sources: {PlaceSource.osm}, forceRefresh: true);
+    expect(osm.nearbyCalls, 2);
+    expect(again.fromCache, isFalse);
+  });
+
+  test('fresh cache is not reused for a query centred elsewhere in the same tile', () async {
+    final osm = FakeClient(PlaceSource.osm, places: [mk(PlaceSource.osm, 'node/1', 'A', 59, 30)]);
+    final r = repo([osm]);
+    await r.nearby(q, sources: {PlaceSource.osm}); // radius 2000 → tolerance 500 m
+    await r.nearby(const PlaceQuery(lat: 59.002, lon: 30.0), sources: {PlaceSource.osm}); // ~220 m
+    expect(osm.nearbyCalls, 1);
+    await r.nearby(const PlaceQuery(lat: 59.0, lon: 30.0049), sources: {PlaceSource.osm}); // same tile, ~280 m
+    expect(osm.nearbyCalls, 1);
+    await r.nearby(const PlaceQuery(lat: 59.0049, lon: 30.0049), sources: {PlaceSource.osm}); // same tile, ~610 m
+    expect(osm.nearbyCalls, 2);
+  });
+
   test('dedupe merges same object across sources, keeps richest, never merges photos', () {
     final list = PlacesRepositoryImpl.dedupe([
       mk(PlaceSource.osm, 'node/1', 'Памятник Пушкину', 59.0, 30.0),

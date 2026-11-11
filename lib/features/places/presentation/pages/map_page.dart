@@ -45,6 +45,11 @@ class _MapPageState extends State<MapPage> {
   /// Saint Petersburg — sensible default for a Russian history app.
   static const LatLng _fallbackCenter = LatLng(59.9343, 30.3351);
 
+  /// OSM raster tiles stop at z19; deeper zoom only upscales blur and
+  /// breaks cluster spiderfy (it happens at the map's max zoom).
+  static const double _minZoom = 3;
+  static const double _maxZoom = 19;
+
   final List<ReactionDisposer> _disposers = [];
   bool _mapReady = false;
   bool _locating = false;
@@ -140,9 +145,9 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  void _searchHere() {
+  void _searchHere({bool refresh = false}) {
     final c = _map.camera.center;
-    _places.loadAround(c.latitude, c.longitude, force: true);
+    _places.loadAround(c.latitude, c.longitude, force: true, refresh: refresh);
     setState(() => _movedAway = false);
   }
 
@@ -172,6 +177,8 @@ class _MapPageState extends State<MapPage> {
             options: MapOptions(
               initialCenter: _tracking.latLng ?? _fallbackCenter,
               initialZoom: 14,
+              minZoom: _minZoom,
+              maxZoom: _maxZoom,
               onMapReady: _onMapReady,
               onMapEvent: _onMapEvent,
               interactionOptions: const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
@@ -230,10 +237,14 @@ class _MapPageState extends State<MapPage> {
                       .toList();
                   return MarkerClusterLayerWidget(
                     options: MarkerClusterLayerOptions(
-                      maxClusterRadius: 55,
-                      size: const Size(44, 44),
+                      // Smaller radius → pins merge only when they really overlap.
+                      maxClusterRadius: 38,
+                      computeSize: (ms) => ClusterBubble.sizeFor(ms.length),
                       alignment: Alignment.center,
-                      padding: const EdgeInsets.all(50),
+                      padding: const EdgeInsets.all(60),
+                      // Tapping a cluster zooms in close enough to split it.
+                      maxZoom: 18,
+                      showPolygon: false,
                       markers: markers,
                       builder: (ctx, ms) => ClusterBubble(count: ms.length),
                     ),
@@ -346,7 +357,12 @@ class _MapPageState extends State<MapPage> {
             const SizedBox(height: 10),
             GothicFab(icon: Icons.format_list_bulleted, tooltip: l.nearbyAction, onPressed: _openNearby),
             const SizedBox(height: 10),
-            GothicFab(icon: Icons.refresh, tooltip: l.refreshAction, busy: _places.isLoading, onPressed: _searchHere),
+            GothicFab(
+              icon: Icons.refresh,
+              tooltip: l.refreshAction,
+              busy: _places.isLoading,
+              onPressed: () => _searchHere(refresh: true),
+            ),
             const SizedBox(height: 10),
             GothicFab(icon: Icons.add_location_alt_outlined, tooltip: l.addMyPlace, onPressed: _addPlace),
           ],
@@ -356,12 +372,21 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _zoom(double delta) {
-    _map.move(_map.camera.center, (_map.camera.zoom + delta).clamp(3, 19));
+    _map.move(_map.camera.center, (_map.camera.zoom + delta).clamp(_minZoom, _maxZoom));
   }
 
   Future<void> _addPlace() async {
-    final c = _tracking.latLng ?? _map.camera.center;
-    await Navigator.of(context).push<Place>(MaterialPageRoute(builder: (_) => AddPlacePage(initial: c)));
+    // Following the user → put the pin where they stand; otherwise where
+    // they are looking on the map.
+    final me = _tracking.latLng;
+    final start = (_tracking.followUser && me != null) ? me : _map.camera.center;
+    final created = await Navigator.of(
+      context,
+    ).push<Place>(MaterialPageRoute(builder: (_) => AddPlacePage(initial: start)));
+    if (created == null || !mounted) return;
+    _tracking.setFollowUser(false);
+    _map.move(LatLng(created.lat, created.lon), math.max(_map.camera.zoom, 16));
+    _showPreview(created);
   }
 
   void _openFilters() {

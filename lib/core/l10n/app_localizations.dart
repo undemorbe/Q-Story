@@ -1178,6 +1178,12 @@ abstract class AppLocalizations {
   /// **'Enter a valid year'**
   String get invalidYear;
 
+  /// No description provided for @invalidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid http(s) link'**
+  String get invalidUrl;
+
   /// No description provided for @statsTitle.
   ///
   /// In en, this message translates to:
@@ -2263,6 +2269,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Near you: {place}'**
   String reminderNearbyTitle(String place);
+
+  /// No description provided for @trackingNotificationText.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording your walk and steps'**
+  String get trackingNotificationText;
+
+  /// No description provided for @trackingNotificationChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk tracking'**
+  String get trackingNotificationChannel;
+
+  /// No description provided for @unexpectedError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred'**
+  String get unexpectedError;
+
+  /// No description provided for @aboutAuthorBoris.
+  ///
+  /// In en, this message translates to:
+  /// **'Boris Stankov'**
+  String get aboutAuthorBoris;
+
+  /// No description provided for @aboutAuthorAndrey.
+  ///
+  /// In en, this message translates to:
+  /// **'Andrey Kornev'**
+  String get aboutAuthorAndrey;
+
+  /// No description provided for @aboutRoleMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile · Flutter'**
+  String get aboutRoleMobile;
+
+  /// No description provided for @aboutRoleHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History research'**
+  String get aboutRoleHistory;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

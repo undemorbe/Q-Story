@@ -35,8 +35,18 @@ class PlacesRepositoryImpl implements PlacesRepository {
 
   String _nearbyKey(PlaceQuery q, PlaceSource s) => '${s.name}|${Geo.tileKey(q.lat, q.lon)}|${q.radiusM}|${q.language}';
 
+  /// A cached answer is reused only when it was asked from (almost) the same
+  /// point — the tile key is coarse (~1 km), so without this check results
+  /// could be centred hundreds of metres away from where the user looks.
+  bool _sameCenter(Map<String, Object?> rec, PlaceQuery q) {
+    final lat = (rec['lat'] as num?)?.toDouble();
+    final lon = (rec['lon'] as num?)?.toDouble();
+    if (lat == null || lon == null) return false;
+    return Geo.distanceM(lat, lon, q.lat, q.lon) <= q.radiusM * 0.25;
+  }
+
   @override
-  Future<NearbyPlaces> nearby(PlaceQuery query, {required Set<PlaceSource> sources}) async {
+  Future<NearbyPlaces> nearby(PlaceQuery query, {required Set<PlaceSource> sources, bool forceRefresh = false}) async {
     final failures = <PlaceSource, Failure>{};
     final collected = <Place>[];
     var anyFromCache = false;
@@ -51,7 +61,9 @@ class PlacesRepositoryImpl implements PlacesRepository {
       final key = _nearbyKey(query, s);
       final cachedRec = await AppDatabase.nearbyCache.record(key).get(_db);
       final fresh =
+          !forceRefresh &&
           cachedRec != null &&
+          _sameCenter(cachedRec, query) &&
           _now().difference(DateTime.fromMillisecondsSinceEpoch(cachedRec['at'] as int)) < cacheTtl;
       if (fresh) {
         collected.addAll(_decodeList(cachedRec['places']));

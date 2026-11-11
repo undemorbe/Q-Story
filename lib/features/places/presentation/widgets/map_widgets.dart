@@ -89,6 +89,16 @@ class ClusterBubble extends StatelessWidget {
   const ClusterBubble({super.key, required this.count});
   final int count;
 
+  /// Grows gently with the number of places so dense areas read at a glance.
+  static Size sizeFor(int count) {
+    final d = count < 10
+        ? 36.0
+        : count < 50
+        ? 42.0
+        : 48.0;
+    return Size.square(d);
+  }
+
   @override
   Widget build(BuildContext context) {
     final gold = context.gold;
@@ -101,8 +111,8 @@ class ClusterBubble extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          '$count',
-          style: AppFonts.display(color: gold, fontWeight: FontWeight.bold, fontSize: 15),
+          count > 99 ? '99+' : '$count',
+          style: AppFonts.display(color: gold, fontWeight: FontWeight.bold, fontSize: count > 99 ? 13 : 15),
         ),
       ),
     );

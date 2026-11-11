@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:latlong2/latlong.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../../core/l10n/app_localizations.dart';
 import '../../../../core/services/motion_sensors.dart';
 import '../../../../core/util/geo.dart';
 import '../../../places/domain/entities/place.dart';
@@ -162,7 +163,17 @@ abstract class _TrackingStore with Store {
     track.clear();
     _acc.reset();
 
-    _posSub = _sensors.positions(background: _settings.backgroundTracking).listen(_onFix, onError: (_) {});
+    final l = lookupAppLocalizations(_settings.locale);
+    _posSub = _sensors
+        .positions(
+          background: _settings.backgroundTracking,
+          notice: TrackingNotice(
+            title: l.appTitle,
+            text: l.trackingNotificationText,
+            channelName: l.trackingNotificationChannel,
+          ),
+        )
+        .listen(_onFix, onError: (_) {});
 
     _stepStreamActive = await _sensors.ensureStepAccess();
     if (_stepStreamActive) {

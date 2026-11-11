@@ -1,0 +1,7 @@
+/* Shown by iOS in permission prompts and the Home Screen. */
+"CFBundleDisplayName" = "QStory";
+"NSCameraUsageDescription" = "QStory uses the camera to scan QR codes on historical plaques.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "With background tracking enabled, QStory keeps recording your walk and steps while the screen is off. Data stays on your device.";
+"NSLocationWhenInUseUsageDescription" = "QStory uses your location to show historical places nearby, guide you to them and count the distance you walked. Only the search area is sent to open map sources; your route stays on the device.";
+"NSMotionUsageDescription" = "QStory counts your steps to show how far you walked to discover each place. Step data stays on your device.";
+"NSUserNotificationUsageDescription" = "QStory can send an optional daily reminder to go for a walk.";

@@ -27,6 +27,22 @@ class GeoFix {
 
 enum LocationAccess { granted, denied, deniedForever, serviceDisabled }
 
+/// Localized texts for the Android foreground-service notification shown
+/// while tracking runs in the background.
+class TrackingNotice {
+  const TrackingNotice({required this.title, required this.text, required this.channelName});
+
+  final String title;
+  final String text;
+  final String channelName;
+
+  static const fallback = TrackingNotice(
+    title: 'QStory',
+    text: 'Recording your walk and steps',
+    channelName: 'Walk tracking',
+  );
+}
+
 /// Platform sensors used by tracking. Swap with a fake in tests.
 abstract interface class MotionSensors {
   Future<LocationAccess> ensureLocationAccess();
@@ -36,8 +52,13 @@ abstract interface class MotionSensors {
 
   /// Continuous positions. When [background] is true, Android runs a
   /// foreground service with a persistent notification and iOS keeps
-  /// receiving updates while the app is in the background.
-  Stream<GeoFix> positions({required bool background, int distanceFilterM = 5});
+  /// receiving updates while the app is in the background. [notice] holds
+  /// the localized texts of that notification.
+  Stream<GeoFix> positions({
+    required bool background,
+    int distanceFilterM = 5,
+    TrackingNotice notice = TrackingNotice.fallback,
+  });
 
   /// Ask for step-counter access (Android ACTIVITY_RECOGNITION / iOS Motion).
   Future<bool> ensureStepAccess();
@@ -80,7 +101,11 @@ class DeviceMotionSensors implements MotionSensors {
   }
 
   @override
-  Stream<GeoFix> positions({required bool background, int distanceFilterM = 5}) {
+  Stream<GeoFix> positions({
+    required bool background,
+    int distanceFilterM = 5,
+    TrackingNotice notice = TrackingNotice.fallback,
+  }) {
     final LocationSettings settings;
     if (!kIsWeb && Platform.isAndroid) {
       settings = AndroidSettings(
@@ -88,10 +113,10 @@ class DeviceMotionSensors implements MotionSensors {
         distanceFilter: distanceFilterM,
         intervalDuration: const Duration(seconds: 3),
         foregroundNotificationConfig: background
-            ? const ForegroundNotificationConfig(
-                notificationTitle: 'QStory',
-                notificationText: 'Записываем прогулку и шаги',
-                notificationChannelName: 'Трекинг прогулки',
+            ? ForegroundNotificationConfig(
+                notificationTitle: notice.title,
+                notificationText: notice.text,
+                notificationChannelName: notice.channelName,
                 setOngoing: true,
                 enableWakeLock: true,
               )

@@ -583,6 +583,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidYear => 'Enter a valid year';
 
   @override
+  String get invalidUrl => 'Enter a valid http(s) link';
+
+  @override
   String get statsTitle => 'Statistics';
 
   @override
@@ -1161,4 +1164,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String reminderNearbyTitle(String place) {
     return 'Near you: $place';
   }
+
+  @override
+  String get trackingNotificationText => 'Recording your walk and steps';
+
+  @override
+  String get trackingNotificationChannel => 'Walk tracking';
+
+  @override
+  String get unexpectedError => 'An unexpected error occurred';
+
+  @override
+  String get aboutAuthorBoris => 'Boris Stankov';
+
+  @override
+  String get aboutAuthorAndrey => 'Andrey Kornev';
+
+  @override
+  String get aboutRoleMobile => 'Mobile · Flutter';
+
+  @override
+  String get aboutRoleHistory => 'History research';
 }

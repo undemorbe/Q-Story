@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qstory/core/errors/failures.dart';
 import 'package:qstory/features/activity/domain/entities/activity.dart';
@@ -127,6 +129,37 @@ void main() {
     expect((await env.activity.events()).last.type, ActivityEventType.userPlaceCreated);
     await store.deleteUserPlace(mine);
     expect(store.places.where((p) => p.id == mine.id), isEmpty);
+  });
+
+  test('a newer loadAround wins over a slower older one', () async {
+    final gate = Completer<void>();
+    final moscow = place('node/9', title: 'Новое', lat: 55.75, lon: 37.61);
+    osm.handler = (q) async {
+      if (q.lat > 59) {
+        await gate.future;
+        return [monument];
+      }
+      return [moscow];
+    };
+    final first = store.loadAround(59.9343, 30.3351);
+    await store.loadAround(55.75, 37.61);
+    expect(store.places.map((p) => p.id), contains('osm:node/9'));
+    gate.complete();
+    await first;
+    expect(store.places.map((p) => p.id), contains('osm:node/9'));
+    expect(store.places.map((p) => p.id), isNot(contains(monument.id)));
+    expect(store.isLoading, isFalse);
+  });
+
+  test('creating a user place enables the user source and survives reloads', () async {
+    await env.settings.toggleSource(PlaceSource.user, false);
+    store.toggleSourceFilter(PlaceSource.osm);
+    final mine = place('u2', source: PlaceSource.user, title: 'Колодец', lat: 59.9343, lon: 30.3351);
+    await store.addUserPlace(mine);
+    expect(env.settings.enabledSources, contains(PlaceSource.user));
+    expect(store.filtered.map((p) => p.id), contains(mine.id));
+    await store.loadAround(59.9343, 30.3351, force: true);
+    expect(store.places.where((p) => p.id == mine.id), hasLength(1));
   });
 
   test('details and resolve go through the repository', () async {

@@ -208,6 +208,7 @@
   "useMyLocation": "Моё местоположение",
   "placeSaved": "Место сохранено на устройстве",
   "invalidYear": "Введите корректный год",
+  "invalidUrl": "Введите корректную ссылку http(s)",
   "statsTitle": "Статистика",
   "statsLocalOnly": "Все данные хранятся только на этом устройстве",
   "statsEstimated": "Нет датчика шагов — шаги оцениваются по расстоянию",
@@ -402,5 +403,12 @@
         "type": "String"
       }
     }
-  }
+  },
+  "trackingNotificationText": "Записываем прогулку и шаги",
+  "trackingNotificationChannel": "Трекинг прогулки",
+  "unexpectedError": "Произошла непредвиденная ошибка",
+  "aboutAuthorBoris": "Борис Станьков",
+  "aboutAuthorAndrey": "Андрей Корнев",
+  "aboutRoleMobile": "Мобильная разработка · Flutter",
+  "aboutRoleHistory": "Историческое исследование"
 }

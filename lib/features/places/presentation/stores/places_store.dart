@@ -117,24 +117,44 @@ abstract class _PlacesStore with Store {
     return Geo.distanceM(lat, lon, lastLat!, lastLon!) > _reloadDistanceM;
   }
 
+  /// Id of the latest [loadAround] call; older responses are dropped so a
+  /// slow request for a previous point never overwrites a newer one.
+  int _requestSeq = 0;
+
+  /// Loads places around the point. [force] ignores the "moved too little"
+  /// check, [refresh] also bypasses the fresh network cache.
   @action
-  Future<void> loadAround(double lat, double lon, {bool force = false}) async {
-    if (isLoading) return;
-    if (!force && !shouldReload(lat, lon) && places.isNotEmpty) return;
+  Future<void> loadAround(double lat, double lon, {bool force = false, bool refresh = false}) async {
+    if (!force && !refresh && !shouldReload(lat, lon) && places.isNotEmpty) return;
+    final seq = ++_requestSeq;
     isLoading = true;
     lastLat = lat;
     lastLon = lon;
-    final result = await _repo.nearby(
-      PlaceQuery(lat: lat, lon: lon, radiusM: _settings.searchRadiusM, language: _settings.languageCode),
-      sources: _settings.enabledSources.toSet(),
-    );
-    places = ObservableList.of(result.places);
+    final NearbyPlaces result;
+    try {
+      result = await _repo.nearby(
+        PlaceQuery(lat: lat, lon: lon, radiusM: _settings.searchRadiusM, language: _settings.languageCode),
+        sources: _settings.enabledSources.toSet(),
+        forceRefresh: refresh,
+      );
+    } finally {
+      if (seq == _requestSeq) isLoading = false;
+    }
+    if (seq != _requestSeq) return;
+    _applyResult(result.places);
     failures = ObservableMap.of(result.failures);
     fromCache = result.fromCache;
-    isLoading = false;
     if (!result.fromCache && result.places.isNotEmpty) {
       await _journal.log(ActivityEventType.placesLoaded, value: result.places.length);
     }
+  }
+
+  void _applyResult(List<Place> loaded) {
+    // A place created while the request was in flight is not in the result
+    // yet (user places were read before it was saved) — keep it.
+    final ids = loaded.map((p) => p.id).toSet();
+    final pending = places.where((p) => p.source == PlaceSource.user && !ids.contains(p.id));
+    places = ObservableList.of([...pending, ...loaded]);
   }
 
   Future<Result<Place>> details(Place place) =>
@@ -148,7 +168,14 @@ abstract class _PlacesStore with Store {
   @action
   Future<void> addUserPlace(Place place) async {
     await _repo.saveUserPlace(place);
-    places.insert(0, place);
+    // Otherwise the new pin would vanish on the next reload / stay hidden.
+    if (!_settings.enabledSources.contains(PlaceSource.user)) {
+      await _settings.toggleSource(PlaceSource.user, true);
+    }
+    if (sourceFilter.isNotEmpty) sourceFilter.add(PlaceSource.user);
+    places
+      ..removeWhere((p) => p.id == place.id)
+      ..insert(0, place);
     await _journal.log(ActivityEventType.userPlaceCreated, place: place);
   }
 

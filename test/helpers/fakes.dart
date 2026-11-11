@@ -23,6 +23,7 @@ class FakeSensors implements MotionSensors {
   LocationAccess access = LocationAccess.granted;
   bool stepAccess = true;
   bool? lastBackground;
+  TrackingNotice? lastNotice;
   GeoFix? oneShot;
   int openedAppSettings = 0;
   int openedLocationSettings = 0;
@@ -32,8 +33,13 @@ class FakeSensors implements MotionSensors {
   @override
   Future<GeoFix?> currentFix() async => oneShot;
   @override
-  Stream<GeoFix> positions({required bool background, int distanceFilterM = 5}) {
+  Stream<GeoFix> positions({
+    required bool background,
+    int distanceFilterM = 5,
+    TrackingNotice notice = TrackingNotice.fallback,
+  }) {
     lastBackground = background;
+    lastNotice = notice;
     return pos.stream;
   }
 
@@ -59,10 +65,15 @@ class FakeClient implements PlaceSourceClient {
   int fetchCalls = 0;
   PlaceQuery? lastQuery;
 
+  /// Overrides the answer per query — lets tests delay/reorder responses.
+  Future<List<Place>> Function(PlaceQuery query)? handler;
+
   @override
   Future<List<Place>> nearby(PlaceQuery query) async {
     nearbyCalls++;
     lastQuery = query;
+    final h = handler;
+    if (h != null) return h(query);
     if (error != null) throw error!;
     return places;
   }

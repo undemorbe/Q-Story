@@ -262,6 +262,7 @@
   "useMyLocation": "Use my location",
   "placeSaved": "Place saved on this device",
   "invalidYear": "Enter a valid year",
+  "invalidUrl": "Enter a valid http(s) link",
   "statsTitle": "Statistics",
   "statsLocalOnly": "Everything is stored on this device only",
   "statsEstimated": "No step sensor — steps are estimated from distance",
@@ -517,5 +518,12 @@
         "type": "String"
       }
     }
-  }
+  },
+  "trackingNotificationText": "Recording your walk and steps",
+  "trackingNotificationChannel": "Walk tracking",
+  "unexpectedError": "An unexpected error occurred",
+  "aboutAuthorBoris": "Boris Stankov",
+  "aboutAuthorAndrey": "Andrey Kornev",
+  "aboutRoleMobile": "Mobile · Flutter",
+  "aboutRoleHistory": "History research"
 }

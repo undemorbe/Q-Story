@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/di/service_locator.dart';
@@ -122,30 +123,17 @@ class _DateHeader extends StatelessWidget {
   final DateTime date;
   const _DateHeader({required this.date});
 
-  static const _months = [
-    'Января',
-    'Февраля',
-    'Марта',
-    'Апреля',
-    'Мая',
-    'Июня',
-    'Июля',
-    'Августа',
-    'Сентября',
-    'Октября',
-    'Ноября',
-    'Декабря',
-  ];
-
   @override
   Widget build(BuildContext context) {
     final gold = context.gold;
+    // "11 ноября" / "November 11" — genitive month form comes from intl.
+    final dayMonth = DateFormat.MMMMd(Localizations.localeOf(context).languageCode).format(date);
     return Column(
       children: [
         Text('— ✦ ◆ ✦ —', style: TextStyle(color: gold.withValues(alpha: 0.55), fontSize: 16, letterSpacing: 4)),
         const SizedBox(height: 10),
         Text(
-          '${date.day} ${_months[date.month - 1]}',
+          dayMonth,
           style: AppFonts.display(color: gold, fontSize: 26, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),

@@ -31,6 +31,7 @@ class _AddPlacePageState extends State<AddPlacePage> {
   late LatLng _point = widget.initial;
   PlaceCategory _category = PlaceCategory.building;
   bool _saving = false;
+  bool _locating = false;
 
   static const _categories = [
     PlaceCategory.building,
@@ -54,16 +55,29 @@ class _AddPlacePageState extends State<AddPlacePage> {
   }
 
   Future<void> _useMyLocation() async {
+    if (_locating) return;
+    setState(() => _locating = true);
     final fix = await getIt<TrackingStore>().locateOnce();
-    if (fix == null || !mounted) return;
+    if (!mounted) return;
+    setState(() => _locating = false);
+    if (fix == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.locationDenied)));
+      return;
+    }
     setState(() => _point = LatLng(fix.lat, fix.lon));
     _map.move(_point, 17);
   }
 
+  static bool _isHttpUrl(String v) {
+    final u = Uri.tryParse(v);
+    return u != null && (u.scheme == 'http' || u.scheme == 'https') && u.host.isNotEmpty;
+  }
+
   Future<void> _save() async {
-    if (!_form.currentState!.validate()) return;
+    if (_saving || !_form.currentState!.validate()) return;
     setState(() => _saving = true);
     final desc = _description.text.trim();
+    final image = _image.text.trim();
     final place = Place(
       source: PlaceSource.user,
       sourceId: DateTime.now().microsecondsSinceEpoch.toRadixString(36),
@@ -72,11 +86,16 @@ class _AddPlacePageState extends State<AddPlacePage> {
       lon: _point.longitude,
       summary: desc.length > 160 ? '${desc.substring(0, 160)}…' : desc,
       description: desc,
-      imageUrl: _image.text.trim().isEmpty ? null : _image.text.trim(),
+      imageUrl: image.isEmpty ? null : image,
       category: _category,
       yearStart: int.tryParse(_year.text.trim()),
     );
-    await getIt<PlacesStore>().addUserPlace(place);
+    try {
+      await getIt<PlacesStore>().addUserPlace(place);
+    } catch (_) {
+      if (mounted) setState(() => _saving = false);
+      rethrow;
+    }
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.placeSaved)));
     Navigator.of(context).pop(place);
@@ -125,7 +144,7 @@ class _AddPlacePageState extends State<AddPlacePage> {
                   child: TextFormField(
                     controller: _year,
                     decoration: InputDecoration(labelText: l.yearField),
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(signed: true),
                     validator: (v) {
                       if (v == null || v.trim().isEmpty) return null;
                       final y = int.tryParse(v.trim());
@@ -140,6 +159,10 @@ class _AddPlacePageState extends State<AddPlacePage> {
                     controller: _image,
                     decoration: InputDecoration(labelText: l.imageUrlField),
                     keyboardType: TextInputType.url,
+                    validator: (v) {
+                      final s = v?.trim() ?? '';
+                      return s.isEmpty || _isHttpUrl(s) ? null : l.invalidUrl;
+                    },
                   ),
                 ),
               ],
@@ -154,8 +177,10 @@ class _AddPlacePageState extends State<AddPlacePage> {
                   ),
                 ),
                 TextButton.icon(
-                  onPressed: _useMyLocation,
-                  icon: const Icon(Icons.my_location, size: 18),
+                  onPressed: _locating ? null : _useMyLocation,
+                  icon: _locating
+                      ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Icon(Icons.my_location, size: 18),
                   label: Text(l.useMyLocation),
                 ),
               ],
@@ -171,7 +196,11 @@ class _AddPlacePageState extends State<AddPlacePage> {
                   options: MapOptions(
                     initialCenter: _point,
                     initialZoom: 16,
+                    minZoom: 3,
+                    maxZoom: 19,
+                    interactionOptions: const InteractionOptions(flags: InteractiveFlag.all & ~InteractiveFlag.rotate),
                     onTap: (_, p) => setState(() => _point = p),
+                    onLongPress: (_, p) => setState(() => _point = p),
                   ),
                   children: [
                     TileLayer(
