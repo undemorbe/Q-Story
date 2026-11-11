@@ -179,7 +179,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dailyNotificationsTitle => 'Daily Notifications';
 
   @override
-  String get dailyNotificationsDesc => 'A short daily nudge: a real \"on this day\" fact or a reminder to walk';
+  String get dailyNotificationsDesc => 'Once a day: a curious fact from Wikipedia or a place near you';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -195,7 +195,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutNotificationsText =>
-      'Once a day at the chosen time QStory reminds you to go for a walk. When the internet is available, the reminder for the next days carries a real \"on this day\" event from Wikipedia (Russian only). Notifications are scheduled on the device; nothing is sent anywhere.';
+      'Once a day at the chosen time QStory sends one curious fact: a “Did you know” teaser or an anniversary selected by Wikipedia editors, or a story about an unvisited place in the area you last explored. Tap it to read the article. Facts never repeat; the only requests leaving your device go to Wikipedia.';
 
   @override
   String get notificationsEnabledMsg => 'Notifications enabled';
@@ -1153,4 +1153,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutPrivacyPolicy => 'Privacy policy';
+
+  @override
+  String get reminderDykTitle => 'Did you know?';
+
+  @override
+  String reminderNearbyTitle(String place) {
+    return 'Near you: $place';
+  }
 }

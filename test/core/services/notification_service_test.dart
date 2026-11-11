@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qstory/core/l10n/app_localizations.dart';
-import 'package:qstory/core/errors/failures.dart';
 import 'package:qstory/core/services/daily_reminder.dart';
 import 'package:qstory/core/services/notification_service.dart';
 import 'package:qstory/core/storage/app_preferences.dart';
-import 'package:qstory/core/util/result.dart';
-import 'package:qstory/features/history/domain/entities/daily_fact_entity.dart';
-import 'package:qstory/features/history/domain/repositories/daily_fact_repository.dart';
+import 'package:qstory/features/history/data/repositories/interesting_facts_repository.dart';
+import 'package:qstory/features/history/domain/interesting_fact.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FakeNotifier implements LocalNotifier {
@@ -31,7 +29,7 @@ class FakeNotifier implements LocalNotifier {
       scheduled[plan.id] = plan;
 
   @override
-  Future<void> show(int id, String title, String body, {required String channelName}) async =>
+  Future<void> show(int id, String title, String body, {required String channelName, String? url}) async =>
       shown.add((id, title, body));
 
   @override
@@ -41,17 +39,47 @@ class FakeNotifier implements LocalNotifier {
   }
 }
 
-class FakeFacts implements DailyFactRepository {
-  final requests = <(int, int)>[];
-  Result<List<DailyFactEntity>> Function(int month, int day) answer = (m, d) =>
-      Ok([DailyFactEntity(year: 1900 + d, text: 'Event on $d.$m')]);
+class FakeFacts implements InterestingFactsRepository {
+  final requests = <String>[];
+  List<InterestingFact> dyk = [];
+  List<InterestingFact> near = [];
+  List<InterestingFact> Function(int month, int day) otd = (m, d) => [];
 
   @override
-  Future<Result<List<DailyFactEntity>>> getFactsForDate(int month, int day) async {
-    requests.add((month, day));
-    return answer(month, day);
+  Future<List<InterestingFact>> didYouKnow(String lang) async {
+    requests.add('dyk:$lang');
+    return dyk;
+  }
+
+  @override
+  Future<List<InterestingFact>> onThisDay(String lang, int month, int day) async {
+    requests.add('otd:$lang:$month/$day');
+    return otd(month, day);
+  }
+
+  @override
+  Future<List<InterestingFact>> nearby() async {
+    requests.add('nearby');
+    return near;
   }
 }
+
+InterestingFact dyk(int i) => InterestingFact(
+  id: 'dyk:$i',
+  kind: FactKind.didYouKnow,
+  text: 'Знаете ли вы интересный факт номер $i про город?',
+  url: 'https://ru.m.wikipedia.org/wiki/A$i',
+);
+
+InterestingFact otd(int year, String text) =>
+    InterestingFact(id: 'otd:$year', kind: FactKind.onThisDay, text: text, year: year);
+
+InterestingFact near(int i) => InterestingFact(
+  id: 'place:$i',
+  kind: FactKind.nearby,
+  text: 'Старинная усадьба номер $i построена в XIX веке.',
+  title: 'Усадьба $i',
+);
 
 void main() {
   final ru = lookupAppLocalizations(const Locale('ru'));
@@ -108,26 +136,67 @@ void main() {
       expect(p[0].title, isNot(p[1].title));
     });
 
-    test('uses a fact for its own date only', () {
-      final facts = {
-        DailyReminder.dateKey(DateTime(2026, 3, 8)): [const DailyFactEntity(year: 1917, text: 'Something happened')],
-      };
-      final p = DailyReminder.plan(now: now, hour: 18, minute: 0, l: ru, facts: facts);
-      expect(p[0].title, isNot(contains('1917')));
-      expect(p[1].title, ru.reminderFactTitle('1917'));
-      expect(p[1].body, 'Something happened');
-      expect(p[2].title, isNot(contains('1917')));
+    test('an anniversary is used on its own date only', () {
+      final pool = FactPool(
+        onThisDay: {
+          DailyReminder.dateKey(DateTime(2026, 3, 8)): [otd(1917, 'Открылся первый городской трамвай в Москве.')],
+        },
+      );
+      final p = DailyReminder.plan(now: now, hour: 18, minute: 0, l: ru, facts: pool);
+      final i = p.indexWhere((r) => r.factId == 'otd:1917');
+      expect(p[i].at.day, 8);
+      expect(p[i].title, ru.reminderFactTitle('1917'));
+      expect(p[i].body, 'Открылся первый городской трамвай в Москве.');
+      expect(p.where((r) => r.factId != null), hasLength(1));
+    });
+
+    test('kinds rotate by day and fall back to each other', () {
+      final pool = FactPool(didYouKnow: [for (var i = 0; i < 10; i++) dyk(i)], nearby: [near(1), near(2), near(3)]);
+      final p = DailyReminder.plan(now: now, hour: 18, minute: 0, l: ru, facts: pool);
+      expect(p.every((r) => r.factId != null), isTrue);
+      final kinds = p.map((r) => r.factId!.split(':').first).toSet();
+      expect(kinds, {'dyk', 'place'});
+      final nearbyDay = p.firstWhere((r) => r.factId!.startsWith('place:'));
+      expect(nearbyDay.title, ru.reminderNearbyTitle('Усадьба 1'));
+      final dykDay = p.firstWhere((r) => r.factId!.startsWith('dyk:'));
+      expect(dykDay.title, ru.reminderDykTitle);
+      expect(dykDay.url, startsWith('https://'));
+    });
+
+    test('no fact repeats within the week or from earlier weeks', () {
+      final pool = FactPool(didYouKnow: [dyk(1), dyk(2), dyk(3)], used: {'dyk:1'});
+      final p = DailyReminder.plan(now: now, hour: 18, minute: 0, l: en, facts: pool);
+      final ids = [for (final r in p) ?r.factId];
+      expect(ids.toSet(), {'dyk:2', 'dyk:3'});
+      expect(ids, hasLength(2));
+      // The rest of the week is generic.
+      expect(p.where((r) => r.factId == null), hasLength(DailyReminder.days - 2));
+    });
+
+    test('grim facts are never sent', () {
+      final pool = FactPool(
+        didYouKnow: [
+          const InterestingFact(
+            id: 'bad',
+            kind: FactKind.didYouKnow,
+            text: 'В результате катастрофы погибли сотни людей.',
+          ),
+        ],
+      );
+      final p = DailyReminder.plan(now: now, hour: 18, minute: 0, l: ru, facts: pool);
+      expect(p.every((r) => r.factId == null), isTrue);
     });
 
     test('the pick is stable across re-plans', () {
-      final facts = {
-        DailyReminder.dateKey(DateTime(2026, 3, 7)): [
-          for (var y = 1800; y < 1810; y++) DailyFactEntity(year: y, text: 'e$y'),
-        ],
-      };
-      final a = DailyReminder.plan(now: now, hour: 18, minute: 0, l: ru, facts: facts);
-      final b = DailyReminder.plan(now: now.add(const Duration(hours: 1)), hour: 18, minute: 0, l: ru, facts: facts);
-      expect(a.first.body, b.first.body);
+      final pool = FactPool(didYouKnow: [for (var i = 0; i < 10; i++) dyk(i)]);
+      final a = DailyReminder.plan(now: now, hour: 18, minute: 0, l: ru, facts: pool);
+      final b = DailyReminder.plan(now: now.add(const Duration(hours: 1)), hour: 18, minute: 0, l: ru, facts: pool);
+      expect(a.map((r) => r.body), b.map((r) => r.body));
+    });
+
+    test('an anniversary without a year still has a title', () {
+      final f = const InterestingFact(id: 'x', kind: FactKind.onThisDay, text: 'Что-то случилось однажды.');
+      expect(DailyReminder.present(en, f).$1, en.reminderDykTitle);
     });
 
     test('generic texts cover five variants', () {
@@ -138,7 +207,7 @@ void main() {
     test('clip keeps short text and shortens long text with an ellipsis', () {
       expect(DailyReminder.clip('  short  '), 'short');
       final long = DailyReminder.clip('x' * 500);
-      expect(long.length, lessThanOrEqualTo(180));
+      expect(long.length, 240);
       expect(long, endsWith('…'));
     });
   });
@@ -202,35 +271,80 @@ void main() {
       expect(notifier.scheduled[DailyReminder.baseId]!.at, DateTime(2026, 3, 8, 7, 45));
     });
 
-    test('in Russian the first days carry real facts', () async {
+    test('plans from all sources in the app language', () async {
       await make({'notifications_enabled': true});
+      facts.dyk = [dyk(1), dyk(2)];
+      facts.otd = (m, d) => [otd(1900 + d, 'Событие $d.$m: открылся первый городской музей.')];
+      facts.near = [near(1)];
       await service.reschedule(ru);
-      expect(facts.requests, hasLength(NotificationService.factDays));
-      expect(facts.requests.first, (3, 7));
-      expect(notifier.scheduled[DailyReminder.baseId]!.title, ru.reminderFactTitle('1907'));
-      expect(notifier.scheduled[DailyReminder.baseId + NotificationService.factDays]!.title, isNot(contains('году')));
+      expect(facts.requests, containsAll(['dyk:ru', 'nearby', 'otd:ru:3/7', 'otd:ru:3/13']));
+      expect(facts.requests.where((r) => r.startsWith('otd')), hasLength(DailyReminder.days));
+      final plans = notifier.scheduled.values.toList();
+      expect(plans, hasLength(DailyReminder.days));
+      expect(plans.where((p) => p.factId != null).length, greaterThanOrEqualTo(4));
+      expect(prefs.reminderFactLog, hasLength(plans.where((p) => p.factId != null).length));
+
+      await service.reschedule(en, force: true);
+      expect(facts.requests, contains('dyk:en'));
     });
 
-    test('in English no facts are fetched', () async {
+    test('app starts re-plan at most every 12 hours unless forced', () async {
       await make({'notifications_enabled': true});
       await service.reschedule(en);
-      expect(facts.requests, isEmpty);
-      expect(notifier.scheduled, hasLength(DailyReminder.days));
+      final n = facts.requests.length;
+      await service.reschedule(en);
+      expect(facts.requests, hasLength(n));
+      await service.reschedule(en, force: true);
+      expect(facts.requests.length, greaterThan(n));
+      // A different language is a different plan.
+      final m = facts.requests.length;
+      await service.reschedule(ru);
+      expect(facts.requests.length, greaterThan(m));
     });
 
-    test('a failing fact source falls back to generic texts', () async {
+    test('delivered facts are not sent again, planned-but-unsent ones may be', () async {
+      final past = now.subtract(const Duration(days: 1)).millisecondsSinceEpoch;
+      final future = now.add(const Duration(days: 1)).millisecondsSinceEpoch;
+      final ancient = now.subtract(const Duration(days: 400)).millisecondsSinceEpoch;
+      await make({
+        'notifications_enabled': true,
+        'reminder_fact_log': ['$past|dyk:1', '$future|dyk:2', '$ancient|dyk:3', 'garbage'],
+      });
+      facts.dyk = [dyk(1), dyk(2), dyk(3)];
+      await service.reschedule(en);
+      final sent = {for (final p in notifier.scheduled.values) ?p.factId};
+      expect(sent, {'dyk:2', 'dyk:3'});
+      expect(prefs.reminderFactLog.where((e) => e.endsWith('|dyk:1')), hasLength(1));
+      expect(prefs.reminderFactLog, isNot(contains('garbage')));
+    });
+
+    test('no facts available falls back to generic texts', () async {
       await make({'notifications_enabled': true});
-      facts.answer = (m, d) => const Err(NetworkFailure());
       await service.reschedule(ru);
       expect(notifier.scheduled, hasLength(DailyReminder.days));
-      expect(notifier.scheduled.values.every((p) => p.body.isNotEmpty), isTrue);
+      expect(notifier.scheduled.values.every((p) => p.body.isNotEmpty && p.factId == null), isTrue);
     });
 
-    test('test notification uses a generic text', () async {
+    test('disabling forgets the plan so re-enabling plans immediately', () async {
+      await make({'notifications_enabled': true});
+      await service.reschedule(en);
+      await service.setEnabled(false, en);
+      expect(prefs.reminderPlannedAt, isNull);
+    });
+
+    test('test notification uses a generic text when offline', () async {
       await make();
       await service.showTest(en);
       expect(notifier.shown.single.$1, 0);
       expect(notifier.shown.single.$2, isNotEmpty);
+    });
+
+    test('test notification shows a "Did you know" fact when there is one', () async {
+      await make();
+      facts.dyk = [dyk(7)];
+      await service.showTest(ru);
+      expect(notifier.shown.single.$2, ru.reminderDykTitle);
+      expect(notifier.shown.single.$3, dyk(7).text);
     });
   });
 

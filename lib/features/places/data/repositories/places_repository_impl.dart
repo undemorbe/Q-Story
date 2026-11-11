@@ -63,6 +63,8 @@ class PlacesRepositoryImpl implements PlacesRepository {
         collected.addAll(list);
         await AppDatabase.nearbyCache.record(key).put(_db, {
           'at': _now().millisecondsSinceEpoch,
+          'lat': query.lat,
+          'lon': query.lon,
           'places': list.map((p) => p.toJson()).toList(),
         });
       } catch (e) {
@@ -177,6 +179,26 @@ class PlacesRepositoryImpl implements PlacesRepository {
     final existing = await AppDatabase.placesCache.record(place.id).get(_db);
     if (existing != null && existing['_detailed'] == true) return;
     await AppDatabase.placesCache.record(place.id).put(_db, place.toJson());
+  }
+
+  @override
+  Future<List<Place>> recentlyLoaded({int limit = 60}) async {
+    final recs = await AppDatabase.nearbyCache.find(_db);
+    if (recs.isEmpty) return const [];
+    int at(Map<String, Object?> v) => (v['at'] as int?) ?? 0;
+    final latest = recs.map((r) => at(r.value)).reduce((a, b) => a > b ? a : b);
+    // All sources of one load are written within seconds of each other.
+    final batch = [
+      for (final r in recs)
+        if (latest - at(r.value) < const Duration(minutes: 5).inMilliseconds) r.value,
+    ];
+    final places = dedupe([for (final v in batch) ..._decodeList(v['places'])]);
+    final centre = batch.firstWhere((v) => v['lat'] is num && v['lon'] is num, orElse: () => const {});
+    if (centre.isNotEmpty) {
+      final lat = (centre['lat'] as num).toDouble(), lon = (centre['lon'] as num).toDouble();
+      places.sort((a, b) => Geo.distanceM(lat, lon, a.lat, a.lon).compareTo(Geo.distanceM(lat, lon, b.lat, b.lon)));
+    }
+    return places.take(limit).toList();
   }
 
   @override

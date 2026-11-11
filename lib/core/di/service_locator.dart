@@ -9,7 +9,9 @@ import '../../features/activity/presentation/stores/journal_store.dart';
 import '../../features/activity/presentation/stores/tracking_store.dart';
 import '../../features/favorites/presentation/stores/favorites_store.dart';
 import '../../features/history/data/datasources/daily_fact_remote_data_source.dart';
+import '../../features/history/data/datasources/wiki_facts_client.dart';
 import '../../features/history/data/repositories/daily_fact_repository_impl.dart';
+import '../../features/history/data/repositories/interesting_facts_repository.dart';
 import '../../features/history/domain/repositories/daily_fact_repository.dart';
 import '../../features/history/presentation/stores/daily_fact_store.dart';
 import '../../features/places/data/repositories/places_repository_impl.dart';
@@ -75,6 +77,9 @@ Future<void> setupServiceLocator({
     ..registerLazySingleton<DailyFactRemoteDataSource>(() => DailyFactRemoteDataSource(dio: http))
     ..registerLazySingleton<DailyFactRepository>(() => DailyFactRepositoryImpl(remote: getIt()))
     ..registerLazySingleton<ScanResolver>(() => ScanResolver(getIt()))
+    ..registerLazySingleton<InterestingFactsRepository>(
+      () => InterestingFactsRepository(WikiFactsClient(http), getIt(), getIt()),
+    )
     ..registerLazySingleton<NotificationService>(
       () => NotificationService(getIt(), getIt(), notifier ?? PluginNotifier()),
     );

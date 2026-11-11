@@ -82,7 +82,7 @@ class _QStoryAppState extends State<QStoryApp> with WidgetsBindingObserver {
     _localeReaction = reaction<Locale>((_) => getIt<SettingsStore>().locale, (_) {
       if (getIt.isRegistered<NotificationService>() && getIt<NotificationService>().enabled) {
         unawaited(
-          getIt<NotificationService>().reschedule(_currentL10n()).catchError((Object e) {
+          getIt<NotificationService>().reschedule(_currentL10n(), force: true).catchError((Object e) {
             debugPrint('Reminder reschedule failed: $e');
           }),
         );

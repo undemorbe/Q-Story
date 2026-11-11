@@ -179,7 +179,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dailyNotificationsTitle => 'Ежедневные уведомления';
 
   @override
-  String get dailyNotificationsDesc => 'Короткое напоминание: настоящий факт «в этот день» или повод прогуляться';
+  String get dailyNotificationsDesc => 'Раз в день: любопытный факт из Википедии или место рядом с вами';
 
   @override
   String get notificationTime => 'Время уведомления';
@@ -195,7 +195,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get aboutNotificationsText =>
-      'Раз в день в выбранное время QStory напомнит о прогулке. Если есть интернет, напоминания на ближайшие дни содержат настоящее событие «в этот день» из Википедии. Уведомления планируются на устройстве и никуда не отправляются.';
+      'Раз в день в выбранное время QStory присылает один любопытный факт: анонс «Знаете ли вы?» или годовщину, отобранную редакторами Википедии, либо историю непосещённого места там, где вы гуляли последний раз. Нажмите на уведомление, чтобы прочитать статью. Факты не повторяются; с устройства уходят только запросы к Википедии.';
 
   @override
   String get notificationsEnabledMsg => 'Уведомления включены';
@@ -1154,4 +1154,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get aboutPrivacyPolicy => 'Политика конфиденциальности';
+
+  @override
+  String get reminderDykTitle => 'Знаете ли вы?';
+
+  @override
+  String reminderNearbyTitle(String place) {
+    return 'Рядом с вами: $place';
+  }
 }

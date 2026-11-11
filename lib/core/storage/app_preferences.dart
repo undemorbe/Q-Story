@@ -23,6 +23,9 @@ class AppPreferences {
   static const _kSeenAchievements = 'seen_achievements';
   static const _kNotifEnabled = 'notifications_enabled';
   static const _kNotifTime = 'notification_time';
+  static const _kFactLog = 'reminder_fact_log';
+  static const _kPlanAt = 'reminder_planned_at';
+  static const _kPlanKey = 'reminder_plan_key';
 
   String? get localeCode => _prefs.getString(_kLocale);
   Future<void> setLocaleCode(String code) => _prefs.setString(_kLocale, code);
@@ -90,4 +93,23 @@ class AppPreferences {
 
   Future<void> setNotificationTime(TimeOfDay t) =>
       _prefs.setString(_kNotifTime, '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}');
+
+  /// Facts put into reminders, as `<epoch ms of the reminder>|<fact id>`.
+  List<String> get reminderFactLog => _prefs.getStringList(_kFactLog) ?? const [];
+  Future<void> setReminderFactLog(List<String> v) => _prefs.setStringList(_kFactLog, v);
+
+  /// When the week of reminders was last planned, and for which settings.
+  DateTime? get reminderPlannedAt {
+    final ms = _prefs.getInt(_kPlanAt);
+    return ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
+  }
+
+  String? get reminderPlanKey => _prefs.getString(_kPlanKey);
+
+  Future<void> setReminderPlanned(DateTime at, String key) async {
+    await _prefs.setInt(_kPlanAt, at.millisecondsSinceEpoch);
+    await _prefs.setString(_kPlanKey, key);
+  }
+
+  Future<void> clearReminderPlan() => _prefs.remove(_kPlanAt);
 }

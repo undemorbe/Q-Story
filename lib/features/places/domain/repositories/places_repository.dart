@@ -20,6 +20,10 @@ abstract interface class PlacesRepository {
 
   // ─── User places (local only) ────────────────────────────────────────────
   Future<List<Place>> userPlaces();
+
+  /// Places from the most recently loaded map area (from the local cache,
+  /// no network), closest to that area's centre first.
+  Future<List<Place>> recentlyLoaded({int limit = 60});
   Future<void> saveUserPlace(Place place);
   Future<void> deleteUserPlace(String sourceId);
 }

@@ -55,12 +55,12 @@
   "english": "English",
   "notifSettingsTitle": "Notifications",
   "dailyNotificationsTitle": "Daily Notifications",
-  "dailyNotificationsDesc": "A short daily nudge: a real \"on this day\" fact or a reminder to walk",
+  "dailyNotificationsDesc": "Once a day: a curious fact from Wikipedia or a place near you",
   "notificationTime": "Notification Time",
   "testNotification": "Test Notification",
   "testNotificationDesc": "Check how notifications work",
   "aboutNotificationsTitle": "About Notifications",
-  "aboutNotificationsText": "Once a day at the chosen time QStory reminds you to go for a walk. When the internet is available, the reminder for the next days carries a real \"on this day\" event from Wikipedia (Russian only). Notifications are scheduled on the device; nothing is sent anywhere.",
+  "aboutNotificationsText": "Once a day at the chosen time QStory sends one curious fact: a “Did you know” teaser or an anniversary selected by Wikipedia editors, or a story about an unvisited place in the area you last explored. Tap it to read the article. Facts never repeat; the only requests leaving your device go to Wikipedia.",
   "notificationsEnabledMsg": "Notifications enabled",
   "notificationsDisabledMsg": "Notifications disabled",
   "testNotificationSent": "Test notification sent",
@@ -508,5 +508,14 @@
   "reminderChannel": "Daily reminder",
   "reminderChannelDesc": "Once-a-day reminder to go for a walk",
   "notificationsPermissionDenied": "Notifications are not allowed. Enable them for QStory in the system settings.",
-  "aboutPrivacyPolicy": "Privacy policy"
+  "aboutPrivacyPolicy": "Privacy policy",
+  "reminderDykTitle": "Did you know?",
+  "reminderNearbyTitle": "Near you: {place}",
+  "@reminderNearbyTitle": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  }
 }

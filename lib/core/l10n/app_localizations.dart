@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @dailyNotificationsDesc.
   ///
   /// In en, this message translates to:
-  /// **'A short daily nudge: a real \"on this day\" fact or a reminder to walk'**
+  /// **'Once a day: a curious fact from Wikipedia or a place near you'**
   String get dailyNotificationsDesc;
 
   /// No description provided for @notificationTime.
@@ -461,7 +461,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutNotificationsText.
   ///
   /// In en, this message translates to:
-  /// **'Once a day at the chosen time QStory reminds you to go for a walk. When the internet is available, the reminder for the next days carries a real \"on this day\" event from Wikipedia (Russian only). Notifications are scheduled on the device; nothing is sent anywhere.'**
+  /// **'Once a day at the chosen time QStory sends one curious fact: a “Did you know” teaser or an anniversary selected by Wikipedia editors, or a story about an unvisited place in the area you last explored. Tap it to read the article. Facts never repeat; the only requests leaving your device go to Wikipedia.'**
   String get aboutNotificationsText;
 
   /// No description provided for @notificationsEnabledMsg.
@@ -2251,6 +2251,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy policy'**
   String get aboutPrivacyPolicy;
+
+  /// No description provided for @reminderDykTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you know?'**
+  String get reminderDykTitle;
+
+  /// No description provided for @reminderNearbyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Near you: {place}'**
+  String reminderNearbyTitle(String place);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
